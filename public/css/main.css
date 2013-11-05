@@ -1,0 +1,104 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+		
+	body {
+		/*background: transparent url(../img/full-background.jpg) no-repeat center center fixed;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;*/
+		background-color: #5f5f5f;
+	}
+
+	.row .main-content {
+		background: #fff;
+	}
+
+	.fiftyx td:first-child {
+	    width: 25%;
+	}
+
+	.fiftyx {
+		margin-bottom: 35px;
+	}
+
+	ul#master-server-list{
+		list-style: none;
+		padding: 0;
+		width: 100%;
+	}
+
+	ul#master-server-list li{
+		background-color: #ccc;
+		padding: 5px 15px;
+		float: left;
+		width: 100%;
+	}
+
+	ul#master-server-list li img{
+		float: left;
+		width: 32px;
+		height: 32px;
+		margin: 5px 10px 5px 0;
+	}
+
+	ul#master-server-list li div{
+		float: left;
+		height: 32px;
+	}
+
+	ul#master-server-list li.online{
+		background-color: #87ef2f;
+	}
+
+	ul#master-server-list li.offline{
+		background-color: #e24648;
+	}
+
+	ul#master-server-list li.error{
+		background-color: #f4de4a;
+	}
+
+	.donation-plans div {
+		text-align: center;
+	}
+
+	.donator-cost {
+		font-size: 3em;
+		font-weight: bold;
+	}
+
+	#desc_md_textarea {
+		display: none !important;
+	}
+
+	.maps-list section {
+		float: left;
+	}
+	.maps-list section h3 {
+		margin-top: 2%;
+	}
+
+	.maps-list section img {
+		float: left;
+		width: 30%;
+	}
+
+	.maps-list section div {
+		float: right;
+		width: 67%;
+	}
+
+
+
+
+
+
+
+
+
+
+

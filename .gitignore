@@ -1,0 +1,6 @@
+/app/config/keys.php
+/bootstrap/compiled.php
+/vendor
+composer.phar
+composer.lock
+.DS_Store
