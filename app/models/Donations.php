@@ -8,4 +8,9 @@ class Donations extends Eloquent
 		return DB::table('donations')->get();
 	}
 
+	public function saveDonator()
+	{
+
+	}
+
 }

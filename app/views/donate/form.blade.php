@@ -15,7 +15,7 @@
                     <label class="col-md-4 control-label" for="steamid">Steam Login ID</label>
 
                     <div class="col-md-8 form-group">
-	  					{{ Form::text('steamid', $value = null, ['class' => 'form-control', 'id' => 'steamid']) }}
+	  					{{ Form::text('steam_id', $value = null, ['class' => 'form-control', 'id' => 'steam_id']) }}
 	  					<span class="help-block">Leave this field blank to donate annonymously.</span>
                     </div>
                 </div>

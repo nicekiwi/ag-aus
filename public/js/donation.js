@@ -34,6 +34,12 @@
 				value: response.id
 			}).appendTo(this.form);
 
+			$('<input>', {
+				type: 'hidden',
+				name: 'stripe-data',
+				value: response.card.type+','+response.card.last4+','+response.card.exp_month+','+response.card.exp_year
+			}).appendTo(this.form);
+
 			this.form[0].submit();
 		}
 	}

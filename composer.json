@@ -9,7 +9,8 @@
 		"aws/aws-sdk-php-laravel": "1.*",
 		"stripe/stripe-php": "v1.9.0",
 		"way/generators": "dev-master",
-		"vtalbot/markdown": "1.*"
+		"vtalbot/markdown": "1.*",
+		"thomaswelton/laravel-gravatar": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

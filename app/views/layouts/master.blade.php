@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <style>
             body {
-                padding-top: 50px;
+                /*padding-top: 50px;*/
                 padding-bottom: 20px;
             }
 
@@ -37,54 +37,53 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+          <div class="container">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+              <img src="/img/ag-logo.png"></a>
+          </div>
 
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+              <li class="{{ (Request::is('news*') ? 'active' : '') }}"><a href="/news">News</a></li>
+              <li class="{{ (Request::is('maps*') ? 'active' : '') }}"><a href="/maps">Maps</a></li>
+              <li class="{{ (Request::is('stats*') ? 'active' : '') }}"><a href="/stats">Stats</a></li>
+              <li><a href="/forums">Forums</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="{{ (Request::is('donate*') ? 'active' : '') }}"><a href="/donate">Donate</a></li>
+              @if(Auth::check())
+              <li class="dropdown">
+                <a href="#" class="user-admin-menu dropdown-toggle" data-toggle="dropdown">
+                     <img src="{{ Gravatar::src(Auth::user()->email, 24) }}" class=""> {{ Auth::user()->username }} <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="/admin/profile"><span class="glyphicon glyphicon-tasks"></span> Profile</a></li>
+                  <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                </ul>
+              </li>
+              @endif
+            </ul>
+          </div><!-- /.navbar-collapse -->
+          </div>
+        </nav>
 
         <div class="container">
 
           <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-8 main-content">
 
-              <nav class="navbar navbar-default" role="navigation">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="/">Alternitive Gamers</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                  <ul class="nav navbar-nav">
-                    <li><a href="/news">News</a></li>
-                    <li><a href="/donate">Donate</a></li>
-                  </ul>
-
-                  <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/maps">Maps</a></li>
-                    <li><a href="/stats">Stats</a></li>
-                    <li><a href="/forums">Forums</a></li>
-                    @if(Auth::check())
-                    <li class="dropdown">
-
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                           <img src="{{ Gravatar::src(Auth::user()->email, 24) }}" class=""> {{ Auth::user()->username }} <b class="caret"></b>
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a href="/user/progress"><span class="glyphicon glyphicon-tasks"></span> Progress</a></li>
-                        <li><a href="/user/settings"><span class="glyphicon glyphicon-tasks"></span> Settings</a></li>
-                        <li><a href="/user/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                      </ul>
-                    </li>
-                    @else
-                    <li><a href="/login">Login</a></li>
-                    @endif
-                  </ul>
-                </div><!-- /.navbar-collapse -->
-              </nav>
+              
 
               @if(Session::get('flash_message'))
                   <div class="flash">
@@ -127,12 +126,7 @@
               <ul id="master-server-list">
               @foreach($servers as $server)
                 <li class="check-server-status" style="background-color: #{{ ($server->offline === 1 ? 'e24648' : '87ef2f') }}" data-id="server-{{ $server->id }}">
-                  <img src="/img/server-load-32.gif">
-                  <div>
-                    {{ $server->name }}<br>
-                    {{ $server->ipaddress }} - <span class="players">{{ $server->players }}</span> / <span class="maxPlayers">{{ $server->maxPlayers }}</span> Players 
-                  </div>
-                  
+                    {{ $server->vanilla_name }}<span class="players">{{ $server->players }}</span> / <span class="maxPlayers">{{ $server->maxPlayers }}</span>
                 </li>
               @endforeach
               </ul>
