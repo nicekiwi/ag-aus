@@ -53,7 +53,7 @@ Accessing your vagrant server like so, from the `/vagrant` directory run `vagran
 
 ### 6. Setup Virtual Host
 
-Vagrant took care of everything, all you need to do is add `192.168.56.101 alternative-gamers.dev` to your hosts file.
+Vagrant took care of everything, all you need to do is add `192.168.56.101 alternative-gamers.dev` to your hosts file on your host computer *(Not in the VM)*.
 
 ### 7. Accessing MySQL & Importing the Database
 
