@@ -13,6 +13,13 @@ class PostsController extends BaseController {
         return View::make('posts.index')->with(compact('posts'));
 	}
 
+	public function display_event_widget($view)
+	{
+		$events = Post::all();
+		//dd($events);
+		$view->with('events', $events);
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -51,6 +58,7 @@ class PostsController extends BaseController {
 			$post->title = Input::get('title');
 			$post->desc_md = Input::get('desc_md');
 			$post->desc = Markdown::string(Input::get('desc_md'));
+			$post->slug = Str::slug(Input::get('title'));
 			//$post->author = Auth::User()->name;
 			$post->save();
 
@@ -66,9 +74,9 @@ class PostsController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($slug)
 	{
-		$post = Post::findOrFail($id);
+		$post = Post::where('slug',$slug)->first();
 
         return View::make('posts.show', compact('post'));
 	}
@@ -114,6 +122,7 @@ class PostsController extends BaseController {
 			$post->title = Input::get('title');
 			$post->desc_md = Input::get('desc_md');
 			$post->desc = Markdown::string(Input::get('desc_md'));
+			$post->slug = Str::slug(Input::get('title'));
             $post->save();
 
             // redirect

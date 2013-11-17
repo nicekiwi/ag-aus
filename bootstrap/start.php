@@ -28,7 +28,7 @@ $app->redirectIfTrailingSlash();
 
 $env = $app->detectEnvironment(array(
 
-	'local' => array('Ezras-Mac-mini.local'),
+	'local' => array('precise64'),
 
 ));
 

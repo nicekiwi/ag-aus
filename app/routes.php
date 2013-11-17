@@ -11,11 +11,7 @@
 |
 */
 
-View::composer('layouts.master', function($view)
-{
-	$servers = new Servers;
-    $view->with('servers', $servers->getServers());
-});
+
 
 Route::get('create-user' , function()
 {
@@ -92,6 +88,37 @@ Route::get('refresh-servers', function()
 	return $servers->refreshServers();
 });
 
+Route::get('players', function()
+{
+	$servers = new Servers;
+	$players = $servers->getPlayers('203.33.121.205','27021');
+
+	//dd($players);
+
+	foreach($players as $key => $value){
+	    echo $value->getName() . 'has a score of' . $value->getScore() . '<br>';
+	}
+});
+
+Route::get('check-steamid/{id}', function($id)
+{
+	$data = new StdClass;
+
+	try 
+	{
+		$steamID = SteamId::create($id);
+		$data->steamid = $steamID->getCustomUrl();
+		$data->nickname = $steamID->getNickname();
+		$data->profileImage = $steamID->imageUrl;
+	} 
+	catch (SteamCondenserException $e) 
+	{
+		$data->message = $e->getMessage(); //'Profile does not exist or it set to Private.';
+	}
+
+	return json_encode($data);
+});
+
 // Route::get('/', function()
 // {
 	
@@ -129,12 +156,22 @@ Route::get('donate', function()
 	return View::make('donate.form');
 });
 
+Route::get('news', function()
+{
+	return View::make('donate.form');
+});
+
+Route::get('donors', 'DonationController@display_donations');
+
 Route::post('donate', 'DonationController@validate_donation');
 
 
 Route::get('/', ['as' => 'home', function()
 {
-	return 'Homepahe';
+	return View::make('index');
+	//dd(Donation::find(8)->donator);
+
+	
 }]);
 
 /*Route::get('admin' ['as' => 'admin', function()
@@ -149,5 +186,9 @@ Route::get('logout', 'SessionsController@destroy');
 Route::resource('sessions', 'SessionsController');
 
 Route::get('news', 'PostsController@index');
+Route::get('news/{slug}', 'PostsController@show');
+
+
+
 Route::resource('posts', 'PostsController');
 Route::resource('maps', 'MapsController');

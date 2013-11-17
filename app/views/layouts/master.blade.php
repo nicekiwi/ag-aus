@@ -55,8 +55,9 @@
           <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
               <li class="{{ (Request::is('news*') ? 'active' : '') }}"><a href="/news">News</a></li>
+              <li class="{{ (Request::is('games*') ? 'active' : '') }}"><a href="/servers">Games</a></li>
               <li class="{{ (Request::is('maps*') ? 'active' : '') }}"><a href="/maps">Maps</a></li>
-              <li class="{{ (Request::is('stats*') ? 'active' : '') }}"><a href="/stats">Stats</a></li>
+              
               <li><a href="/forums">Forums</a></li>
             </ul>
 
@@ -78,12 +79,10 @@
           </div>
         </nav>
 
-        <div class="container">
+        <div class="container main-content">
 
           <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-8 main-content">
-
-              
+            <div class="col-xs-12 col-sm-6 col-md-8 clearfix">
 
               @if(Session::get('flash_message'))
                   <div class="flash">
@@ -109,35 +108,18 @@
             </div>
 
             <div class="col-xs-6 col-sm-6 col-md-4">
-              <h3>{{ date('F') }} Donations</h3>
-              <p></p>
-              <div class="progress-percent">$42 of $140 Donated</div>
-              <div class="progress">
-
-                <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%;">
-                  <span class="sr-only">30% Complete</span>
-                </div>
-              </div>
-
-              <h3>Events</h3>
-
-
-              <h3>Our Servers</h3>
-              <ul id="master-server-list">
-              @foreach($servers as $server)
-                <li class="check-server-status" style="background-color: #{{ ($server->offline === 1 ? 'e24648' : '87ef2f') }}" data-id="server-{{ $server->id }}">
-                    {{ $server->vanilla_name }}<span class="players">{{ $server->players }}</span> / <span class="maxPlayers">{{ $server->maxPlayers }}</span>
-                </li>
-              @endforeach
-              </ul>
+              @include('partials.donation-widget')
+              @include('partials.event-list')
+              @include('partials.server-list')
             </div>
           </div>
-
         </div> <!-- /container -->
 
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script type="text/javascript" src="/js/vendor/jquery.fancybox.pack.js?v=2.1.5"></script>
+        <script type="text/javascript" src="/js/vendor/jquery.formance.min.js"></script>
         <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+
         @yield('footer')
         <script src="/js/main.js"></script>
     </body>

@@ -10,6 +10,15 @@
 	<button type="button" class="btn btn-default">KOTH</button>
 </div>
 
+<div class="btn-group">
+	<button type="button" class="active btn btn-default">
+		<span class="glyphicon glyphicon-list"></span>
+	</button>
+	<button type="button" class="btn btn-default">
+		<span class="glyphicon glyphicon-th-large"></span>
+	</button>
+</div>
+
 {{ Form::text('search') }}
 
 <p>&nbsp;</p>
