@@ -11,10 +11,10 @@ class MapsController extends BaseController {
 	 */
 	public function index()
 	{
-		if(Input::has('type')) $maps = Map::orderBy('name','asc')->where('type',Input::get('type'))->get();
-		else $maps = Map::all();
+		if(Input::has('type')) $maps = Map::orderBy('name','asc')->where('type',Input::get('type'))->where('public',1)->get();
+		else $maps = Map::where('public',1)->get();
 
-		$map_modes = MapModes::orderBy('name','asc')->get();
+		$map_modes = MapTypes::orderBy('name','asc')->get();
 
         return View::make('maps.index')->with(['maps'=>$maps,'map_modes'=>$map_modes]);
 	}
@@ -31,9 +31,30 @@ class MapsController extends BaseController {
 	 */
 	public function create()
 	{
-        $map_modes = MapModes::orderBy('name','asc')->lists('name','mode');
+        $s3 = AWS::get('s3');
 
-        return View::make('maps.create')->with('map_modes',$map_modes);
+		$response = $s3->listObjects(['Bucket' => 'ag-maps']);
+
+	    $map_list = $response['Contents'];
+        $map_types = MapTypes::orderBy('name','asc')->lists('name','type');
+
+        foreach ($response['Contents'] as $map) {
+
+        	if(Map::where('filename',$map['Key'])->count() < 1)
+    		{
+	        	$new_map = new Map;
+				$new_map->filesize = $map['Size'];
+				$new_map->filename = $map['Key'];
+				$new_map->s3_path = 'https://s3-ap-southeast-2.amazonaws.com/ag-maps/' . $map['Key'];
+				$new_map->save();
+    		}
+
+    	}
+
+    	//$map_list_updated = Map::where('filename',$map['Key'])->count() < 1
+
+        //return View::make('maps.create')->with(['map_types' => $map_types, 'map_list' => $map_list]);
+        return 'win';
 	}
 
 	/**

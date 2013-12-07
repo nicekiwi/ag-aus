@@ -4,12 +4,16 @@
 
 <h1>Add a new Map</h1>
 
-<?php $up_id = uniqid() ?>
+@foreach($map_list as $map)
 
-{{ Form::model($post, [ 'method' => 'POST', 'route' => 'maps.store', 'files' => true, 'id' => 'map-upload-form', 'target' => 'result_frame' ]) }}
+{{ $map['Key'] }} - {{ round(($map['Size']/1048576), 2) . "Mb"; }}
+
+@endforeach
+
+{{ Form::model($post, [ 'method' => 'POST', 'route' => 'maps.store', 'files' => true, 'id' => 'upload_form' ]) }}
 
 {{ Form::label('type', 'Map Type')}}
-{{ Form::select('size', $map_modes); }}
+{{ Form::select('size', $map_types); }}
 
 {{ $errors->name }}
 {{ Form::label('name', 'Map Name')}}
@@ -35,25 +39,8 @@
 {{ Form::textarea('desc_md', null, ['id' => 'desc_md_textarea']) }}
 <div id="epiceditor"></div>
 
-<!--APC hidden field--> 
-    <input type="hidden" name="APC_UPLOAD_PROGRESS" id="progress_key" value="{{ $up_id }}"/> 
-<!----> 
+{{ Form::submit('Submit', ['id' => 'upload']) }}
 
-{{ Form::file('map_file', ['id' => 'file']); }}
-
-<!--Include the iframe--> 
-    <br /> 
-    <iframe id="upload_frame" name="upload_frame" frameborder="0" border="0" src="" scrolling="no" scrollbar="no" > </iframe> 
-    <br /> 
-<!----> 
-
-<div class="progress">
-	<div class="bar"></div >
-	<div class="percent">0%</div >
-</div>
-
-{{ Form::submit() }}
-    
 {{ Form::close() }}
 
 @stop
@@ -62,41 +49,9 @@
 
 <style type="text/css">
 	
-/*iframe*/
-#upload_frame {
-	border:0px;
-	height:40px;
-	width:400px;
-	/*display:none;*/
-}
-
-#progress_container {
-	width: 300px; 
-	height: 30px; 
-	border: 1px solid #CCCCCC; 
-	background-color:#EBEBEB;
-	display: block; 
-	margin:5px 0px -15px 0px;
-}
-
-#progress_bar {
-	position: relative; 
-	height: 30px; 
-	background-color: #F3631C; 
-	width: 0%; 
-	z-index:10; 
-}
-
-#progress_completed {
-	font-size:16px; 
-	z-index:40; 
-	line-height:30px; 
-	padding-left:4px; 
-	color:#FFFFFF;
-}
 
 </style>
-<script type="text/javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" src="/js/uploadbar.js"></script>
 <script type="text/javascript" src="/js/vendor/epiceditor.min.js"></script>
 <script type="text/javascript">
 	var opts = {
@@ -117,29 +72,6 @@
 	  autogrow: true
 		};
 var editor = new EpicEditor(opts).load();
-	
-$(document).ready(function() {
-//show the progress bar only if a file field was clicked 
-    var show_bar = 0; 
-    $('input[type="file"]').click(function(){ 
-        show_bar = 1; 
-    }); 
-
-//show iframe on form submit 
-    $("#map-upload-form").submit(function(){ 
-        if (show_bar === 1) {  
-            $('#upload_frame').show(); 
-            function set () { 
-                $('#upload_frame').attr('src','/maps/upload-progress?up_id={{ $up_id}}'); 
-            } 
-            setTimeout(set); 
-        } 
-    }); 
-
-    //$('#upload_frame').attr('src','/maps/upload-progress?up_id={{ $up_id}}'); 
-// 
-
-}); 
 </script>
 
 

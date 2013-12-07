@@ -94,7 +94,7 @@
 
       <div class="small-12 medium-4 columns">
         @include('partials.event-list')
-        @include('partials.donation-widget')
+
         @include('partials.server-list')
         
       </div>

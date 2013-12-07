@@ -37,6 +37,9 @@ Route::get('amazon', function()
 
 	foreach ($response['Contents'] as $object) {
         echo $object['Key'] . "\n";
+        echo "<pre>";
+        print_r($object);
+        echo "</pre>";
     }
 
 	//return json_encode($objects);
@@ -182,7 +185,18 @@ Route::get('news/{slug}', 'PostsController@show');
 
 Route::get('maps/upload-progress', function()
 {
-	return View::make('maps.upload_progress');
+	session_start();
+ 
+	$key = ini_get("session.upload_progress.prefix") . "upload_form";
+
+	if (!empty($_SESSION[$key])) {
+	    $current = $_SESSION[$key]["bytes_processed"];
+	    $total = $_SESSION[$key]["content_length"];
+	    echo $current < $total ? ceil($current / $total * 100) : 100;
+	}
+	else {
+	    echo 100;
+	}
 });
 
 Route::resource('posts', 'PostsController');
