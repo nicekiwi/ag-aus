@@ -12,8 +12,11 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
+<<<<<<< HEAD
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.0.2/css/foundation.min.css">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+
+>>>>>>> c0304698dd7eaceb3dbd0b401235bbd258bec099
         <!-- Add fancyBox -->
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />
         <link rel="stylesheet" href="/css/main.css">
@@ -25,6 +28,7 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
+<<<<<<< HEAD
           <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-8 main-content">
 
@@ -74,6 +78,12 @@
                   </section>
                 </nav>
 
+        <div class="container main-content">
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-8 clearfix">
+>>>>>>> c0304698dd7eaceb3dbd0b401235bbd258bec099
+
               @if(Session::get('flash_message'))
                   <div class="flash">
                       {{ Session::get('flash_message') }}
@@ -98,39 +108,26 @@
             </div>
 
             <div class="col-xs-6 col-sm-6 col-md-4">
-              <h3>{{ date('F') }} Donations</h3>
-              <p></p>
-              <div class="progress-percent">$42 of $140 Donated</div>
-              <div class="progress">
-
-                <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%;">
-                  <span class="sr-only">30% Complete</span>
-                </div>
-              </div>
-
-              <h3>Events</h3>
-
-
-              <h3>Our Servers</h3>
-              <ul id="master-server-list">
-              @foreach($servers as $server)
-                <li class="check-server-status" style="background-color: #{{ ($server->offline === 1 ? 'e24648' : '87ef2f') }}" data-id="server-{{ $server->id }}">
-                  <img src="/img/server-load-32.gif">
-                  <div>
-                    {{ $server->name }}<br>
-                    {{ $server->ipaddress }} - <span class="players">{{ $server->players }}</span> / <span class="maxPlayers">{{ $server->maxPlayers }}</span> Players 
-                  </div>
-                  
-                </li>
-              @endforeach
-              </ul>
+              @include('partials.donation-widget')
+              @include('partials.event-list')
+              @include('partials.server-list')
             </div>
           </div>
+<<<<<<< HEAD
 
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.0.2/js/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.0.2/js/foundation.min.js"></script>
+=======
+        </div> <!-- /container -->
+
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/vendor/jquery.fancybox.pack.js?v=2.1.5"></script>
+        <script type="text/javascript" src="/js/vendor/jquery.formance.min.js"></script>
+        <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+
+>>>>>>> c0304698dd7eaceb3dbd0b401235bbd258bec099
         @yield('footer')
         <script src="/js/main.js"></script>
     </body>

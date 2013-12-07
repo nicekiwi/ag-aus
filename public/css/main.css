@@ -5,15 +5,23 @@
    ========================================================================== */
 		
 	body {
-		/*background: transparent url(../img/full-background.jpg) no-repeat center center fixed;
+		background: transparent url(../img/full-background.jpg) no-repeat center center fixed;
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
-		background-size: cover;*/
-		background-color: #5f5f5f;
+		background-size: cover;
+		/*background-color: #1f1f1f;*/
 	}
 
-	.row .main-content {
+	.container {
+		max-width: 960px;
+	}
+
+	.navbar-brand, .user-admin-menu{
+		padding: 9px 10px 0 15px !important;
+	}
+
+	.main-content {
 		background: #fff;
 	}
 

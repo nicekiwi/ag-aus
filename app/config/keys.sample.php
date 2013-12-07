@@ -5,9 +5,9 @@ return array (
 	// Laravel Specific
 	'laravel' => [
 			// Database
-		'database' = [
+		'database' => [
 			// Live Mysql Creds
-			'db_name' = '',
+			'db_name' => '',
 			'username' => '',
 			'password' => ''
 		],

@@ -39,7 +39,7 @@ return array(
 	|
 	*/
 
-	'timezone' => 'UTC',
+	'timezone' => 'Australia/Sydney',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -118,6 +118,7 @@ return array(
 		'Acme\Providers\DonationsServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'VTalbot\Markdown\MarkdownServiceProvider',
+		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
 	),
 
 	/*
@@ -184,6 +185,7 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 		'AWS' 			  => 'Aws\Laravel\AwsFacade',
 		'Markdown' 		  => 'VTalbot\Markdown\Facades\Markdown',
+		'Gravatar' 		  => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
 	),
 
 );
