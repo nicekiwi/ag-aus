@@ -54,17 +54,28 @@ class PostsController extends BaseController {
 				->withInput(Input::except('password'));
 		} else {
 			// store
+
+			$html_desc = Markdown::string(Input::get('desc_md'));
+
 			$post = new Post;
 			$post->title = Input::get('title');
 			$post->desc_md = Input::get('desc_md');
-			$post->desc = Markdown::string(Input::get('desc_md'));
+			$post->desc = $html_desc;
 			$post->slug = Str::slug(Input::get('title'));
+
+			$dom = new domDocument;
+			$dom->loadHTML($html_desc);
+			$dom->preserveWhiteSpace = false;
+			$images = $dom->getElementsByTagName('img');
+
+			$post->featured_image = $images[0]->getAttibute('src');
+
 			//$post->author = Auth::User()->name;
 			$post->save();
 
 			// redirect
 			Session::flash('message', 'Successfully created post!');
-			return Redirect::to('posts');
+			return Redirect::to('news/'.$post->slug);
 		}
 	}
 
@@ -118,16 +129,28 @@ class PostsController extends BaseController {
                     ->withInput(Input::except('password'));
         } else {
             // store
+
+            $html_desc = Markdown::string(Input::get('desc_md'));
+
             $post = Post::findOrFail($id);
 			$post->title = Input::get('title');
 			$post->desc_md = Input::get('desc_md');
-			$post->desc = Markdown::string(Input::get('desc_md'));
+			$post->desc = $html_desc;
 			$post->slug = Str::slug(Input::get('title'));
+
+			$dom = new domDocument;
+			$dom->loadHTML($html_desc);
+			$dom->preserveWhiteSpace = false;
+			$xpath = new DOMXPath($dom);
+   			$src = $xpath->evaluate("string(//img/@src)");
+
+			$post->featured_image = $src;
+
             $post->save();
 
             // redirect
             Session::flash('message', 'Successfully updated post!');
-            return Redirect::to('posts');
+            return Redirect::to('news/'.$post->slug);
         }
 	}
 

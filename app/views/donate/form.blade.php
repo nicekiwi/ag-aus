@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h2>Make a Donation</h2>
+<h1>Donations</h1>
 
 <h4>Reasons to donate:</h4>
 <ul>

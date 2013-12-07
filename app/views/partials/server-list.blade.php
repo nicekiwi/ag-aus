@@ -1,8 +1,11 @@
 <h3>Servers</h3>
-<ul id="master-server-list">
+<dl class="accordion" data-accordion>
 	@foreach($servers as $server)
-	<li class="check-server-status" style="background-color: #{{ ($server->offline === 1 ? 'e24648' : '87ef2f') }}" data-id="server-{{ $server->id }}">
-		{{ $server->vanilla_name }}<span class="players">{{ $server->players }}</span> / <span class="maxPlayers">{{ $server->maxPlayers }}</span>
-	</li>
+	<dd>
+		<a style="background-color: #{{ ($server->offline === 1 ? 'e24648' : '87ef2f') }};padding:0.5rem;" data-id="server-{{ $server->id }}" href="#server-{{ $server->id }}">{{ $server->vanilla_name }} <span class="players">{{ $server->players }}</span> / <span class="maxPlayers">{{ $server->maxPlayers }}</span></a>
+		<div id="server-{{ $server->id }}" class="content">
+		<p>{{ $server->ipaddress }}:{{ $server->port }}</p>
+		</div>
+	</dd>
 	@endforeach
-</ul>
+</dl>

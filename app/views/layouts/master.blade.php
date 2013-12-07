@@ -14,7 +14,7 @@
 
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.0.2/css/foundation.min.css">
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
-      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/minified/jquery.ui.slider.min.css">
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.min.css">
 
       <!-- Add fancyBox -->
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />
@@ -26,7 +26,7 @@
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
-    <header style="background-color: #000; padding:10px 0;">
+    <header class="header-nav">
       <div class="row">
         <nav class="top-bar" data-topbar="">
           <!-- Title -->
@@ -49,7 +49,7 @@
 
             <!-- Top Bar Right Nav Elements -->
             <ul class="right">
-              <li><a href="/donate">Donations</a></li>
+              <li><a href="/donations">Donations</a></li>
               <li class="divider"></li>
               <li><a href="/forums">Forums</a></li>
 
@@ -71,43 +71,41 @@
       </div>
     </header>
 
-    <section class="row" style="background:#fff;">
+    <section class="row" style="background:#fff;padding-top:15px;">
       <div class="small-12 columns">
-
+        <!-- Display Alert messages -->
         @if(Session::get('flash_message'))
-            <div class="flash">
-                {{ Session::get('flash_message') }}
-            </div>
+        <div data-alert data-options="animation_speed:500;" class="custom-alert-box">
+            {{ Session::get('flash_message') }}
+            <a href="#" class="close">&times;</a>
+        </div>
         @endif
 
         @if(Session::get('message'))
-            <div class="flash">
-                {{ Session::get('message') }}
-            </div>
+        <div class="flash">
+            {{ Session::get('message') }}
+        </div>
         @endif
       </div>
 
-      <div class="small-12 columns">
+      <div class="small-12 medium-8 columns">
         @yield('content')
+      </div>
+
+      <div class="small-12 medium-4 columns">
+        @include('partials.event-list')
+        @include('partials.donation-widget')
+        @include('partials.server-list')
+        
       </div>
 
       <footer class="small-12 columns">
         <p>&copy; Powered by Kiwidev 2013</p>
       </footer>
-
-      <div class="small-12 medium-6 columns">
-        @include('partials.donation-widget')
-      </div>
-      <div class="small-12 medium-6 columns">
-        @include('partials.server-list')
-      </div>
-      <div class="small-12 medium-6 columns">
-        @include('partials.event-list')
-      </div>
     </section>
 
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.0.2/js/jquery.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.0.2/js/foundation.min.js"></script>

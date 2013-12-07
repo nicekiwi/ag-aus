@@ -1,4 +1,4 @@
-<h3>Events</h3>
+<h3>Upcoming Events</h3>
 <ul>
 @if(count($events) > 0)
 	@foreach($events as $event)

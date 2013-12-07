@@ -30,5 +30,5 @@ $(document).ready(function()
 {
 	setInterval(updateServers, 15000);
 	$(".fancybox").fancybox();
-	$( "#slider" ).slider();
+	$('#maps-list').dataTable();
 });

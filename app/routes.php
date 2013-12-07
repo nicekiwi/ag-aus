@@ -180,7 +180,10 @@ Route::resource('sessions', 'SessionsController');
 Route::get('news', 'PostsController@index');
 Route::get('news/{slug}', 'PostsController@show');
 
-
+Route::get('maps/upload-progress', function()
+{
+	return View::make('maps.upload_progress');
+});
 
 Route::resource('posts', 'PostsController');
 Route::resource('maps', 'MapsController');

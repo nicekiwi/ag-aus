@@ -8,8 +8,12 @@
 		background-color: #cfcfcf;
 	}
 
-	.container {
-		max-width: 960px;
+	
+
+	@media only screen and (min-width: 40.063em) {
+		.header-nav, .top-bar, .top-bar-section li a:not(.button) {
+			background: #1d1d1d;
+		}
 	}
 
 	.navbar-brand, .user-admin-menu{
@@ -76,23 +80,6 @@
 
 	#desc_md_textarea {
 		display: none !important;
-	}
-
-	.maps-list section {
-		float: left;
-	}
-	.maps-list section h3 {
-		margin-top: 2%;
-	}
-
-	.maps-list section img {
-		float: left;
-		width: 30%;
-	}
-
-	.maps-list section div {
-		float: right;
-		width: 67%;
 	}
 
 
