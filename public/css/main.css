@@ -5,12 +5,7 @@
    ========================================================================== */
 		
 	body {
-		background: transparent url(../img/full-background.jpg) no-repeat center center fixed;
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-		/*background-color: #1f1f1f;*/
+		background-color: #cfcfcf;
 	}
 
 	.container {

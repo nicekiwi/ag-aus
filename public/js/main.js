@@ -25,8 +25,10 @@ var updateServers = function()
 	});
 }
 
+$(document).foundation();
 $(document).ready(function() 
 {
 	setInterval(updateServers, 15000);
 	$(".fancybox").fancybox();
+	$( "#slider" ).slider();
 });

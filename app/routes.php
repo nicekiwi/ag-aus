@@ -119,37 +119,29 @@ Route::get('check-steamid/{id}', function($id)
 	return json_encode($data);
 });
 
- Route::get('/', function()
- {
-	return View::make('index');
-});
-
 Route::get('games', function()
 {
-	
 	return View::make('games');
-=======
-// 	return View::make('index');
-// });
-
-Route::get('upload', function()
-{
-	$s3 = AWS::get('s3');
- 
-	// Create Object is pretty self explanatory:
-	// Arg 1: The bucket where your file will be created.
-	// Arg 2: The name of your file.
-	// Arg 3: An array of Options.
-	//        In this case we're specifying the &quot;fileUpload&quot; option (a file on your server)
-	//        and the ACL setting to allow this file to be read by anyone.
-	$response = $s3->createObject('ag-maps', 'in_the_cloud.jpg'/*, array(
-		'fileUpload'=>__DIR__.'/file.jpg'*///,
-		//'acl'=>AmazonS3::ACL_PUBLIC,
-	/*)*/);
-	 
-	// Check if everything is okay.
-	if ((int) $response->isOK()) echo 'I Uploaded a File from My Server!';
 });
+
+// Route::get('upload', function()
+// {
+// 	$s3 = AWS::get('s3');
+ 
+// 	// Create Object is pretty self explanatory:
+// 	// Arg 1: The bucket where your file will be created.
+// 	// Arg 2: The name of your file.
+// 	// Arg 3: An array of Options.
+// 	//        In this case we're specifying the &quot;fileUpload&quot; option (a file on your server)
+// 	//        and the ACL setting to allow this file to be read by anyone.
+// 	$response = $s3->createObject('ag-maps', 'in_the_cloud.jpg'/*, array(
+// 		'fileUpload'=>__DIR__.'/file.jpg'*///,
+// 		//'acl'=>AmazonS3::ACL_PUBLIC,
+// 	/*)*/);
+	 
+// 	// Check if everything is okay.
+// 	if ((int) $response->isOK()) echo 'I Uploaded a File from My Server!';
+// });
 
 // Route::get('meow', function()
 // {
@@ -158,12 +150,7 @@ Route::get('upload', function()
 //         ->with('posts', Post::all());
 // });
 
-Route::get('donate', function()
-{
-	return View::make('donate.form');
-});
-
-Route::get('news', function()
+Route::get('donations', function()
 {
 	return View::make('donate.form');
 });
@@ -177,8 +164,6 @@ Route::get('/', ['as' => 'home', function()
 {
 	return View::make('index');
 	//dd(Donation::find(8)->donator);
-
-	
 }]);
 
 /*Route::get('admin' ['as' => 'admin', function()

@@ -67,6 +67,8 @@
                 <div class="form-group row">
                     <label class="col-md-4 control-label" for="amount">Amount</label>
 
+<div id="slider"></div>
+
                     <div class="col-md-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
