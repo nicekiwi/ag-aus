@@ -85,7 +85,13 @@ Route::get('refresh-servers', function()
 Route::get('/', function()
 {
 	
-	return View::make('hello');
+	return View::make('index');
+});
+
+Route::get('games', function()
+{
+	
+	return View::make('games');
 });
 
 // Route::get('meow', function()

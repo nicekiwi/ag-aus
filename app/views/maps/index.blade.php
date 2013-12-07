@@ -14,19 +14,25 @@
 
 <p>&nbsp;</p>
 
-<div class="maps-list">
-	@foreach($maps as $map)
-	<section class="map">
-		<img class="img-thumbnail" src="/img/mapthumbs/gravel-pit-thumb.jpg">
-		<div>
-			<h3 class="map-name">[{{ strtoupper($map->mode) }}] {{ $map->name }} <small>v{{ $map->revision }} - {{ $map->developer }}</small></h3>
-			<p class="expert">{{ strip_tags(preg_replace('/\s+?(\S+)?$/', '', substr($map->desc, 0, 121))); }}.. <a target="_blank" href="{{ $map->more_info_url }}">[Read More]</a></p>
-			<p><a href="{{ $map->s3_path }}"><button type="button" class="btn btn-success btn-sm">
-			  <span class="glyphicon glyphicon-download"></span> Download - {{ $map->filename }}</button></a></p>
-		</div>
-	</section>
-	@endforeach
-	{{ $maps->links() }}
-</div>
+<table>
+	<thead>
+		<tr>
+			<td>Mode</td>
+			<td>Name</td>
+			<td>Size</td>
+			<td>Date Added</td>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach($maps as $map)
+		<tr>
+			<td>{{ strtoupper($map->mode) }}</td>
+			<td><a href="{{ $map->filename }}">{{ $map->name }}</a> <small>v{{ $map->revision }}</td>
+			<td>{{ $map->size }}</td>
+			<td>{{ $map->created_at }}</td>
+		</tr>
+		@endforeach
+	</tbody>
+</table>
 
 @stop
