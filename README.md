@@ -65,15 +65,11 @@ Once you have the code you'll need to install all the dependancies for the site,
 
 *PhpMyAdmin is not installed by default.*
 
-The database can be configured within vagrant normally with mysql, I prefer to use Sequel Pro from my host computer, you can download the connection file below to import.
+Create the database in console: `mysql -u root -p -e "create database ag";`
 
 - **Database**: `ag`
 - **Username**: `root`
 - **Password**: `password`
-
-**Sequal Pro Connection Plist:** - <https://gist.github.com/nicekiwi/7511852>.
-
-~~A dump of the database structure and some sample data can be downloaded here: <https://gist.github.com/nicekiwi/7512069>.~~
 
 Migrations and Data Seeding are now included. Run `php artisan migrate --seed` to setup the stuff.
 
@@ -87,6 +83,8 @@ So there is some stuff missing, like the keys for all the secret stuff like Stri
 - Amazon Web Services (You'll need to get a key to Sync maps)
 
 One you got the keys, drop them into `/app/config/keys.php`.
+
+**Sequal Pro Connection Plist:** - <https://gist.github.com/nicekiwi/7511852>.
 
 ### Got an Issue?
 

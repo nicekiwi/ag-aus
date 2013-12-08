@@ -23,14 +23,12 @@ $app->redirectIfTrailingSlash();
 | Laravel takes a dead simple approach to your application environments
 | so you can just specify a machine name or HTTP host that matches a
 | given environment, then we will automatically detect it for you.
-|
+| Call: putenv('ENV=production'); somewhere to get the Production enviroment.
 */
 
-$env = $app->detectEnvironment(array(
-
-	'local' => array('precise64'),
-
-));
+$env = $app->detectEnvironment(function(){
+	return getenv('ENV') ?: 'local';
+});
 
 /*
 |--------------------------------------------------------------------------
