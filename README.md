@@ -13,7 +13,7 @@ See the setup thingy below, this will be improved when its not just after midnig
 
 
 - **IP Address**: 192.168.56.101
-- **VirtualHost**: alternative-gamers.dev
+- **VirtualHost**: alternative-gaming.dev
 
 
 ### 1. Install Vagrant (Recommended) 
@@ -53,9 +53,15 @@ Accessing your vagrant server like so, from the `/vagrant` directory run `vagran
 
 ### 6. Setup Virtual Host
 
-Vagrant took care of everything, all you need to do is add `192.168.56.101 alternative-gamers.dev` to your hosts file on your host computer *(Not in the VM)*.
+Vagrant took care of everything, all you need to do is add `192.168.56.101 alternative-gaming.dev` to your hosts file on your host computer *(Not in the VM)*.
 
-### 7. Accessing MySQL & Importing the Database
+
+### 7. Install Laravel dependancies
+
+Once you have the code you'll need to install all the dependancies for the site, this is simple; just run `composer update` from the root directory.
+
+
+### 8. Accessing MySQL & Importing the Database
 
 *PhpMyAdmin is not installed by default.*
 
@@ -67,23 +73,18 @@ The database can be configured within vagrant normally with mysql, I prefer to u
 
 **Sequal Pro Connection Plist:** - <https://gist.github.com/nicekiwi/7511852>.
 
-A dump of the database structure and some sample data can be downloaded here: <https://gist.github.com/nicekiwi/7512069>.
+~~A dump of the database structure and some sample data can be downloaded here: <https://gist.github.com/nicekiwi/7512069>.~~
 
-Migrations to handle the database do not exist as of yet.
+Migrations and Data Seeding are now included. Run `php artisan migrate --seed` to setup the stuff.
 
-
-
-### 8. Install Laravel dependancies
-
-Once you have the code you'll need to install all the dependancies for the site, this is simple; just run `composer update` from the root directory.
 
 ## Fill in the Gaps
 
 So there is some stuff missing, like the keys for all the secret stuff like Stripe payments and Amazon Web Services. As we're just deving for now you can sign up for and use your own.
 
 - Stripe.com
-- MailChimp THIng
-- Amazon Web Services (This you might need mine for.. )
+- Mandrill SMTP
+- Amazon Web Services (You'll need to get a key to Sync maps)
 
 One you got the keys, drop them into `/app/config/keys.php`.
 

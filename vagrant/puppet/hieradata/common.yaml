@@ -53,9 +53,9 @@ server:
 nginx:
     vhosts:
         R6kvUbBveUwM:
-            server_name: alternative-gamers.dev
+            server_name: alternative-gaming.dev
             server_aliases:
-                - www.alternative-gamers.dev
+                - www.alternative-gaming.dev
             www_root: /var/www/public
             listen_port: '80'
             index_files:
