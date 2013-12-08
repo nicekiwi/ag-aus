@@ -28,7 +28,7 @@ While you don't **have** to use Vagrant, I highly recommend you do; so we're all
 
 Clone the repository onto your harddrive where you can read write to it:
 
-`git clone git@github.com:nicekiwi/alternative-gamers-au.git`
+`git clone git@github.com:nicekiwi/alternative-gaming-au.git`
 
 
 ### 4. Setup Vagrant Box
@@ -58,7 +58,7 @@ Vagrant took care of everything, all you need to do is add `192.168.56.101 alter
 
 ### 7. Install Laravel dependancies
 
-Once you have the code you'll need to install all the dependancies for the site, this is simple; just run `composer update` from the root directory.
+Once you have the code you'll need to install all the dependancies for the site, this is simple; just run `composer install` from the root directory.
 
 
 ### 8. Accessing MySQL & Importing the Database
