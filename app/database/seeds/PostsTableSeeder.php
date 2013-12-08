@@ -20,7 +20,7 @@ class PostsTableSeeder extends Seeder {
 				'desc' 				=> $desc,
 				'desc_md' 			=> $desc_md,
 				'featured_image' 	=> 'http://i.imgur.com/YGmIx9q.jpg',
-				'created_by'		=> 'admin'
+				'created_by'		=> 1
 			]);
 		}
 	}

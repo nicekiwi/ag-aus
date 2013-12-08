@@ -25,12 +25,12 @@ class CreateServersTable extends Migration {
 			$table->integer('offline');
 			$table->integer('maxPlayers');
 			$table->integer('players');
-			$table->integer('current_map');
-			$table->string('version');
+			$table->integer('current_map')->nullable();
+			$table->string('version')->nullable();
 
 			$table->softDeletes();
-			$table->integer('updated_by');
-			$table->integer('created_by');
+			$table->integer('updated_by')->nullable();
+			$table->integer('created_by')->nullable();
 			$table->timestamps();
 		});
 	}

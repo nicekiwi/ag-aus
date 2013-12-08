@@ -17,7 +17,7 @@ class CreateDonationsTable extends Migration {
 			$table->increments('id');
 			$table->integer('donator_id')->unsigned();
 			$table->string('message');
-			$table->integer('anonymous');
+			$table->integer('anonymous')->nullable();
 			$table->string('currency');
 			$table->integer('amount');
 

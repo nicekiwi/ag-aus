@@ -31,8 +31,8 @@ class CreateMapsTable extends Migration {
 			$table->text('developer_url');
 
 			$table->softDeletes();
-			$table->integer('updated_by');
-			$table->integer('created_by');
+			$table->integer('updated_by')->nullable();
+			$table->integer('created_by')->nullable();
 			$table->timestamps();
 		});
 	}

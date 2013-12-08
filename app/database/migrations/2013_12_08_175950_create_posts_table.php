@@ -23,11 +23,11 @@ class CreatePostsTable extends Migration {
 			$table->integer('event')->nullable();
 			$table->timestamp('event_date');
 			$table->timestamp('event_timezone');
-			$table->text('tags');
+			$table->text('tags')->nullable();
 
 			$table->softDeletes();
-			$table->integer('updated_by');
-			$table->integer('created_by');
+			$table->integer('updated_by')->nullable();
+			$table->integer('created_by')->nullable();
 			$table->timestamps();
 		});
 	}

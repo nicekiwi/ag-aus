@@ -16,12 +16,11 @@ class CreateDonatorsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('steam_id')->unique();
-			$table->text('steam_image');
+			$table->text('steam_image')->nullable();
 			$table->string('email');
 			$table->string('card_token', 150);
 			$table->string('card_last4', 4);
 			$table->string('card_type', 10);
-			$table->string('card_country');
 			$table->string('card_month', 3);
 			$table->string('card_year', 6);
 
