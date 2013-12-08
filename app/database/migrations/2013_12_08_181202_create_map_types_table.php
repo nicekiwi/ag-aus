@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateMapsTable extends Migration {
+class CreateMapTypesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,18 @@ class CreateMapsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('maps', function(Blueprint $table) {
+		Schema::create('map_types', function(Blueprint $table)
+		{
 			$table->increments('id');
+			$table->string('type');
 			$table->string('name');
+			
+			$table->softDeletes();
+			$table->integer('updated_by');
+			$table->integer('created_by');
 			$table->timestamps();
 		});
 	}
-
 
 	/**
 	 * Reverse the migrations.
@@ -27,7 +32,7 @@ class CreateMapsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('maps');
+		Schema::drop('map_types');
 	}
 
 }

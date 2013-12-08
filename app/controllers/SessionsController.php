@@ -29,18 +29,20 @@ class SessionsController extends BaseController {
 	 */
 	public function store()
 	{
-		//
 		$input = Input::all();
 
-
 		$attempt = Auth::attempt([
-			'email' => $input['email'],
+			'username' => $input['username'],
 			'password' => $input['password']
 		]);
 
-		if($attempt) return Redirect::intended('/admin');
+		if($attempt) {
+			Session::flash('success_message', 'Login was a great success.');
+			return Redirect::intended('/admin');
+		}
 
-		dd('prob');
+		Session::flash('error_message', 'Invalid Username or Password.');
+		return Redirect::to('login');
 	}
 
 	/**

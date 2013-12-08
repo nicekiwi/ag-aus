@@ -21,6 +21,8 @@ class DonationController extends BaseController {
 						->sum('amount');
 
 		$percentage = ($total_amount / 1000) * 100;
+
+		if($percentage > 100) $percentage = 100;
 		
 		if($percentage >= 75) $class = 'success';
 		if($percentage <= 50) $class = 'warning';
@@ -44,6 +46,8 @@ class DonationController extends BaseController {
 						->sum('amount');
 
 		$percentage = ($total_amount / 1000) * 100;
+
+		if($percentage > 100) $percentage = 100;
 		
 		if($percentage >= 75) $class = 'success';
 		if($percentage <= 50) $class = 'warning';

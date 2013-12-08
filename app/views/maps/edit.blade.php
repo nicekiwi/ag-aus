@@ -2,9 +2,12 @@
 
 @section('content')
 
-<h1>Add a new Map</h1>
+<h1>Edit Map: {{ $map->name }}</h1>
 
-{{ Form::model($post, [ 'method' => 'PUT', 'route' => 'maps.update', 'files' => true ]) }}
+{{ Form::model($map, [ 'method' => 'PUT', 'route' => ['maps.update', $map->id]]) }}
+
+{{ Form::label('type', 'Map Type')}}
+{{ Form::select('type', $map_types); }}
 
 {{ $errors->name }}
 {{ Form::label('name', 'Map Name')}}
@@ -32,8 +35,6 @@
 {{ Form::label('desc_md', 'Map Notes')}}
 {{ Form::textarea('desc_md', null, ['id' => 'desc_md_textarea']) }}
 <div id="epiceditor"></div>
-
-{{ Form::file('map_file'); }}
 
 {{ Form::submit() }}
     

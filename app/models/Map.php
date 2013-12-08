@@ -15,4 +15,11 @@ class Map extends Eloquent {
 
 		return $response;
 	}
+
+	public function maptype()
+    {
+        return $this->belongsTo('MapTypes','type');
+    }
+
+
 }

@@ -4,6 +4,8 @@
 
 <h1>Donations</h1>
 
+<p><a href="/donors">See list of donors.</a></p>
+
 <h4>Reasons to donate:</h4>
 <ul>
     <li>You're supporting the AG Community (Yay).</li>

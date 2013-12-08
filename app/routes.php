@@ -28,7 +28,8 @@ Route::get('amazon', function()
 	$s3 = AWS::get('s3');
 
 	$response = $s3->listObjects([
-		'Bucket' => 'ag-maps'
+		'Bucket' => 'alternative-gaming',
+		'Prefix' => 'games/team-fortress-2/maps/'
 	]);
 
 	// $objects = $s3->getIterator('ListObjects', array(

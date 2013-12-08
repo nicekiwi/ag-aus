@@ -9,7 +9,7 @@ class PostsController extends BaseController {
 	 */
 	public function index()
 	{
-		$posts = Post::orderBy('created_at','desc')->paginate(15);
+		$posts = Post::orderBy('created_at','desc')->paginate(7);
         return View::make('posts.index')->with(compact('posts'));
 	}
 
@@ -27,7 +27,8 @@ class PostsController extends BaseController {
 	 */
 	public function create()
 	{
-        return View::make('posts.create');
+		$map_list = Map::orderBy('name','asc')->lists('name','id');
+        return View::make('posts.create')->with('map_list',$map_list);
 	}
 
 	/**
@@ -44,6 +45,8 @@ class PostsController extends BaseController {
 			'desc_md'      => 'required'
 		);
 
+		//dd(Input::get('event_maps'));
+
 		$validator = Validator::make(Input::all(), $rules);
 
 		// process the login
@@ -52,31 +55,36 @@ class PostsController extends BaseController {
 			return Redirect::to('posts/create')
 				->withErrors($validator)
 				->withInput(Input::except('password'));
-		} else {
-			// store
-
-			$html_desc = Markdown::string(Input::get('desc_md'));
-
-			$post = new Post;
-			$post->title = Input::get('title');
-			$post->desc_md = Input::get('desc_md');
-			$post->desc = $html_desc;
-			$post->slug = Str::slug(Input::get('title'));
-
-			$dom = new domDocument;
-			$dom->loadHTML($html_desc);
-			$dom->preserveWhiteSpace = false;
-			$images = $dom->getElementsByTagName('img');
-
-			$post->featured_image = $images[0]->getAttibute('src');
-
-			//$post->author = Auth::User()->name;
-			$post->save();
-
-			// redirect
-			Session::flash('message', 'Successfully created post!');
-			return Redirect::to('news/'.$post->slug);
 		}
+
+
+
+		// store
+		$html_desc = Markdown::string(Input::get('desc_md'));
+
+		$post = new Post;
+		$post->title = Input::get('title');
+		$post->desc_md = Input::get('desc_md');
+		$post->desc = $html_desc;
+		$post->slug = Str::slug(Input::get('title'));
+
+		$post->event = Input::get('event');
+		//$post->event_maps = implode(',', Input::get('event_maps'));
+
+		$dom = new domDocument;
+		$dom->loadHTML($html_desc);
+		$dom->preserveWhiteSpace = false;
+		$xpath = new DOMXPath($dom);
+			$src = $xpath->evaluate("string(//img/@src)");
+
+		$post->featured_image = $src;
+
+		//$post->author = Auth::User()->name;
+		$post->save();
+
+		// redirect
+		Session::flash('message', 'Successfully created post!');
+		return Redirect::to('news');
 	}
 
 	/**
@@ -101,8 +109,9 @@ class PostsController extends BaseController {
 	public function edit($id)
 	{
 		$post = Post::findOrFail($id);
+		$map_list = Map::orderBy('name','asc')->lists('name','id');
 
-        return View::make('posts.edit', compact('post'));
+        return View::make('posts.edit')->with(['post'=>$post, 'map_list'=>$map_list]);
 	}
 
 	/**
@@ -137,6 +146,8 @@ class PostsController extends BaseController {
 			$post->desc_md = Input::get('desc_md');
 			$post->desc = $html_desc;
 			$post->slug = Str::slug(Input::get('title'));
+
+			$post->event = Input::get('event');
 
 			$dom = new domDocument;
 			$dom->loadHTML($html_desc);

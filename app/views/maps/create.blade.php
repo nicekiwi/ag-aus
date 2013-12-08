@@ -13,7 +13,7 @@
 {{ Form::model($post, [ 'method' => 'POST', 'route' => 'maps.store', 'files' => true, 'id' => 'upload_form' ]) }}
 
 {{ Form::label('type', 'Map Type')}}
-{{ Form::select('size', $map_types); }}
+{{ Form::select('type', $map_types); }}
 
 {{ $errors->name }}
 {{ Form::label('name', 'Map Name')}}

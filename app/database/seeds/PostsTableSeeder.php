@@ -4,15 +4,24 @@ class PostsTableSeeder extends Seeder {
 
 	public function run()
 	{
-		// Uncomment the below to wipe the table clean before populating
-		// DB::table('posts')->truncate();
+		Eloquent::unguard();
 
-		$posts = array(
+		$faker = Faker\Factory::create();
 
-		);
+		foreach (range(5, 20) as $index) {
 
-		// Uncomment the below to run the seeder
-		// DB::table('posts')->insert($posts);
+			$title = 'Test Post ' . $index;
+			$desc = '<img src="http://i.imgur.com/YGmIx9q.jpg"><p>' . $faker->paragraph($nbSentences = 5) . '</p>';
+			$desc_md = '![Imgur](http://i.imgur.com/YGmIx9q.jpg)' . $faker->paragraph($nbSentences = 5);
+
+			Post::create([
+				'title' 			=> $title,
+				'slug'				=> Str::slug($title),
+				'desc' 				=> $desc,
+				'desc_md' 			=> $desc_md,
+				'featured_image' 	=> 'http://i.imgur.com/YGmIx9q.jpg',
+				'created_by'		=> 'admin'
+			]);
+		}
 	}
-
 }

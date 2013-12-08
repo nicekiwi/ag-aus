@@ -5,16 +5,17 @@
 <h1>Maps</h1>
 
 @if(Auth::check())
-	<p><a href="/maps/create">Add Map</a></p>
+	<p><a href="/maps/create">Sync with Amazon</a> <i class="fa fa-refresh"></i></p>
 @endif
 
 
 <dl class="sub-nav">
 	<dt>Filter:</dt>
 	<dd class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></dd>
-	@foreach($map_modes as $mode)
-	<dd class="{{ (Input::get('type') == $mode->mode ? 'active' : '') }}"><a href="/maps?type={{ $mode->mode }}">{{ $mode->name }}</a></dd>
+	@foreach($map_types as $type)
+	<dd class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }}</a></dd>
 	@endforeach
+	<dd class="{{ (Input::get('type') == 'new' ? 'active' : '') }}"><a href="/maps?type=new">New</a></dd>
 </dl>
 
 @if(count($maps) > 0)
@@ -29,9 +30,9 @@
 	<tbody>
 		@foreach($maps as $map)
 		<tr>
-			<td>{{ $map->name }}</td>
-			<td>{{ $map->size }}</td>
-			<td>{{ $map->created_at }}</td>
+			<td><a href="/maps/{{ $map->id }}/edit">{{ $map->name }}x</a></td>
+			<td>{{ round(($map->filesize/1048576), 2) }}</td>
+			<td><a href="/maps/{{ $map->slug }}">{{ $map->created_at }}</a></td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -40,5 +41,29 @@
 @else
 <p>No maps available.</p>
 @endif
+
+@stop
+
+@section('footer')
+
+<style type="text/css">
+	
+	.dataTables_length, .dataTables_info {
+		display: none;
+	}
+	
+	.dataTables_filter {
+		float: left;
+		text-align: left;
+	}
+
+</style>
+
+<script type="text/javascript">
+	
+	$('#maps-list').dataTable({
+		'bPaginate': false
+	});
+</script>
 
 @stop

@@ -61,7 +61,7 @@
                      <img src="{{ Gravatar::src(Auth::user()->email, 24) }}" class=""> {{ Auth::user()->username }} <b class="caret"></b>
                 </a>
                 <ul class="dropdown"><li class="title back js-generated"><h5><a href="#">Back</a></h5></li>
-                  <li><a href="/user/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                  <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                 </ul>
               </li>
               @endif
@@ -74,16 +74,31 @@
     <section class="row" style="background:#fff;padding-top:15px;">
       <div class="small-12 columns">
         <!-- Display Alert messages -->
-        @if(Session::get('flash_message'))
-        <div data-alert data-options="animation_speed:500;" class="custom-alert-box">
+        @if(Session::get('error_message'))
+        <div data-alert data-options="animation_speed:500;" class="alert-box radius alert">
+            {{ Session::get('error_message') }}
+            <a href="#" class="close">&times;</a>
+        </div>
+        @endif
+
+        @if(Session::get('warning_message'))
+        <div data-alert data-options="animation_speed:500;" class="alert-box radius warning">
             {{ Session::get('flash_message') }}
             <a href="#" class="close">&times;</a>
         </div>
         @endif
 
-        @if(Session::get('message'))
-        <div class="flash">
-            {{ Session::get('message') }}
+        @if(Session::get('info_message'))
+        <div data-alert data-options="animation_speed:500;" class="alert-box radius info">
+            {{ Session::get('error_message') }}
+            <a href="#" class="close">&times;</a>
+        </div>
+        @endif
+
+        @if(Session::get('success_message'))
+        <div data-alert data-options="animation_speed:500;" class="alert-box radius success">
+            {{ Session::get('success_message') }}
+            <a href="#" class="close">&times;</a>
         </div>
         @endif
       </div>
@@ -94,9 +109,8 @@
 
       <div class="small-12 medium-4 columns">
         @include('partials.event-list')
-
+        @include('partials.donation-widget')
         @include('partials.server-list')
-        
       </div>
 
       <footer class="small-12 columns">

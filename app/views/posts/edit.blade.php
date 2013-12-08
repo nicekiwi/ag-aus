@@ -2,14 +2,26 @@
 
 @section('content')
 
+<h1>Edit Post</h1>
+
 {{ Form::model($post, [ 'method' => 'PATCH', 'route' => ['posts.update', $post->id]]) }}
 
+{{ $errors->title }}
 {{ Form::text('title') }}
+
+{{ $errors->desc_md }}
 
 {{ Form::textarea('desc_md', null, ['id' => 'desc_md_textarea']) }}
 <div id="epiceditor"></div>
 
-{{ Form::submit('Commit Edit') }}
+{{ Form::label('event', 'Event?')}}
+{{ Form::checkbox('event') }}
+
+{{ Form::label('event_maps', 'Event Map')}}
+{{ Form::select('event_maps[]', $map_list, null, ['id' => 'event_maps', 'multiple']); }}
+
+
+{{ Form::submit('Add Post') }}
     
 {{ Form::close() }}
 
@@ -17,6 +29,8 @@
 
 @section('footer')
 
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.min.css">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="/js/vendor/epiceditor.min.js"></script>
 <script type="text/javascript">
 	var opts = {
@@ -38,6 +52,8 @@
 	};
 
 	var editor = new EpicEditor(opts).load();
+
+	$("#event_maps").chosen();
 </script>
 
 @stop

@@ -17,6 +17,8 @@ View::composer('partials.donation-widget', function($view)
 						->sum('amount');
 
 	$percentage = ($total_amount / 85) * 100;
+
+	if($percentage > 100) $percentage = 100;
 	
 	if($percentage >= 75) $class = 'success';
 	if($percentage <= 50) $class = 'warning';
