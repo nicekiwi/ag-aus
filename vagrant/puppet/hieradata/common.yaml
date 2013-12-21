@@ -7,7 +7,7 @@ vagrantfile-local:
         network:
             private_network: 192.168.56.101
             forwarded_port:
-                FFrp3rSYTPr3:
+                oqK9l6rk9Cxq:
                     host: ''
                     guest: ''
         provider:
@@ -15,7 +15,7 @@ vagrantfile-local:
                 modifyvm:
                     name: alternative-gaming-vm
                     natdnshostresolver1: on
-                    memory: '512'
+                    memory: '256'
                 setextradata:
                     VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root: 1
         provision:
@@ -26,7 +26,7 @@ vagrantfile-local:
                     - '--hiera_config /vagrant/hiera.yaml'
                     - '--parser future'
         synced_folder:
-            2igqzXdgGezO:
+            t2kbFSvjqEAJ:
                 id: vagrant-root
                 source: ./
                 target: /var/www
@@ -52,7 +52,7 @@ server:
     _prevent_empty: ''
 nginx:
     vhosts:
-        R6kvUbBveUwM:
+        bipcxLLCi0Af:
             server_name: alternative-gaming.dev
             server_aliases:
                 - www.alternative-gaming.dev
@@ -72,6 +72,7 @@ php:
             - cli
             - intl
             - mcrypt
+            - curl
         pear: {  }
         pecl:
             - pecl_http
