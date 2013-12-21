@@ -38,9 +38,9 @@
 	  textarea: 'desc_md_textarea',
 	  clientSideStorage: false,
 	  theme: {
-	    base: 'http://ag-aus.dev/themes/base/epiceditor.css',
+	    base: 'http://alternative-gaming.dev/themes/base/epiceditor.css',
 	    //preview: 'http://ag-aus.dev/themes/preview/preview-dark.css',
-	    editor: 'http://ag-aus.dev/themes/editor/epic-dark.css'
+	    editor: 'http://alternative-gaming.dev/themes/editor/epic-dark.css'
 	  },
 	  button: {
 	    preview: true,
