@@ -58,7 +58,9 @@ Vagrant took care of everything, all you need to do is add `192.168.56.101 alter
 
 ### 7. Install Laravel dependancies
 
-Once you have the code you'll need to install all the dependancies for the site, this is simple; just run `composer install` from the root directory.
+Once you have the code you'll need to install all the dependancies for the site, this is simple; just navagate to `/var/www/` in terminal within the vagrant box and run `composer install`. 
+
+**Note:** All terminal/artisan commands should be run within vagrant. Not on your host machine. 
 
 
 ### 8. Accessing MySQL & Importing the Database
