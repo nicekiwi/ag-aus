@@ -1,7 +1,7 @@
 /app/config/keys.php
 /bootstrap/compiled.php
 /vendor
-/vagrant/.vagrant
+/vagrant/.vagrant/*
 composer.phar
 composer.lock
 .DS_Store
