@@ -113,9 +113,6 @@ return array(
 		'Way\Generators\GeneratorsServiceProvider',
 		'VTalbot\Markdown\MarkdownServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
-		'Cartalyst\Sentry\SentryServiceProvider',
-		'Former\FormerServiceProvider',
-		'Stevemo\Cpanel\CpanelServiceProvider',
 	),
 
 	/*
@@ -186,8 +183,6 @@ return array(
 		'AWS' 			  => 'Aws\Laravel\AwsFacade',
 		'Markdown' 		  => 'VTalbot\Markdown\Facades\Markdown',
 		'Gravatar' 		  => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
-		'Sentry' 		  => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
-		'Former'   		  => 'Former\Facades\Former',
 	),
 
 );
