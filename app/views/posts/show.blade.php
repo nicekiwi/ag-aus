@@ -3,7 +3,7 @@
 @section('content')
 
 <h1>{{ $post->title }}</h1>
-<p><small>Posted by {{ $post->author }} on {{ date('D, d M Y', strtotime($post->created_at)) }}</small></p>
+<p>Posted by <a href="/users/{{ $post->user->username }}">{{ $post->user->username }}</a> {{ $post->created_at->diffForHumans() }}</p>
 {{ $post->desc }}
 
 <a href="/posts/{{ $post->id }}/edit">Edit post</a>

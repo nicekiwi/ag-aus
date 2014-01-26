@@ -9,8 +9,14 @@ class PostsController extends BaseController {
 	 */
 	public function index()
 	{
-		$posts = Post::orderBy('created_at','desc')->paginate(7);
+		$posts = Post::orderBy('created_at','desc')->paginate(15);
         return View::make('posts.index')->with(compact('posts'));
+	}
+
+	public function index_public()
+	{
+		$posts = Post::orderBy('created_at','desc')->paginate(7);
+        return View::make('posts.public')->with(compact('posts'));
 	}
 
 	public function display_event_widget($view)
@@ -78,13 +84,14 @@ class PostsController extends BaseController {
 			$src = $xpath->evaluate("string(//img/@src)");
 
 		$post->featured_image = $src;
+		$post->created_by = Auth::user()->id;
 
 		//$post->author = Auth::User()->name;
 		$post->save();
 
 		// redirect
 		Session::flash('message', 'Successfully created post!');
-		return Redirect::to('news');
+		return Redirect::to('admin/posts');
 	}
 
 	/**
@@ -161,7 +168,7 @@ class PostsController extends BaseController {
 
             // redirect
             Session::flash('message', 'Successfully updated post!');
-            return Redirect::to('news/'.$post->slug);
+            return Redirect::to('admin/posts');
         }
 	}
 
@@ -179,7 +186,7 @@ class PostsController extends BaseController {
 
 		// redirect
 		Session::flash('message', 'Successfully deleted the post!');
-		return Redirect::to('posts');
+		return Redirect::to('admin/posts');
 	}
 
 }

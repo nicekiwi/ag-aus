@@ -4,8 +4,6 @@ class PostsTableSeeder extends Seeder {
 
 	public function run()
 	{
-		Eloquent::unguard();
-
 		$faker = Faker\Factory::create();
 
 		foreach (range(5, 20) as $index) {

@@ -11,8 +11,7 @@
 		"way/generators": "dev-master",
 		"vtalbot/markdown": "1.*",
 		"thomaswelton/laravel-gravatar": "dev-master",
-		"fzaninotto/faker": "v1.2.0",
-		"cartalyst/sentry": "2.0.*"
+		"fzaninotto/faker": "v1.2.0"
 	},
 	"autoload": {
 		"classmap": [

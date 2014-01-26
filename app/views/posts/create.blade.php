@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -6,7 +6,7 @@
 
 <h1>Create new Post</h1>
 
-{{ Form::model($post, [ 'method' => 'POST', 'route' => 'posts.store' ]) }}
+{{ Form::model($post, [ 'method' => 'POST', 'route' => 'admin.posts.store' ]) }}
 
 {{ $errors->title }}
 {{ Form::text('title') }}
@@ -31,31 +31,10 @@
 
 @section('footer')
 
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.min.css">
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="/js/vendor/epiceditor.min.js"></script>
 <script type="text/javascript">
-	var opts = {
-	  container: 'epiceditor',
-	  textarea: 'desc_md_textarea',
-	  clientSideStorage: false,
-	  theme: {
-	    base: 'http://ag-aus.dev/themes/base/epiceditor.css',
-	    //preview: 'http://ag-aus.dev/themes/preview/preview-dark.css',
-	    editor: 'http://ag-aus.dev/themes/editor/epic-dark.css'
-	  },
-	  button: {
-	    preview: true,
-	    fullscreen: false,
-	    bar: "auto"
-	  },
-	  focusOnLoad: false,
-	  autogrow: true
-	};
+  var editor = new EpicEditor(opts).load();
 
-	var editor = new EpicEditor(opts).load();
-
-	$("#event_maps").chosen();
+  $("#event_maps").chosen();
 </script>
 
 @stop

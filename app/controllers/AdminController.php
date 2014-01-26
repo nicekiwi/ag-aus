@@ -9,7 +9,7 @@ class AdminController extends BaseController {
 	 */
 	public function index()
 	{
-        return View::make('admins.index');
+        return View::make('admin.index');
 	}
 
 	/**
@@ -19,7 +19,7 @@ class AdminController extends BaseController {
 	 */
 	public function create()
 	{
-        return View::make('admins.create');
+        return View::make('admin.create');
 	}
 
 	/**
@@ -40,7 +40,7 @@ class AdminController extends BaseController {
 	 */
 	public function show($id)
 	{
-        return View::make('admins.show');
+        return View::make('admin.show');
 	}
 
 	/**
@@ -51,7 +51,7 @@ class AdminController extends BaseController {
 	 */
 	public function edit($id)
 	{
-        return View::make('admins.edit');
+        return View::make('admin.edit');
 	}
 
 	/**

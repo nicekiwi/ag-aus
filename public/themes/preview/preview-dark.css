@@ -119,3 +119,7 @@ body {
     font-size: 11px;
     padding: 0;
 }
+
+#epiceditor-preview img {
+    width: 100%;
+}

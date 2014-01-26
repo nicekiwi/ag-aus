@@ -106,11 +106,16 @@ return array(
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
         'Illuminate\Workbench\WorkbenchServiceProvider',
+
+        // Custom
 		'Aws\Laravel\AwsServiceProvider',
 		'Acme\Providers\DonationsServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'VTalbot\Markdown\MarkdownServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
+		'Cartalyst\Sentry\SentryServiceProvider',
+		'Former\FormerServiceProvider',
+		'Stevemo\Cpanel\CpanelServiceProvider',
 	),
 
 	/*
@@ -176,9 +181,13 @@ return array(
         'URL'             => 'Illuminate\Support\Facades\URL',
         'Validator'       => 'Illuminate\Support\Facades\Validator',
         'View'            => 'Illuminate\Support\Facades\View',
+
+        // Custom
 		'AWS' 			  => 'Aws\Laravel\AwsFacade',
 		'Markdown' 		  => 'VTalbot\Markdown\Facades\Markdown',
 		'Gravatar' 		  => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
+		'Sentry' 		  => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
+		'Former'   		  => 'Former\Facades\Former',
 	),
 
 );

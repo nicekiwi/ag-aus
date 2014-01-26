@@ -1,10 +1,10 @@
-@extends('layouts.master')
+@extends('layouts.admin')
 
 @section('content')
 
-<h1>Edit Post</h1>
+<h1><i class="fa fa-pencil"></i> Edit Post</h1>
 
-{{ Form::model($post, [ 'method' => 'PATCH', 'route' => ['posts.update', $post->id]]) }}
+{{ Form::model($post, [ 'method' => 'PATCH', 'route' => ['admin.posts.update', $post->id]]) }}
 
 {{ $errors->title }}
 {{ Form::text('title') }}
@@ -21,7 +21,7 @@
 {{ Form::select('event_maps[]', $map_list, null, ['id' => 'event_maps', 'multiple']); }}
 
 
-{{ Form::submit('Add Post') }}
+{{ Form::submit('Save') }}
     
 {{ Form::close() }}
 
@@ -29,31 +29,10 @@
 
 @section('footer')
 
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.min.css">
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="/js/vendor/epiceditor.min.js"></script>
 <script type="text/javascript">
-	var opts = {
-	  container: 'epiceditor',
-	  textarea: 'desc_md_textarea',
-	  clientSideStorage: false,
-	  theme: {
-	    base: 'http://alternative-gaming.dev/themes/base/epiceditor.css',
-	    //preview: 'http://ag-aus.dev/themes/preview/preview-dark.css',
-	    editor: 'http://alternative-gaming.dev/themes/editor/epic-dark.css'
-	  },
-	  button: {
-	    preview: true,
-	    fullscreen: false,
-	    bar: "auto"
-	  },
-	  focusOnLoad: false,
-	  autogrow: true
-	};
+  var editor = new EpicEditor(opts).load();
 
-	var editor = new EpicEditor(opts).load();
-
-	$("#event_maps").chosen();
+  $("#event_maps").chosen();
 </script>
 
 @stop

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -59,9 +59,9 @@
 	  textarea: 'desc_md_textarea',
 	  clientSideStorage: false,
 	  theme: {
-	    base: 'http://ag-aus.dev/themes/base/epiceditor.css',
-	    //preview: 'http://ag-aus.dev/themes/preview/preview-dark.css',
-	    editor: 'http://ag-aus.dev/themes/editor/epic-dark.css'
+	    base: 'http://{{ $_SERVER["HTTP_HOST"] }}/themes/base/epiceditor.css',
+	    //preview: 'http://{{ $_SERVER["HTTP_HOST"] }}/themes/preview/preview-dark.css',
+	    editor: 'http://{{ $_SERVER["HTTP_HOST"] }}/themes/editor/epic-dark.css'
 	  },
 	  button: {
 	    preview: true,

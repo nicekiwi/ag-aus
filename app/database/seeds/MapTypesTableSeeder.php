@@ -4,8 +4,6 @@ class MapTypesTableSeeder extends Seeder {
 
 	public function run()
 	{
-		Eloquent::unguard();
-
 		MapTypes::create(['type' => 'arena', 'name'=> 'Arena']);
 		MapTypes::create(['type' => 'ctf', 'name'=> 'Capture the Flag']);
 		MapTypes::create(['type' => 'cp', 'name'=> 'Control Point']);

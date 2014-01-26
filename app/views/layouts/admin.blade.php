@@ -31,7 +31,7 @@
         <nav class="top-bar" data-topbar="">
           <!-- Title -->
           <ul class="title-area">
-            <li class="name"><h1><a href="/"><img src="/img/ag-logo.png"></a></h1></li>
+            <li class="name"><h1><a href="/">AG-Aus Admin</a></h1></li>
 
             <!-- Mobile Menu Toggle -->
             <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
@@ -42,22 +42,21 @@
             <!-- Top Bar Left Nav Elements -->
             <ul class="left">
               <!-- Dropdown -->
-              <li><a href="/news">News</a>
-              <li><a href="/games">Games</a></li>
-              <li><a href="/maps">Maps</a></li>
+              <li><a href="/admin/posts">Posts</a>
+              <li><a href="/admin/servers">Servers</a></li>
+              <li><a href="/admin/maps">Maps</a></li>
+              @if(Auth::user()->role === 1)
+              <li><a href="/admin/users">Users</a></li>
+              @endif
             </ul>
 
             <!-- Top Bar Right Nav Elements -->
             <ul class="right">
-              <li><a href="/donations">Donations</a></li>
-              <li class="divider"></li>
-              <li><a href="/forums">Forums</a></li>
-
               <!-- If Authenticated -->
               @if(Auth::check())
               <li class="has-dropdown not-click">
 
-                <a href="/admin" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                      <img src="{{ Gravatar::src(Auth::user()->email, 24) }}" class=""> {{ Auth::user()->username }} <b class="caret"></b>
                 </a>
                 <ul class="dropdown"><li class="title back js-generated"><h5><a href="#">Back</a></h5></li>
@@ -103,14 +102,8 @@
         @endif
       </div>
 
-      <div class="small-12 medium-8 columns">
+      <div class="small-12 columns">
         @yield('content')
-      </div>
-
-      <div class="small-12 medium-4 columns">
-        @include('partials.event-list')
-        @include('partials.donation-widget')
-        @include('partials.server-list')
       </div>
 
       <footer class="small-12 columns">
@@ -123,6 +116,28 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.0.2/js/foundation.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.min.css">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/epiceditor.min.js"></script>
+    <script type="text/javascript">
+      var opts = {
+        container: 'epiceditor',
+        textarea: 'desc_md_textarea',
+        clientSideStorage: false,
+        theme: {
+          base: 'http://alternative-gaming.dev/themes/base/epiceditor.css',
+          preview: 'http://alternative-gaming.dev/themes/preview/github.css',
+          editor: 'http://alternative-gaming.dev/themes/editor/epic-dark.css'
+        },
+        button: {
+          preview: true,
+          fullscreen: false,
+          bar: "auto"
+        },
+        focusOnLoad: false,
+        autogrow: true
+      };
+    </script>
     @yield('footer')
     <script src="/js/main.js"></script>
   </body>

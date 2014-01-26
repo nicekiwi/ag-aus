@@ -16,10 +16,10 @@ class Servers extends Eloquent
 		return $info;
 	}
 
-	public function getPlayers($ip,$port)
+	public function getPlayers($ip,$port,$rcon_passwd=null)
 	{
 		$server = $this->initServer($ip,$port);
-		$players = $server->getPlayers();
+		$players = $server->getPlayers($rcon_passwd);
 		return $players;
 	}
 

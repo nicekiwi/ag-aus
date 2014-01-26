@@ -4,8 +4,6 @@ class ServersTableSeeder extends Seeder {
 
 	public function run()
 	{
-		Eloquent::unguard();
-
 		Servers::create([
 			'order' 			=> 1,
 			'name'				=> '#1 Chill Out Server',

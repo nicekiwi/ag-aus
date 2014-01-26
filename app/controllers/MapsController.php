@@ -11,12 +11,35 @@ class MapsController extends BaseController {
 	 */
 	public function index()
 	{
-		if(Input::has('type')) $maps = Map::orderBy('name','asc')->where('type',Input::get('type'))->where('public',1)->get();
-		else $maps = Map::where('public',1)->get();
-
+		$maps = $this->get_maps();
 		$map_types = MapTypes::orderBy('name','asc')->get();
 
         return View::make('maps.index')->with(['maps'=>$maps,'map_types'=>$map_types]);
+	}
+
+	public function index_public()
+	{
+		$maps = $this->get_maps();
+		$map_types = MapTypes::orderBy('name','asc')->get();
+
+        return View::make('maps.public')->with(['maps'=>$maps,'map_types'=>$map_types]);
+	}
+
+	public function get_maps()
+	{
+		$public = 1;
+		if(Auth::check()) $public = 0;
+		if(Input::has('type')) 
+			//$maps = Map::orderBy('name','asc')->has('type',Input::get('type'))/*->where('type',Input::get('type'))->where('public',1)*/->get();
+			$maps = Map::orderBy('name','asc')->whereHas('maptype', function($q)
+			{
+			    $q->where('type', Input::get('type'));
+
+			})->where('public','>=',$public)->get();
+		else 
+			$maps = Map::where('public','>=',$public)->get();
+
+		return $maps;
 	}
 
 	public function search($name)
@@ -163,6 +186,7 @@ class MapsController extends BaseController {
 		$map->revision = Input::get('revision');
 		$map->more_info_url = Input::get('more_info_url');
 		$map->image = Input::get('image');
+		$map->video = Input::get('video');
 		$map->desc_md = Input::get('desc_md');
 		$map->desc = $html_desc;
 		$map->slug = Str::slug(Input::get('name').' '.Input::get('revision'));
@@ -171,7 +195,7 @@ class MapsController extends BaseController {
 		$map->save();
 
 		Session::flash('success_message', $map->name . ' ' . $map->revision . ' updated successfully.');
-		return Redirect::to('maps');
+		return Redirect::to('admin/maps');
 	}
 
 	/**

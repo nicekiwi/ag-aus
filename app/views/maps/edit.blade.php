@@ -1,10 +1,10 @@
-@extends('layouts.master')
+@extends('layouts.admin')
 
 @section('content')
 
 <h1>Edit Map: {{ $map->name }}</h1>
 
-{{ Form::model($map, [ 'method' => 'PUT', 'route' => ['maps.update', $map->id]]) }}
+{{ Form::model($map, [ 'method' => 'PUT', 'route' => ['admin.maps.update', $map->id]]) }}
 
 {{ Form::label('type', 'Map Type')}}
 {{ Form::select('type', $map_types); }}
@@ -25,6 +25,9 @@
 {{ Form::label('image', 'Image of Map')}}
 {{ Form::text('image') }}
 
+{{ Form::label('video', 'Video Review or Demo of Map')}}
+{{ Form::text('video') }}
+
 {{ Form::label('developer', 'Map Developer')}}
 {{ Form::text('developer') }}
 
@@ -40,29 +43,10 @@
     
 {{ Form::close() }}
 
+@stop
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/epiceditor/0.2.0/js/epiceditor.min.js"></script>
+@section('footer')
 <script type="text/javascript">
-	var opts = {
-	  container: 'epiceditor',
-	  textarea: 'desc_md_textarea',
-	  clientSideStorage: false,
-	  theme: {
-	    base: 'http://ag-aus.dev/themes/base/epiceditor.css',
-	    //preview: 'http://ag-aus.dev/themes/preview/preview-dark.css',
-	    editor: 'http://ag-aus.dev/themes/editor/epic-dark.css'
-	  },
-	  button: {
-	    preview: true,
-	    fullscreen: false,
-	    bar: "auto"
-	  },
-	  focusOnLoad: false,
-	  autogrow: true
-	};
-
-	var editor = new EpicEditor(opts).load();
+  var editor = new EpicEditor(opts).load();
 </script>
-
-
 @stop

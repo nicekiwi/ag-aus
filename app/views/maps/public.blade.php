@@ -1,21 +1,16 @@
-@extends('layouts.admin')
+@extends('layouts.master')
 
 @section('content')
 
 <h1>Maps</h1>
 
-@if(Auth::check())
-	<p><a href="/admin/maps/create">Sync with Amazon</a> <i class="fa fa-refresh"></i></p>
-@endif
-
-
 <dl class="sub-nav">
 	<dt>Filter:</dt>
-	<dd class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/admin/maps">All</a></dd>
+	<dd class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></dd>
 	@foreach($map_types as $type)
-	<dd class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/admin/maps?type={{ $type->type }}">{{ $type->name }}</a></dd>
+	<dd class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }}</a></dd>
 	@endforeach
-	<!-- <dd class="{{ (Input::get('type') == 'new' ? 'active' : '') }}"><a href="/admin/maps?type=new">New</a></dd> -->
+	<!-- <dd class="{{ (Input::get('type') == 'new' ? 'active' : '') }}"><a href="/maps?type=new">New</a></dd> -->
 </dl>
 
 @if(count($maps) > 0)
@@ -26,15 +21,17 @@
 			<td>Name</td>
 			<td>Size (MB)</td>
 			<td>Added</td>
+			<td></td>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach($maps as $map)
 		<tr>
 			<td>{{ $map->maptype->type }}</td>
-			<td><a href="/admin/maps/{{ $map->id }}/edit"><?php if($map->name !== ''){ echo $map->name; } else { echo $map->filename; } ?></a></td>
+			<td><a href="/maps/{{ $map->slug }}">{{ $map->name }} {{ $map->revision }}</a></td>
 			<td>{{ round(($map->filesize/1048576), 2) }}</td>
 			<td>{{ $map->created_at->diffForHumans() }}</td>
+			<td><a target="_blank" href="https://s3-ap-southeast-2.amazonaws.com/alternative-gaming/{{ $map->s3_path }}"><i class="fa fa-cloud-download"></i> Download</a></td>
 		</tr>
 		@endforeach
 	</tbody>

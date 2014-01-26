@@ -4,8 +4,6 @@ class DonatorsTableSeeder extends Seeder {
 
 	public function run()
 	{
-		Eloquent::unguard();
-
 		$faker = Faker\Factory::create();
 
 		foreach (range(10,20) as $index) {

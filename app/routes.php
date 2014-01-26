@@ -11,6 +11,27 @@
 |
 */
 
+Route::get('test', function()
+{
+	//$photo = new Photo;
+
+	//return $photo->import_photos();
+
+	//dd(User::find(1)->first()->created_at->diffForhumans());
+
+	$server = new SourceServer('203.33.121.205','27081');
+	try {
+	  $server->rconAuth('sho-hybu-muph-ner');
+	  dd($server->rconExec('Users'));
+	}
+	catch(RCONNoAuthException $e) {
+	  trigger_error('Could not authenticate with the game server.',
+	    E_USER_ERROR);
+	}
+
+
+});
+
 Route::get('server-info', function()
 {
 	$server = new Servers;
@@ -26,11 +47,18 @@ Route::get('refresh-servers', function()
 Route::get('players', function()
 {
 	$servers = new Servers;
-	$players = $servers->getPlayers('203.33.121.205','27021');
+	//$servers->rconAuth('sho-hybu-muph-ner');
+	$players = $servers->getPlayers('203.33.121.205','27021','sho-hybu-muph-ner');
 
-	foreach($players as $key => $value){
-	    echo $value->getName() . 'has a score of' . $value->getScore() . '<br>';
+	//dd($players);
+
+	echo '<table>';
+	foreach($players as $player){
+	    echo '<tr><td>' . $player->getName() . '</td><td>' . $player->getSteamId() . '</td></tr>';
 	}
+	echo '</table';
+
+	//var_dump($players);
 });
 
 Route::get('check-steamid/{id}', function($id)
@@ -70,14 +98,46 @@ Route::get('/', ['as' => 'home', function()
 	return View::make('index');
 }]);
 
-Route::get('admin', ['as' => 'admin', 'before' => 'auth', 'uses' => 'AdminController@index']);
+//Route::get('admin', ['as' => 'admin', 'before' => 'auth', 'uses' => 'AdminController@index']);
 
 Route::get('login', 'SessionsController@create');
 Route::get('logout', 'SessionsController@destroy');
 Route::resource('sessions', 'SessionsController');
 
-Route::get('news', 'PostsController@index');
+Route::get('news', 'PostsController@index_public');
 Route::get('news/{slug}', 'PostsController@show');
 
-Route::resource('posts', 'PostsController');
-Route::resource('maps', 'MapsController');
+Route::get('maps', 'MapsController@index_public');
+Route::get('maps/{slug}', 'MapsController@show');
+
+
+
+
+
+
+// ===============================================
+// ADMIN SECTION =================================
+// ===============================================
+Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
+{
+	// main page for the admin section (app/views/admin/dashboard.blade.php)
+	Route::get('/', function()
+	{
+		return View::make('admin.index');
+	});
+
+	Route::resource('posts', 'PostsController');
+	Route::resource('maps', 'MapsController');
+
+	// // subpage for the posts found at /admin/posts (app/views/admin/posts.blade.php)
+	// Route::get('posts', function()
+	// {
+	// 	return View::make('posts.show');
+	// });
+
+	// // subpage to create a post found at /admin/posts/create (app/views/admin/posts-create.blade.php)
+	// Route::get('posts/create', function()
+	// {
+	// 	return View::make('posts.create');
+	// });
+});
