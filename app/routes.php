@@ -21,7 +21,7 @@ Route::get('test', function()
 
 	$server = new SourceServer('203.33.121.205','27081');
 	try {
-	  $server->rconAuth('sho-hybu-muph-ner');
+	  $server->rconAuth('');
 	  dd($server->rconExec('Users'));
 	}
 	catch(RCONNoAuthException $e) {
@@ -47,8 +47,7 @@ Route::get('refresh-servers', function()
 Route::get('players', function()
 {
 	$servers = new Servers;
-	//$servers->rconAuth('sho-hybu-muph-ner');
-	$players = $servers->getPlayers('203.33.121.205','27021','sho-hybu-muph-ner');
+	$players = $servers->getPlayers('203.33.121.205','27021');
 
 	//dd($players);
 
