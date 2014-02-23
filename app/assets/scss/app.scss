@@ -1,0 +1,130 @@
+@import "foundation/settings";
+@import "settings-override";
+@import "normalize";
+@import "foundation-override";
+
+
+body {
+	background-color: #cfcfcf;
+}
+
+
+
+@media only screen and (min-width: 40.063em) {
+	.header-nav, .top-bar, .top-bar-section li a:not(.button) {
+		background: #1d1d1d;
+	}
+}
+
+.navbar-brand, .user-admin-menu{
+	padding: 9px 10px 0 15px !important;
+}
+
+.main-content {
+	background: #fff;
+}
+
+.fiftyx td:first-child {
+    width: 25%;
+}
+
+.fiftyx {
+	margin-bottom: 35px;
+}
+
+ul#master-server-list{
+	list-style: none;
+	padding: 0;
+	width: 100%;
+}
+
+ul#master-server-list li{
+	background-color: #ccc;
+	padding: 5px 15px;
+	float: left;
+	width: 100%;
+}
+
+ul#master-server-list li img{
+	float: left;
+	width: 32px;
+	height: 32px;
+	margin: 5px 10px 5px 0;
+}
+
+ul#master-server-list li div{
+	float: left;
+	height: 32px;
+}
+
+ul#master-server-list li.online{
+	background-color: #87ef2f;
+}
+
+ul#master-server-list li.offline{
+	background-color: #e24648;
+}
+
+ul#master-server-list li.error{
+	background-color: #f4de4a;
+}
+
+.donation-plans div {
+	text-align: center;
+}
+
+.donator-cost {
+	font-size: 3em;
+	font-weight: bold;
+}
+
+#desc_md_textarea {
+	display: none !important;
+}
+
+#epiceditor {
+	min-height: 500px;
+}
+
+
+
+
+/* Videos Page */
+
+img.unveil {
+	border-radius: 7px;
+}
+
+.video-list li, .video-list li a {
+	position: relative;
+	display: block;
+}
+
+a.lightbox:hover i {
+	opacity: 0.7;
+}
+
+.lightbox i {
+    display: block;
+    font-size: 40px;
+    line-height: 1em;
+    height: 1em;
+    width: 1em;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    margin: -0.5em 0 0 -0.5em;
+    opacity: 0.1;
+    // text-shadow: 0 0 100px #1d1d1d;
+    transition: opacity 0.5s ease;
+}
+
+@media #{$small-only} { 
+	img.unveil {
+		width: 100%;
+	}
+}

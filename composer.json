@@ -10,7 +10,9 @@
 		"stripe/stripe-php": "v1.9.0",
 		"way/generators": "dev-master",
 		"vtalbot/markdown": "1.*",
-		"thomaswelton/laravel-gravatar": "dev-master",
+		"thomaswelton/laravel-gravatar": "dev-master"
+	},
+	"require-dev": {
 		"fzaninotto/faker": "v1.2.0"
 	},
 	"autoload": {

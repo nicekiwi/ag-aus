@@ -1,0 +1,14 @@
+{
+  "name": "alternative-gaming-au",
+  "version": "0.0.1",
+  "private": "true",
+  "dependencies": {
+    "foundation": "zurb/bower-foundation",
+    "fancybox": "*",
+    "unveil": "*",
+    "datatables": "~1.9.4"
+  },
+  "resolutions": {
+    "jquery": ">= 2.0.0"
+  }
+}

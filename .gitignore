@@ -1,7 +1,10 @@
 /app/config/keys.php
+/app/database/*.sqlite
+/app/assets/build/*
 /bootstrap/compiled.php
 /vendor
-vagrant/.vagrant
+/bower_components/*
+/.sass-cache/*
+/node_modules/*
 composer.phar
-composer.lock
 .DS_Store
