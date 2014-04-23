@@ -3,7 +3,7 @@
 return array(
 	'connections' => array(
 		'mysql' => array(
-			'database'  => 'ag',
+			'database'  => 'ag-aus',
 			'username'  => 'root',
 			'password'  => 'password',
 		),

@@ -37,7 +37,7 @@ class CreateThrottleTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::drop('throttle');
 	}
 
 }

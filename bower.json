@@ -1,12 +1,13 @@
 {
-  "name": "alternative-gaming-au",
+  "name": "ag-aus",
   "version": "0.0.1",
   "private": "true",
   "dependencies": {
-    "foundation": "zurb/bower-foundation",
     "fancybox": "*",
     "unveil": "*",
-    "datatables": "~1.9.4"
+    "datatables": "~1.9.4",
+    "bootstrap-sass-official": "~v3.1.1",
+    "blueimp-file-upload": "~9.5.7"
   },
   "resolutions": {
     "jquery": ">= 2.0.0"

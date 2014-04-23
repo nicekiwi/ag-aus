@@ -11,10 +11,39 @@ class MapsController extends BaseController {
 	 */
 	public function index()
 	{
+		$s3 = AWS::get('s3');
+
+		$postObject = new \Aws\S3\Model\PostObject($s3, 'alternative-gaming', [
+			'acl' => 'public-read',
+			//'key' => 'games/team-fortress-2/maps'
+		]);
+
+		// $postObject = $s3->postObject('alternative-gaming', [
+		// 	'acl' => 'public-read',
+		// 	'key' => 'games/team-fortress-2/maps'
+		// ]);
+
+		$form = $postObject->prepareData()->getFormInputs();
+
+		$options = new stdClass;
+		$options->policy = $form['policy'];
+		$options->signature = $form['signature'];
+		$options->uid = uniqid();
+		$options->accessKey = $form['AWSAccessKeyId'];
+		$options->bucket = 'alternative-gaming';
+		$options->key = 'games/team-fortress-2/maps';//$form['key'];
+		$options->acl = $form['acl'];
+
+		//dd($form);
+
 		$maps = $this->get_maps();
 		$map_types = MapTypes::orderBy('name','asc')->get();
 
-        return View::make('maps.index')->with(['maps'=>$maps,'map_types'=>$map_types]);
+        return View::make('maps.index')->with([
+        	'maps' => $maps,
+        	'map_types' => $map_types,
+        	'options' => $options
+        ]);
 	}
 
 	public function index_public()
@@ -24,6 +53,13 @@ class MapsController extends BaseController {
 
         return View::make('maps.public')->with(['maps'=>$maps,'map_types'=>$map_types]);
 	}
+
+	// public function upload()
+	// {
+		
+
+	// 	return View::make('maps.upload')->with(compact('options'));
+	// }
 
 	public function get_maps()
 	{

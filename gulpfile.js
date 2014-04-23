@@ -10,21 +10,21 @@ var jshint          = require('gulp-jshint'),
     rename          = require('gulp-rename'),
     includejs       = require('gulp-include'),
     importcss       = require('gulp-cssimport'),
-    sass            = require('gulp-ruby-sass');
+    sass            = require('gulp-sass');
  
 var sources = {
     sass:              './app/assets/scss/*.scss',
-    javascript:        './app/assets/js/app.js'
+    javascript:        './app/assets/js/*.js'
 };
 
 var targets = {
     css:    './public/css',
-    js:     './public/js',
+    js:     './public/js'
 };
 
 // JS hint task
 gulp.task('jshint', function() {
-    gulp.src('./app/assets/js/app.js')
+    gulp.src('./app/assets/js/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -40,6 +40,11 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(targets.js));
 });
 
+gulp.task('fonts', function () {
+    gulp.src('app/bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap/*')
+        .pipe(gulp.dest('dist/bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap'));
+});
+
 // compile CSS
 gulp.task('sass', function() {
 
@@ -49,10 +54,11 @@ gulp.task('sass', function() {
         ])
         .pipe(importcss())
         .pipe(sass({
-            loadPath: [
-                './bower_components/foundation/scss', 
+            includePaths: [
+                './bower_components/bootstrap-sass-official/vendor/assets/stylesheets', 
                 './bower_components'
-            ]
+            ],
+            errLogToConsole: true
         }))
 
         .pipe(autoprefix('last 2 versions'))

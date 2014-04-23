@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration {
 			$table->string('steam_id')->nullable();
 			$table->text('steam_image')->nullable();
 
+			$table->text('remember_token')->nullable();
+
 			// Sentry
 			$table->text('permissions')->nullable();
 			$table->boolean('activated')->default(0);
