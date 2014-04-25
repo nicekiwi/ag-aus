@@ -29,7 +29,7 @@
 		<tr>
 			<td>{{ $map->maptype->type }}</td>
 			<td><a href="/maps/{{ $map->slug }}">{{ $map->name }} {{ $map->revision }}</a></td>
-			<td>{{ round(($map->filesize/1048576), 2) }}</td>
+			<td>{{ round(($map->filesize/1048576), 0) }}</td>
 			<td>{{ $map->created_at->diffForHumans() }}</td>
 			<td><a target="_blank" href="https://s3-ap-southeast-2.amazonaws.com/alternative-gaming/{{ $map->s3_path }}"><i class="fa fa-cloud-download"></i> Download</a></td>
 		</tr>

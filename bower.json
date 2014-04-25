@@ -8,8 +8,5 @@
     "datatables": "~1.9.4",
     "bootstrap-sass-official": "~v3.1.1",
     "blueimp-file-upload": "~9.5.7"
-  },
-  "resolutions": {
-    "jquery": ">= 2.0.0"
   }
 }

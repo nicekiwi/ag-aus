@@ -11,7 +11,7 @@
 <!-- The fileinput-button span is used to style the file input field as button -->
 <span class="btn btn-success fileinput-button">
     <i class="fa fa-plus"></i>
-    <span>Select files...</span>
+    <span>Upload maps...</span>
     <!-- The file input field used as target for the file upload widget -->
     <input id="fileupload" type="file" name="file" accept="application/bzip2, text/nav" multiple>
 </span>
@@ -24,6 +24,8 @@
 <!-- The container for the uploaded files -->
 <div id="files" class="files"></div>
 
+<p>Only .bz2 and .nav files are accepted. No max filesize.</p>
+
 
 <dl class="sub-nav">
 	<dt>Filter:</dt>
@@ -35,7 +37,7 @@
 </dl>
 
 @if(count($maps) > 0)
-<table id="maps-list">
+<table id="maps-list" class="table table-striped table-bordered" width="100%">
 	<thead>
 		<tr>
 			<td>Type</td>
@@ -108,7 +110,8 @@
 	});
 	
 	$('#maps-list').dataTable({
-		'bPaginate': false
+		"bPaginate": false,
+		"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
 	});
 </script>
 

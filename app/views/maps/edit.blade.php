@@ -4,7 +4,7 @@
 
 <h1>Edit Map: {{ $map->name }}</h1>
 
-{{ Form::model($map, [ 'method' => 'PUT', 'route' => ['admin.maps.update', $map->id]]) }}
+{{ Form::model($map, [ 'method' => 'PUT', 'route' => ['admin.maps.update', $map->id], 'class'=>'form-horizontal']) }}
 
 <fieldset>
 
@@ -21,28 +21,26 @@
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="name">Name</label>  
+  {{ Form::label('name', 'Name', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-  <input id="name" name="name" type="text" placeholder="" class="form-control input-md" required="">
-    
+    {{ Form::text('name', null, ['class'=>'form-control input-md','required'=>'true'])}}
   </div>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="revision">Revision</label>  
+  {{ Form::label('revision', 'Revision', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-  <input id="revision" name="revision" type="text" placeholder="" class="form-control input-md" required="">
-  <span class="help-block">RC1 or v3.2 for example.</span>  
+    {{ Form::text('revision', null, ['class'=>'form-control input-md','required'=>'true'])}}
+    <span class="help-block">RC1 or v3.2 for example.</span>
   </div>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="s3_path">Amazon S3 Path</label>  
+  {{ Form::label('s3_path', 'Amazon S3 Path', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-  <input id="s3_path" name="s3_path" type="text" placeholder="" class="form-control input-md">
-    
+    {{ Form::text('s3_path', null, ['disabled' => true,'class'=>'form-control input-md']) }}
   </div>
 </div>
 
@@ -50,51 +48,64 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="images">Images</label>
   <div class="col-md-4">
-    <input id="images" name="images" class="input-file" type="file">
+    <!-- The fileinput-button span is used to style the file input field as button -->
+    <span class="btn btn-success fileinput-button">
+        <i class="fa fa-plus"></i>
+        <span>Upload images...</span>
+        <!-- The file input field used as target for the file upload widget -->
+        <input id="imageupload" type="file" name="file" accept="image/jpg, image/jpeg, image/png, image/gif" multiple>
+    </span>
+    <br>
+    <br>
+    <!-- The global progress bar -->
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+    <span class="help-block">Up to 5 images of the map. JPEG/PNG Only. Max 1MB.</span>
   </div>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="video">Video</label>  
+  {{ Form::label('video', 'Video', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-  <input id="video" name="video" type="text" placeholder="" class="form-control input-md">
-  <span class="help-block">Only YouTube links are supported.</span>  
+    {{ Form::text('video', null, ['class'=>'form-control input-md','required'=>'true'])}}
+    <span class="help-block">Only YouTube links are supported.</span>
   </div>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="more_info_url">More Info URL</label>  
+  {{ Form::label('more_info_url', 'More Info URL', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-  <input id="more_info_url" name="more_info_url" type="text" placeholder="" class="form-control input-md">
-  <span class="help-block">Where users can get more info on the map.</span>  
+    {{ Form::text('more_info_url', null, ['class'=>'form-control input-md','required'=>'true'])}}
+    <span class="help-block">Where users can get more info on the map.</span>
   </div>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="developer">Developer</label>  
+  {{ Form::label('developer', 'Developer', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-  <input id="developer" name="developer" type="text" placeholder="" class="form-control input-md">
-  <span class="help-block">Name/Call-sign of the map developer</span>  
+    {{ Form::text('developer', null, ['class'=>'form-control input-md','required'=>'true'])}}
+    <span class="help-block">Name / Alias of the map developer.</span>
   </div>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="developer_url">Developer URL</label>  
+  {{ Form::label('developer_url', 'Developer URL', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-  <input id="developer_url" name="developer_url" type="text" placeholder="" class="form-control input-md">
-  <span class="help-block">Link to the developers bio.</span>  
+    {{ Form::text('developer_url', null, ['class'=>'form-control input-md','required'=>'true'])}}
+    <span class="help-block">Link to the developers bio.</span>
   </div>
 </div>
 
 <!-- Textarea -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="desc">Notes</label>
+  {{ Form::label('desc', 'Notes', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">                     
-    <textarea class="form-control" id="desc" name="desc">Made with &lt;3 for the community.</textarea>
+    {{ Form::textarea('desc_md', null, ['class'=>'form-control','placeholder'=>'Made with &lt;3 for the community.']) }}
   </div>
 </div>
 
@@ -108,37 +119,6 @@
 </div>
 
 </fieldset>
-</form>
-
-{{ Form::label('name', 'Map Name')}}
-{{ Form::text('name') }}
-
-{{ Form::label('revision', 'Map Revision')}}
-{{ Form::text('revision') }}
-
-{{ Form::label('more_info_url', 'More map info')}}
-{{ Form::text('more_info_url') }}
-
-{{ Form::label('s3_path', 'Path to Amazon S3 file')}}
-{{ Form::text('s3_path', null, ['disabled' => true]) }}
-
-{{ Form::label('image', 'Image of Map')}}
-{{ Form::text('image') }}
-
-{{ Form::label('video', 'Video Review or Demo of Map')}}
-{{ Form::text('video') }}
-
-{{ Form::label('developer', 'Map Developer')}}
-{{ Form::text('developer') }}
-
-{{ Form::label('developer_url', 'Map Developer URL')}}
-{{ Form::text('developer_url') }}
-
-{{ $errors->desc_md }}
-{{ Form::label('desc_md', 'Map Notes')}}
-{{ Form::textarea('desc_md', null, ['id' => 'desc_md_textarea']) }}
-
-{{ Form::submit() }}
     
 {{ Form::close() }}
 
@@ -146,6 +126,31 @@
 
 @section('footer')
 <script type="text/javascript">
-  var editor = new EpicEditor(opts).load();
+
+  $(function () {
+    'use strict';
+    // Change this to the location of your server-side upload handler:
+    var url = 'https://{{ $options->bucket }}.s3.amazonaws.com:443/';
+
+    $('#imageupload').fileupload({
+      url: 'https://api.imgur.com/3/image',
+      formData: {
+        'Authorization': 'Client-ID a318c02ce0760fb',
+        'image': 'helloworld.jpg'
+      },
+      dataType: 'json',
+      done: function (e, data) {
+        $.each(data.result.files, function (index, file) {
+          $('<p/>').text(file.name).appendTo('#files');
+        });
+      },
+      progressall: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css('width',progress + '%');
+      }
+    }).prop('disabled', !$.support.fileInput)
+    .parent().addClass($.support.fileInput ? undefined : 'disabled');
+  });
 </script>
+
 @stop

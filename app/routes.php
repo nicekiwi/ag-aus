@@ -19,16 +19,17 @@ Route::get('test', function()
 
 	//dd(User::find(1)->first()->created_at->diffForhumans());
 
-	$server = new SourceServer('203.33.121.205','27081');
-	try {
-	  $server->rconAuth('');
-	  dd($server->rconExec('Users'));
-	}
-	catch(RCONNoAuthException $e) {
-	  trigger_error('Could not authenticate with the game server.',
-	    E_USER_ERROR);
-	}
+	// $server = new SourceServer('203.33.121.205','27081');
+	// try {
+	//   $server->rconAuth('');
+	//   dd($server->rconExec('Users'));
+	// }
+	// catch(RCONNoAuthException $e) {
+	//   trigger_error('Could not authenticate with the game server.',
+	//     E_USER_ERROR);
+	// }
 
+	return View::make('hello');
 
 });
 
@@ -79,9 +80,9 @@ Route::get('check-steamid/{id}', function($id)
 	return json_encode($data);
 });
 
-Route::get('games', function()
+Route::get('bio', function()
 {
-	return View::make('games');
+	return View::make('bio');
 });
 
 Route::get('donations', function()

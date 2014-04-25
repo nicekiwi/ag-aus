@@ -15,105 +15,68 @@
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
       <link rel="stylesheet" href="/css/app.css">
 
-      <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.0.2/js/modernizr.min.js"></script>
   </head>
   <body>
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
-    <header class="header-nav">
-      <div class="row">
-        <nav class="top-bar" data-topbar="">
-          <!-- Title -->
-          <ul class="title-area">
-            <li class="name"><h1><a href="/"><img src="/img/ag-logo.png"></a></h1></li>
 
-            <!-- Mobile Menu Toggle -->
-            <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-          </ul>
-
-          <!-- Top Bar Section -->
-          <section class="top-bar-section">
-            <!-- Top Bar Left Nav Elements -->
-            <ul class="left">
-              <!-- Dropdown -->
-              <li><a href="/news">News</a>
-              <li><a href="/games">Games</a></li>
+      <!-- Static navbar -->
+      <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Alternative Gaming</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="/bio">Bio</a></li>
+              <li><a href="/events">Events</a></li>
               <li><a href="/maps">Maps</a></li>
+              <li><a href="/donate">Donate</a></li>
+              <li><a href="/stats">Stats</a></li>
+
+              <li><a target="_blank" href="http://community.ag-aus.org">Forums</a></li>
             </ul>
-
-            <!-- Top Bar Right Nav Elements -->
-            <ul class="right">
-              <li><a href="/donations">Donations</a></li>
-              <li class="divider"></li>
-              <li><a href="/forums">Forums</a></li>
-
+            <ul class="nav navbar-nav navbar-right">
               <!-- If Authenticated -->
               @if(Auth::check())
-              <li class="has-dropdown not-click">
-
-                <a href="/admin" class="dropdown-toggle" data-toggle="dropdown">
-                     <img src="{{ Gravatar::src(Auth::user()->email, 24) }}" class=""> {{ Auth::user()->username }} <b class="caret"></b>
-                </a>
-                <ul class="dropdown"><li class="title back js-generated"><h5><a href="#">Back</a></h5></li>
-                  <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ Gravatar::src(Auth::user()->email, 20) }}" class=""> {{ Auth::user()->username }} <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/logout">Logout</a></li>
                 </ul>
               </li>
               @endif
             </ul>
-          </section>
-        </nav>
-      </div>
-    </header>
-
-    <section class="row" style="background:#fff;padding-top:15px;">
-      <div class="small-12 columns">
-        <!-- Display Alert messages -->
-        @if(Session::get('error_message'))
-        <div data-alert data-options="animation_speed:500;" class="alert-box radius alert">
-            {{ Session::get('error_message') }}
-            <a href="#" class="close">&times;</a>
-        </div>
-        @endif
-
-        @if(Session::get('warning_message'))
-        <div data-alert data-options="animation_speed:500;" class="alert-box radius warning">
-            {{ Session::get('flash_message') }}
-            <a href="#" class="close">&times;</a>
-        </div>
-        @endif
-
-        @if(Session::get('info_message'))
-        <div data-alert data-options="animation_speed:500;" class="alert-box radius info">
-            {{ Session::get('error_message') }}
-            <a href="#" class="close">&times;</a>
-        </div>
-        @endif
-
-        @if(Session::get('success_message'))
-        <div data-alert data-options="animation_speed:500;" class="alert-box radius success">
-            {{ Session::get('success_message') }}
-            <a href="#" class="close">&times;</a>
-        </div>
-        @endif
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
       </div>
 
-      <div class="small-12 medium-8 columns">
-        @yield('content')
-      </div>
+  <div class="container">
 
-      <div class="small-12 medium-4 columns">
-        @include('partials.event-list')
-        @include('partials.donation-widget')
-        @include('partials.server-list')
-      </div>
+      <section class="row">
+        <div class="col-sm-12">
+          <!-- Display Alert messages -->
+          @include('partials.error-messages')
+        </div>
 
-      <footer class="small-12 columns">
-        <p>&copy; Powered by Kiwidev 2013</p>
-      </footer>
-    </section>
+        <div class="col-sm-12">
+          @yield('content')
+        </div>
 
-    @yield('footer')
+        <footer class="col-sm-12">
+          <p>&copy; Powered by Kiwidev 2013</p>
+        </footer>
+      </section>
+      
+    </div>
     <script src="/js/app.js"></script>
+    @yield('footer')
   </body>
 </html>

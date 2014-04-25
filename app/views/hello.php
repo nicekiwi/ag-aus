@@ -57,7 +57,7 @@ LICENSE:
         /* Lets build a FormData object*/
         var fd = new FormData(); // I wrote about it: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
         fd.append("image", file); // Append the file
-        fd.append("key", "e140fea6fcb52f351ea042fadeacc7f638b68423"); // Get your own key http://api.imgur.com/
+        fd.append("key", "a318c02ce0760fb"); // Get your own key http://api.imgur.com/
         var xhr = new XMLHttpRequest(); // Create the XHR (Cross-Domain XHR FTW!!!) Thank you sooooo much imgur.com
         xhr.open("POST", "http://api.imgur.com/2/upload.json"); // Boooom!
         xhr.onload = function() {
