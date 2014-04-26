@@ -14,7 +14,7 @@
 </dl>
 
 @if(count($maps) > 0)
-<table id="maps-list">
+<table id="maps-list" class="table table-striped table-responsive">
 	<thead>
 		<tr>
 			<td>Type</td>

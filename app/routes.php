@@ -80,18 +80,10 @@ Route::get('check-steamid/{id}', function($id)
 	return json_encode($data);
 });
 
-Route::get('bio', function()
-{
-	return View::make('bio');
-});
-
-Route::get('donations', function()
-{
-	return View::make('donate.form');
-});
+Route::get('donate', 'DonationController@public_index');
+Route::post('donate', 'DonationController@validate_donation');
 
 Route::get('donors', 'DonationController@display_donations');
-Route::post('donate', 'DonationController@validate_donation');
 
 Route::get('/', ['as' => 'home', function()
 {
@@ -100,21 +92,33 @@ Route::get('/', ['as' => 'home', function()
 
 //Route::get('admin', ['as' => 'admin', 'before' => 'auth', 'uses' => 'AdminController@index']);
 
-Route::get('login', 'SessionsController@create');
-Route::get('logout', 'SessionsController@destroy');
-Route::resource('sessions', 'SessionsController');
+//Route::get('login', 'SessionsController@create');
+//Route::get('logout', 'SessionsController@destroy');
+//Route::resource('sessions', 'SessionsController');
 
 Route::get('news', 'PostController@index_public');
 Route::get('news/{slug}', 'PostsController@show');
 
 Route::get('maps', 'MapController@index_public');
-Route::get('maps/{slug}', 'MapsController@show');
+Route::get('maps/{slug}', 'MapController@show');
 
 
 
 
+Route::get( 'login',                  		'UserController@login');
+Route::post('login',                  		'UserController@do_login');
+Route::get( 'login/forgot_password',        'UserController@forgot_password');
+Route::post('login/forgot_password',        'UserController@do_forgot_password');
+Route::get( 'logout',                 		'UserController@logout');
 
 
+
+	// Confide routes
+	Route::get( 'user/create',                 'UserController@create');
+	Route::post('user',                        'UserController@store');
+	Route::get( 'user/reset_password/{token}', 'UserController@reset_password');
+	Route::post('user/reset_password',         'UserController@do_reset_password');
+	Route::get( 'user/confirm/{code}',         'UserController@confirm');
 // ===============================================
 // ADMIN SECTION =================================
 // ===============================================
@@ -140,4 +144,5 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	// {
 	// 	return View::make('posts.create');
 	// });
+
 });

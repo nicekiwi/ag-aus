@@ -12,7 +12,8 @@
 		"vtalbot/markdown": "1.*",
 		"thomaswelton/laravel-gravatar": "dev-master",
 		"zizaco/entrust": "dev-master",
-		"zizaco/confide": "3.2.x"
+		"zizaco/confide": "3.2.x",
+		"laravelbook/ardent": "dev-master"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "v1.2.0"

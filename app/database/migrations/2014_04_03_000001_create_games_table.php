@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateServersTable extends Migration {
+class CreateGamesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,21 +12,11 @@ class CreateServersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('servers', function(Blueprint $table)
+		Schema::create('games', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('order');
 			$table->string('name');
-			$table->text('vanilla_name');
-			$table->string('ip');
-			$table->string('port');
-			$table->string('type');
-			$table->string('game');
-			$table->integer('offline');
-			$table->integer('maxPlayers');
-			$table->integer('players');
-			$table->integer('current_map')->nullable();
-			$table->string('version')->nullable();
+			$table->string('engine');
 
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();
@@ -42,7 +32,7 @@ class CreateServersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('servers');
+		Schema::drop('games');
 	}
 
 }

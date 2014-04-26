@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventsTable extends Migration {
+class CreateServersTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,21 +12,19 @@ class CreateEventsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('events', function(Blueprint $table)
+		Schema::create('servers', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->integer('game_id');
-			$table->integer('server_id');
+			$table->integer('config_id');
+			$table->string('name');
+			$table->text('vanilla_name');
+			$table->string('ip');
+			$table->string('port');
+			$table->integer('order');
 
-			$table->string('title');
-			$table->string('slug');
+			$table->integer('maxPlayers');
 
-			$table->text('desc');
-
-			$table->text('timezone');
-			$table->dateTime('starts');
-			$table->dateTime('ends');
-			
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();
 			$table->integer('created_by')->nullable();
@@ -41,7 +39,7 @@ class CreateEventsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('events');
+		Schema::drop('servers');
 	}
 
 }

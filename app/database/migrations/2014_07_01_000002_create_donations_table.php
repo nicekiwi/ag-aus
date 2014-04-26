@@ -23,6 +23,8 @@ class CreateDonationsTable extends Migration {
 
 			$table->softDeletes();
 			$table->timestamps();
+
+			$table->foreign('donator_id')->references('id')->on('donators')->onDelete('cascade');
 		});
 	}
 

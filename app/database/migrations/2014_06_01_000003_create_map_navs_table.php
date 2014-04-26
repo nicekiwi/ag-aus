@@ -12,7 +12,15 @@ class CreateMapNavsTable extends Migration {
 	 */
 	public function up()
 	{
-		//
+		Schema::create('map_navs', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('filename');
+			$table->text('s3_path');
+			
+			$table->softDeletes();
+			$table->timestamps();
+		});
 	}
 
 	/**
@@ -22,7 +30,7 @@ class CreateMapNavsTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::drop('map_navs');
 	}
 
 }

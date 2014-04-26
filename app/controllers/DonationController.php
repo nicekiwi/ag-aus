@@ -15,6 +15,11 @@ class DonationController extends BaseController {
 	|
 	*/
 
+	public function public_index()
+	{
+		return View::make('donate.public-index')->with(compact('posts'));
+	}
+
 	public function display_donation_widgit($view)
 	{
 		$total_amount = Donation::where('created_at', '>=', '2013-01-01')

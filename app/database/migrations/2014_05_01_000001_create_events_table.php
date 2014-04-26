@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMapsTable extends Migration {
+class CreateEventsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,24 +12,22 @@ class CreateMapsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('maps', function(Blueprint $table)
+		Schema::create('events', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('type');
-			$table->string('filename')->unique();
-			$table->string('filesize');
-			$table->string('name');
-			$table->string('slug');
-			$table->text('desc');
-			$table->text('desc_md');
-			$table->string('revision');
-			$table->text('more_info_url');
-			$table->text('s3_path');
-			$table->integer('public');
-			$table->text('image');
-			$table->string('developer');
-			$table->text('developer_url');
+			$table->integer('game_id');
+			$table->integer('server_id');
+			$table->integer('config_id');
 
+			$table->string('title');
+			$table->string('slug');
+
+			$table->text('desc');
+
+			$table->text('timezone');
+			$table->dateTime('starts');
+			$table->dateTime('ends');
+			
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();
 			$table->integer('created_by')->nullable();
@@ -44,7 +42,7 @@ class CreateMapsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('maps');
+		Schema::drop('events');
 	}
 
 }

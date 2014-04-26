@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "5493ebd1de6e036f0ef2886103c05e14",
+    "hash": "c566ade90d33380455c595b8e5199fd9",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2436,7 +2436,8 @@
     "stability-flags": {
         "way/generators": 20,
         "thomaswelton/laravel-gravatar": 20,
-        "zizaco/entrust": 20
+        "zizaco/entrust": 20,
+        "laravelbook/ardent": 20
     },
     "platform": [
 

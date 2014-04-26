@@ -114,6 +114,7 @@ return array(
 		'VTalbot\Markdown\MarkdownServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
 		'Zizaco\Entrust\EntrustServiceProvider',
+		'Zizaco\Confide\ConfideServiceProvider',
 	),
 
 	/*
@@ -185,6 +186,7 @@ return array(
 		'Markdown' 		  => 'VTalbot\Markdown\Facades\Markdown',
 		'Gravatar' 		  => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
 		'Entrust'    	  => 'Zizaco\Entrust\EntrustFacade',
+		'Confide'    	  => 'Zizaco\Confide\ConfideFacade',
 	),
 
 );

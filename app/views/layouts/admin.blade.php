@@ -70,7 +70,7 @@
         </div>
 
         <footer class="col-sm-12">
-          <p>&copy; Powered by Kiwidev 2013</p>
+          <p>&copy; Powered by Kiwidev 2013<span style="float:right;"><a href="/">Public</a></span></p>
         </footer>
       </section>
       

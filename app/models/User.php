@@ -3,10 +3,22 @@
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Zizaco\Entrust\HasRole;
+use LaravelBook\Ardent\Ardent;
+use Zizaco\Confide\ConfideUser;
 
-class User extends Eloquent implements UserInterface, RemindableInterface { 
+class User extends ConfideUser implements UserInterface, RemindableInterface { 
 
     use HasRole; // Add this trait to your user model
+
+	/**
+	* Ardent validation rules
+	*/
+	// public static $rules = array(
+	// 	'name' => 'required|between:4,16',
+	// 	'email' => 'required|email',
+	// 	'password' => 'required|alpha_num|between:4,8|confirmed',
+	// 	'password_confirmation' => 'required|alpha_num|between:4,8',
+	// );
 
 	/**
 	 * The database table used by the model.

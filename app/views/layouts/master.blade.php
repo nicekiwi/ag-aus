@@ -35,24 +35,13 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li><a href="/bio">Bio</a></li>
               <li><a href="/events">Events</a></li>
               <li><a href="/maps">Maps</a></li>
               <li><a href="/donate">Donate</a></li>
-              <li><a href="/stats">Stats</a></li>
-
-              <li><a target="_blank" href="http://community.ag-aus.org">Forums</a></li>
+              <li><a href="http://ag-aus.gameme.com" target="_blank">Stats</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <!-- If Authenticated -->
-              @if(Auth::check())
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ Gravatar::src(Auth::user()->email, 20) }}" class=""> {{ Auth::user()->username }} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="/logout">Logout</a></li>
-                </ul>
-              </li>
-              @endif
+              <li><a target="_blank" href="http://community.ag-aus.org">Forums</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
@@ -71,7 +60,11 @@
         </div>
 
         <footer class="col-sm-12">
-          <p>&copy; Powered by Kiwidev 2013</p>
+          <p>&copy; Powered by Kiwidev 2013
+          @if(Auth::check())
+          <span style="float:right;"><a href="/admin">Admin</a></span>
+          @endif
+          </p>
         </footer>
       </section>
       
