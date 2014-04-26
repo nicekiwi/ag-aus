@@ -104,10 +104,10 @@ Route::get('login', 'SessionsController@create');
 Route::get('logout', 'SessionsController@destroy');
 Route::resource('sessions', 'SessionsController');
 
-Route::get('news', 'PostsController@index_public');
+Route::get('news', 'PostController@index_public');
 Route::get('news/{slug}', 'PostsController@show');
 
-Route::get('maps', 'MapsController@index_public');
+Route::get('maps', 'MapController@index_public');
 Route::get('maps/{slug}', 'MapsController@show');
 
 
@@ -126,8 +126,8 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 		return View::make('admin.index');
 	});
 
-	Route::resource('posts', 'PostsController');
-	Route::resource('maps', 'MapsController');
+	Route::resource('posts', 'PostController');
+	Route::resource('maps', 'MapController');
 
 	// // subpage for the posts found at /admin/posts (app/views/admin/posts.blade.php)
 	// Route::get('posts', function()

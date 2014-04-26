@@ -1,6 +1,6 @@
 <?php
 
-class PostsController extends BaseController {
+class PostController extends BaseController {
 
 	/**
 	 * Display a listing of the resource.

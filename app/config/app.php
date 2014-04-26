@@ -113,6 +113,7 @@ return array(
 		'Way\Generators\GeneratorsServiceProvider',
 		'VTalbot\Markdown\MarkdownServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
+		'Zizaco\Entrust\EntrustServiceProvider',
 	),
 
 	/*
@@ -183,6 +184,7 @@ return array(
 		'AWS' 			  => 'Aws\Laravel\AwsFacade',
 		'Markdown' 		  => 'VTalbot\Markdown\Facades\Markdown',
 		'Gravatar' 		  => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
+		'Entrust'    	  => 'Zizaco\Entrust\EntrustFacade',
 	),
 
 );

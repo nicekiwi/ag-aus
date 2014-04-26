@@ -1,8 +1,6 @@
 <?php
 
-class MapsController extends BaseController {
-
-	protected $table = 'maps';
+class MapController extends BaseController {
 
 	/**
 	 * Display a listing of the resource.

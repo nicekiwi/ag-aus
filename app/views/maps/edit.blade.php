@@ -129,16 +129,33 @@
 
   $(function () {
     'use strict';
-    // Change this to the location of your server-side upload handler:
-    var url = 'https://{{ $options->bucket }}.s3.amazonaws.com:443/';
+
+    // try {
+    //     var img = document.getElementById('myCanvas').toDataURL('image/jpeg', 0.9).split(',')[1];
+    // } catch(e) {
+    //     var img = document.getElementById('myCanvas').toDataURL().split(',')[1];
+    // }
+
+    function readImage(input) {
+      if ( input.files && input.files[0] ) {
+          var FR= new FileReader();
+          FR.onload = function(e) {
+               $('#img').attr( "src", e.target.result );
+               $('#base').text( e.target.result );
+          };       
+          FR.readAsDataURL( input.files[0] );
+      }
+    }
 
     $('#imageupload').fileupload({
       url: 'https://api.imgur.com/3/image',
-      formData: {
-        'Authorization': 'Client-ID a318c02ce0760fb',
-        'image': 'helloworld.jpg'
+      headers: {
+        Authorization: 'Client-ID a318c02ce0760fb'
       },
       dataType: 'json',
+      data: {
+        image: readImage($(this))
+      },
       done: function (e, data) {
         $.each(data.result.files, function (index, file) {
           $('<p/>').text(file.name).appendTo('#files');
