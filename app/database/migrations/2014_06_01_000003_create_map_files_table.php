@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMapNavsTable extends Migration {
+class CreateMapFilesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,12 @@ class CreateMapNavsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('map_navs', function(Blueprint $table)
+		Schema::create('map_files', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('filename');
+			$table->string('filesize');
+			$table->string('filetype');
 			$table->text('s3_path');
 			
 			$table->softDeletes();
@@ -30,7 +32,7 @@ class CreateMapNavsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('map_navs');
+		Schema::drop('map_files');
 	}
 
 }

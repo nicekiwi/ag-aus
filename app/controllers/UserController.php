@@ -11,6 +11,11 @@
 
 class UserController extends BaseController {
 
+    public function index()
+    {
+        return View::make('users.index');
+    }
+
     /**
      * Displays the form for account creation
      *
@@ -46,7 +51,7 @@ class UserController extends BaseController {
                     
             // Redirect with success message, You may replace "Lang::get(..." for your custom message.
                         return Redirect::action('UserController@login')
-                            ->with( 'notice', $notice );
+                            ->with( 'success_message', $notice );
         }
         else
         {
@@ -55,7 +60,7 @@ class UserController extends BaseController {
 
                         return Redirect::action('UserController@create')
                             ->withInput(Input::except('password'))
-                ->with( 'error', $error );
+                ->with( 'error_message', $error );
         }
     }
 
@@ -100,7 +105,7 @@ class UserController extends BaseController {
             // caught by the authentication filter IE Redirect::guest('user/login').
             // Otherwise fallback to '/'
             // Fix pull #145
-            return Redirect::intended('/'); // change it to '/admin', '/dashboard' or something
+            return Redirect::intended('/admin'); // change it to '/admin', '/dashboard' or something
         }
         else
         {
@@ -122,7 +127,7 @@ class UserController extends BaseController {
 
                         return Redirect::action('UserController@login')
                             ->withInput(Input::except('password'))
-                ->with( 'error', $err_msg );
+                ->with( 'error_message', $err_msg );
         }
     }
 
@@ -137,13 +142,13 @@ class UserController extends BaseController {
         {
             $notice_msg = Lang::get('confide::confide.alerts.confirmation');
                         return Redirect::action('UserController@login')
-                            ->with( 'notice', $notice_msg );
+                            ->with( 'info_message', $notice_msg );
         }
         else
         {
             $error_msg = Lang::get('confide::confide.alerts.wrong_confirmation');
                         return Redirect::action('UserController@login')
-                            ->with( 'error', $error_msg );
+                            ->with( 'error_message', $error_msg );
         }
     }
 
@@ -166,14 +171,14 @@ class UserController extends BaseController {
         {
             $notice_msg = Lang::get('confide::confide.alerts.password_forgot');
                         return Redirect::action('UserController@login')
-                            ->with( 'notice', $notice_msg );
+                            ->with( 'info_message', $notice_msg );
         }
         else
         {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_forgot');
                         return Redirect::action('UserController@forgot_password')
                             ->withInput()
-                ->with( 'error', $error_msg );
+                ->with( 'error_message', $error_msg );
         }
     }
 
@@ -204,14 +209,14 @@ class UserController extends BaseController {
         {
             $notice_msg = Lang::get('confide::confide.alerts.password_reset');
                         return Redirect::action('UserController@login')
-                            ->with( 'notice', $notice_msg );
+                            ->with( 'info_message', $notice_msg );
         }
         else
         {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_reset');
                         return Redirect::action('UserController@reset_password', array('token'=>$input['token']))
                             ->withInput()
-                ->with( 'error', $error_msg );
+                ->with( 'error_message', $error_msg );
         }
     }
 

@@ -9,36 +9,38 @@ class MapController extends BaseController {
 	 */
 	public function index()
 	{
-		$s3 = AWS::get('s3');
+		// $s3 = AWS::get('s3');
 
-		$postObject = new \Aws\S3\Model\PostObject($s3, 'alternative-gaming', [
-			'acl' => 'public-read',
-			//'key' => 'games/team-fortress-2/maps'
-		]);
-
-		// $postObject = $s3->postObject('alternative-gaming', [
+		// $postObject = new \Aws\S3\Model\PostObject($s3, 'alternative-gaming', [
 		// 	'acl' => 'public-read',
-		// 	'key' => 'games/team-fortress-2/maps'
+		// 	//'key' => 'games/team-fortress-2/maps'
 		// ]);
 
-		$form = $postObject->prepareData()->getFormInputs();
+		// // $postObject = $s3->postObject('alternative-gaming', [
+		// // 	'acl' => 'public-read',
+		// // 	'key' => 'games/team-fortress-2/maps'
+		// // ]);
 
-		$options = new stdClass;
-		$options->policy = $form['policy'];
-		$options->signature = $form['signature'];
-		$options->uid = uniqid();
-		$options->accessKey = $form['AWSAccessKeyId'];
-		$options->bucket = 'alternative-gaming';
-		$options->key = 'games/team-fortress-2/maps';//$form['key'];
-		$options->acl = $form['acl'];
+		// $form = $postObject->prepareData()->getFormInputs();
+
+		// $options = new stdClass;
+		// $options->policy = $form['policy'];
+		// $options->signature = $form['signature'];
+		// $options->uid = uniqid();
+		// $options->accessKey = $form['AWSAccessKeyId'];
+		// $options->bucket = 'alternative-gaming';
+		// $options->key = 'games/team-fortress-2/maps';//$form['key'];
+		// $options->acl = $form['acl'];
 
 		//dd($form);
 
 		$maps = $this->get_maps();
-		$map_types = MapTypes::orderBy('name','asc')->get();
+		$map_files = MapFile::all();
+		$map_types = MapType::orderBy('name','asc')->get();
 
         return View::make('maps.index')->with([
         	'maps' => $maps,
+        	'map_files' => $map_files,
         	'map_types' => $map_types,
         	'options' => $options
         ]);
@@ -47,7 +49,7 @@ class MapController extends BaseController {
 	public function index_public()
 	{
 		$maps = $this->get_maps();
-		$map_types = MapTypes::orderBy('name','asc')->get();
+		$map_types = MapType::orderBy('name','asc')->get();
 
         return View::make('maps.public')->with(['maps'=>$maps,'map_types'=>$map_types]);
 	}
@@ -61,17 +63,15 @@ class MapController extends BaseController {
 
 	public function get_maps()
 	{
-		$public = 1;
-		if(Auth::check()) $public = 0;
 		if(Input::has('type')) 
 			//$maps = Map::orderBy('name','asc')->has('type',Input::get('type'))/*->where('type',Input::get('type'))->where('public',1)*/->get();
 			$maps = Map::orderBy('name','asc')->whereHas('maptype', function($q)
 			{
 			    $q->where('type', Input::get('type'));
 
-			})->where('public','>=',$public)->get();
+			})->get();
 		else 
-			$maps = Map::where('public','>=',$public)->get();
+			$maps = Map::all();
 
 		return $maps;
 	}
@@ -96,8 +96,10 @@ class MapController extends BaseController {
 		]);
 
 	    $map_list = $response['Contents'];
-        $map_types = MapTypes::orderBy('name','asc')->lists('name','type');
+        $map_types = MapType::orderBy('name','asc')->lists('name','type');
         $sync_count = 0;
+
+        //dd($response['Contents']);
 
         foreach ($response['Contents'] as $map) 
         {
@@ -107,21 +109,43 @@ class MapController extends BaseController {
         		$rel_path = explode('/', $map['Key']);
         		$name = $rel_path[count($rel_path)-1];
 
-	        	if(Map::where('filename',$name)->count() < 1)
-	    		{
-		        	$new_map = new Map;
-					$new_map->filesize = $map['Size'];
-					$new_map->filename = $name;
-					$new_map->s3_path = $map['Key'];
-					$new_map->save();
+        		$ext = explode('.', $name);
+        		$ext = $ext[count($ext)-1];
 
-					$sync_count++;
-	    		}
+        		if($ext == 'bz2')
+        		{
+        			if(Map::where('filename',$name)->count() < 1)
+		    		{
+			        	$new_map = new Map;
+						$new_map->filesize = $map['Size'];
+						$new_map->filename = $name;
+						$new_map->filetype = $ext;
+						$new_map->s3_path = $map['Key'];
+						$new_map->save();
+
+						$sync_count++;
+		    		}
+        		}
+        		else
+        		{
+        			if(MapFile::where('filename',$name)->count() < 1)
+		    		{
+			        	$new_file = new MapFile;
+						$new_file->filesize = $map['Size'];
+						$new_file->filename = $name;
+						$new_file->filetype = $ext;
+						$new_file->s3_path = $map['Key'];
+						$new_file->save();
+
+						$sync_count++;
+		    		}
+        		}
+
         	}
     	}
 
-    	Session::flash('success_message', $sync_count . ' were maps synced from Amazon.');
-    	return Redirect::to('/maps');
+    	Session::flash('success_message', $sync_count . ' new files were synced from Amazon S3.');
+    	return Redirect::to('admin/maps');
 
     	//$map_list_updated = Map::where('filename',$map['Key'])->count() < 1
 
@@ -174,7 +198,7 @@ class MapController extends BaseController {
 		}
 
 		Session::flash('message', 'Error');
-        return Redirect::to('maps');
+        return Redirect::to('admin/maps');
 	}
 
 	/**
@@ -199,7 +223,7 @@ class MapController extends BaseController {
 	public function edit($id)
 	{
         $map = Map::findOrFail($id);
-        $map_types = MapTypes::orderBy('name','asc')->lists('name','id');
+        $map_types = MapType::orderBy('name','asc')->lists('name','id');
 
         return View::make('maps.edit')->with([ 'map' => $map, 'map_types' => $map_types ]);
 	}
@@ -212,17 +236,14 @@ class MapController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$html_desc = Markdown::string(Input::get('desc_md'));
-
 		$map = Map::findOrFail($id);
 		$map->type = Input::get('type');
 		$map->name = Input::get('name');
 		$map->revision = Input::get('revision');
 		$map->more_info_url = Input::get('more_info_url');
-		$map->image = Input::get('image');
+		$map->images = Input::get('images');
 		$map->video = Input::get('video');
-		$map->desc_md = Input::get('desc_md');
-		$map->desc = $html_desc;
+		$map->notes = Input::get('notes');
 		$map->slug = Str::slug(Input::get('name').' '.Input::get('revision'));
 		$map->developer = Input::get('developer');
 		$map->developer_url = Input::get('developer_url');

@@ -16,7 +16,6 @@ class PostsTableSeeder extends Seeder {
 				'title' 			=> $title,
 				'slug'				=> Str::slug($title),
 				'desc' 				=> $desc,
-				'desc_md' 			=> $desc_md,
 				'featured_image' 	=> 'http://i.imgur.com/YGmIx9q.jpg',
 				'created_by'		=> 1
 			]);

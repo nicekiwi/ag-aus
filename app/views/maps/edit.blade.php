@@ -48,7 +48,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="images">Image</label>
   <div class="col-md-4">
-  	{{ Form::text('image', null, ['class'=>'form-control input-md','required'=>'true']) }}
+  	{{ Form::text('images', null, ['class'=>'form-control input-md','required'=>'true']) }}
     <!-- The fileinput-button span is used to style the file input field as button -->
     <!-- <span class="btn btn-success fileinput-button">
         <i class="fa fa-plus"></i>
@@ -104,7 +104,7 @@
 
 <!-- Textarea -->
 <div class="form-group">
-  {{ Form::label('desc', 'Notes', ['class'=>'col-md-4 control-label'])}}
+  {{ Form::label('notes', 'Notes', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">                     
     {{ Form::textarea('desc_md', null, ['class'=>'form-control','placeholder'=>'Made with &lt;3 for the community.']) }}
   </div>

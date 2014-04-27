@@ -18,6 +18,7 @@ class CreateMapsTable extends Migration {
 			$table->integer('type');
 			$table->string('filename')->unique();
 			$table->string('filesize');
+			$table->string('filetype');
 			$table->string('name');
 			$table->string('slug');
 			$table->text('notes');

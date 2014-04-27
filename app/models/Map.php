@@ -6,12 +6,12 @@ class Map extends Ardent
 {
 	protected $guarded = [];
 
-	public static $rules = [
-		'name' => 'required|between:4,16',
-		'email' => 'required|email',
-		'password' => 'required|alpha_num|between:4,8|confirmed',
-		'password_confirmation' => 'required|alpha_num|between:4,8'
-	];
+	// public static $rules = [
+	// 	'name' => 'required|between:4,16',
+	// 	'email' => 'required|email',
+	// 	'password' => 'required|alpha_num|between:4,8|confirmed',
+	// 	'password_confirmation' => 'required|alpha_num|between:4,8'
+	// ];
 
 	function getMapList()
 	{
@@ -32,9 +32,9 @@ class Map extends Ardent
 	}
 
 
-	public function maptype()
+	public function mapType()
     {
-        return $this->belongsTo('MapTypes','type');
+        return $this->belongsTo('MapType','type');
     }
 
 

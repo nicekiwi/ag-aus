@@ -3,7 +3,6 @@
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Zizaco\Entrust\HasRole;
-use LaravelBook\Ardent\Ardent;
 use Zizaco\Confide\ConfideUser;
 
 class User extends ConfideUser implements UserInterface, RemindableInterface { 

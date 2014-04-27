@@ -6,7 +6,8 @@ class DonationsTableSeeder extends Seeder {
 	{
 		$faker = Faker\Factory::create();
 
-		foreach (range(10,20) as $index) {
+		foreach (range(10,20) as $index)
+		{
 			Donation::create([
 				'donator_id' => $index,
 				'message' => $faker->sentence($nbWords = 6),

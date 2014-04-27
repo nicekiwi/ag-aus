@@ -27,16 +27,50 @@
 <p>Only .bz2 and .nav files are accepted. No max filesize.</p>
 
 
-<dl class="sub-nav">
-	<dt>Filter:</dt>
-	<dd class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/admin/maps">All</a></dd>
+<ul class="nav nav-pills">
+	<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></li>
 	@foreach($map_types as $type)
-	<dd class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/admin/maps?type={{ $type->type }}">{{ $type->name }}</a></dd>
+	<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }}</a></li>
 	@endforeach
-	<!-- <dd class="{{ (Input::get('type') == 'new' ? 'active' : '') }}"><a href="/admin/maps?type=new">New</a></dd> -->
-</dl>
+</ul>
 
 @if(count($maps) > 0)
+<table id="maps-list" class="table table-striped table-bordered" width="100%">
+	<thead>
+		<tr>
+			<td>Type</td>
+			<td>Name</td>
+			<td>Filename</td>
+			<td>Nav</td>
+			<td>Size (MB)</td>
+			<td>Added</td>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach($maps as $map)
+		<tr>
+			<td>{{ $map->maptype->type }}</td>
+			<td>
+				<a href="/admin/maps/{{ $map->id }}/edit">{{ $map->name }} {{ $map->revision }}</a>
+			</td>
+			<td>{{ $map->filename }}</td>
+			<td>
+			@if($map->hasNav)
+				<i style="color:green" class="fa fa-circle"></i>
+			@endif
+			</td>
+			<td>{{ round(($map->filesize/1048576), 2) }}</td>
+			<td>{{ $map->created_at->diffForHumans() }}</td>
+		</tr>
+		@endforeach
+	</tbody>
+	
+</table>
+@else
+<p>No maps available.</p>
+@endif
+
+@if(count($map_files) > 0)
 <table id="maps-list" class="table table-striped table-bordered" width="100%">
 	<thead>
 		<tr>
@@ -47,19 +81,17 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($maps as $map)
+		@foreach($map_files as $file)
 		<tr>
-			<td>{{ $map->maptype->type }}</td>
-			<td><a href="/admin/maps/{{ $map->id }}/edit"><?php if($map->name !== ''){ echo $map->name; } else { echo $map->filename; } ?></a></td>
-			<td>{{ round(($map->filesize/1048576), 2) }}</td>
-			<td>{{ $map->created_at->diffForHumans() }}</td>
+			<td>{{ $file->filename }}</td>
+			<td>{{ $file->filetype }}</td>
+			<td>{{ round(($file->filesize/1048576), 2) }}</td>
+			<td>{{ $file->created_at->diffForHumans() }}</td>
 		</tr>
 		@endforeach
 	</tbody>
 	
 </table>
-@else
-<p>No maps available.</p>
 @endif
 
 @stop

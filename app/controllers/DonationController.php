@@ -17,7 +17,7 @@ class DonationController extends BaseController {
 
 	public function public_index()
 	{
-		return View::make('donate.public-index')->with(compact('posts'));
+		return View::make('donate.public');//->with(compact('posts'));
 	}
 
 	public function display_donation_widgit($view)

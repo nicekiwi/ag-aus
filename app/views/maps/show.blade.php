@@ -9,12 +9,20 @@
 
 <p><a href="/maps">Back to map list</a></p>
 
-@if($map->image !== '')
-<p><img class="th" src="https://i.embed.ly/1/display/crop?key=d5a004fad9d94741b9ea438a9b802b3e&amp;url={{ $map->image }}&amp;height=360&amp;width=800"></p>
+@if($map->images !== '')
+<p>
+@if(is_array($map->images))
+@foreach($map->images as $image)
+<img class="th" src="https://i.embed.ly/1/display/crop?key=d5a004fad9d94741b9ea438a9b802b3e&amp;url={{ $image }}&amp;height=360&amp;width=800">
+@endforeach
+@else
+<img class="th" src="https://i.embed.ly/1/display/crop?key=d5a004fad9d94741b9ea438a9b802b3e&amp;url={{ $map->images }}&amp;height=360&amp;width=800">
+@endif
+</p>
 @endif
 
-@if($map->desc !== '')
-{{ $map->desc }}
+@if($map->notes !== '')
+{{ $map->notes }}
 @endif
 
 @if($map->video !== '')

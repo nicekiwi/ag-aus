@@ -4,14 +4,13 @@
 
 <h1>Maps</h1>
 
-<dl class="sub-nav">
-	<dt>Filter:</dt>
-	<dd class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></dd>
+<ul class="nav nav-pills">
+	<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></li>
 	@foreach($map_types as $type)
-	<dd class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }}</a></dd>
+	<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }}</a></li>
 	@endforeach
-	<!-- <dd class="{{ (Input::get('type') == 'new' ? 'active' : '') }}"><a href="/maps?type=new">New</a></dd> -->
-</dl>
+</ul>
+
 
 @if(count($maps) > 0)
 <table id="maps-list" class="table table-striped table-responsive">
@@ -19,7 +18,9 @@
 		<tr>
 			<td>Type</td>
 			<td>Name</td>
+			<td>Filename</td>
 			<td>Size (MB)</td>
+			<td>Popularity</td>
 			<td>Added</td>
 			<td></td>
 		</tr>
@@ -29,9 +30,11 @@
 		<tr>
 			<td>{{ $map->maptype->type }}</td>
 			<td><a href="/maps/{{ $map->slug }}">{{ $map->name }} {{ $map->revision }}</a></td>
+			<td>{{ $map->filename }}</td>
 			<td>{{ round(($map->filesize/1048576), 0) }}</td>
+			<td><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i></td>
 			<td>{{ $map->created_at->diffForHumans() }}</td>
-			<td><a target="_blank" href="https://s3-ap-southeast-2.amazonaws.com/alternative-gaming/{{ $map->s3_path }}"><i class="fa fa-cloud-download"></i> Download</a></td>
+			<td><a target="_blank" href="https://s3-ap-southeast-2.amazonaws.com/alternative-gaming/{{ $map->s3_path }}"><i class="fa fa-cloud-download fa-lg"></i> Download</a></td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -60,9 +63,9 @@
 
 <script type="text/javascript">
 	
-	$('#maps-list').dataTable({
-		'bPaginate': false
-	});
+	// $('#maps-list').dataTable({
+	// 	'bPaginate': false
+	// });
 </script>
 
 @stop

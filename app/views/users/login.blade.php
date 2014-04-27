@@ -3,11 +3,7 @@
 @section('content')
 
 <h1>Login</h1>
-{{ Form::open([
-  'route'   =>  Confide::checkAction('UserController@do_login') ?: URL::to('/user/login'),
-  'class'   =>  'form-horizontal',
-  'accept-charset'  =>  'UTF-8'
-]) }}
+<form class="form-horizontal" method="POST" action="{{{ Confide::checkAction('UserController@do_login') ?: URL::to('/user/login') }}}" accept-charset="UTF-8">
 
 <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
 

@@ -3859,3 +3859,15 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
+
+.map-filter {
+  padding: 0;
+  margin: 0;
+  list-style: none; }
+
+.map-filter li {
+  float: left;
+  margin: 0 5px; }
+
+.map-filter li.active {
+  font-weight: bold; }

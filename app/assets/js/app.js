@@ -1,5 +1,10 @@
 //= include ../../../bower_components/jquery/jquery.js
-//= include ./vendor/bootstrap.js
+
+//= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/alert.js
+//= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/button.js
+//= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js
+//= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/transition.js
+
 //= include ../../../bower_components/fancybox/source/jquery.fancybox.js
 //= include ../../../bower_components/fancybox/source/helpers/jquery.fancybox-media.js
 //= include ../../../bower_components/unveil/jquery.unveil.js

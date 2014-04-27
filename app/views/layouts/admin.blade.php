@@ -38,7 +38,7 @@
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="/admin/maps">Maps</a></li>
-              @if(Auth::user()->role === 1)
+              @if(Auth::user()->can("manage_users"))
               <li><a href="/admin/users">Users</a></li>
               @endif
             </ul>

@@ -20,7 +20,23 @@
 <h4>Donatoer Perks:</h4>
 
 <p>Donators get a special status ingame, making them invulnerable during the Humiliation mode at the end of a round; and exclusive access to extra player slots on the servers (<a href="/help/donators#player-slots">How do I use this?</a>).</p>
-<p><strong>$12 or more</strong> will give the SteamID you provided Donator status on all Alterntive Gaming Team Fortress 2 servers for 3 months.</p><p><strong>$48 or more</strong> gives you the same as above for 15 Months <span class="text-danger">(Saving 25%)</span>.</p>
+
+<div class="row">
+    <div class="col-sm-12 col-md-4">
+        <h2>Donator $18</h2>
+        <p>3 Months</p>
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+        <h2>Super Donator $32</h2>
+        <p>6 Months</p>
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+    <h2>Super Donator $60</h2>
+        <p>1 Year</p>
+    </div>
+</div>
 
 
 {{ Form::open([
@@ -28,11 +44,11 @@
     'method' => 'post', 
     'id' => 'donation_form',
     'role' => 'form', 
-    'autocomplete' => true
+    'autocomplete' => true,
+    'class'=>'form-horozontal'
 ]) }}
 
-	<div class="panel panel-default">
-        <div class="panel-body">
+
             <fieldset>
                 <!-- Text input-->
                 <div class="form-group row">
@@ -41,7 +57,7 @@
                     <div class="col-md-8 input-group">
                         <span class="input-group-addon">
                             <img width="18" src="/img/icons/steam.png"></span>
-	  					{{ Form::text('steam_id', $value = null, [
+	  					{{ Form::text('steam_id', null, [
                             'class' => 'form-control', 
                             'id' => 'steam_id'
                         ]) }}
@@ -86,9 +102,6 @@
                     </div>
                 </div>
             </fieldset>
-        </div> <!-- panel-body -->
-
-    </div>
 
     
 

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c566ade90d33380455c595b8e5199fd9",
+    "hash": "f69d34b8bdaf6cd8ae47e8763cae2bd4",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -498,29 +498,32 @@
         },
         {
             "name": "koraktor/steam-condenser",
-            "version": "1.3.7",
+            "version": "dev-psr-0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koraktor/steam-condenser-php.git",
-                "reference": "a4c66656982aacdc71eced6322f8242d2d28154b"
+                "reference": "1625240938aaf36b1cdaa7feb643c42968a59027"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koraktor/steam-condenser-php/zipball/a4c66656982aacdc71eced6322f8242d2d28154b",
-                "reference": "a4c66656982aacdc71eced6322f8242d2d28154b",
+                "url": "https://api.github.com/repos/koraktor/steam-condenser-php/zipball/1625240938aaf36b1cdaa7feb643c42968a59027",
+                "reference": "1625240938aaf36b1cdaa7feb643c42968a59027",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0"
+                "monolog/monolog": "~1.7.0",
+                "php": ">=5.3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~3.7.0"
             },
             "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SteamCondenser\\": "lib/"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "lib/"
-            ],
             "license": [
                 "BSD-3-Clause"
             ],
@@ -540,7 +543,7 @@
                 "steam",
                 "webapi"
             ],
-            "time": "2013-10-16 05:14:32"
+            "time": "2014-02-23 21:31:20"
         },
         {
             "name": "laravel/framework",
@@ -719,16 +722,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.9.1",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "65026b610f8c19e61d7242f600530677b0466aac"
+                "reference": "6225b22de9dcf36546be3a0b2fa8e3d986153f57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/65026b610f8c19e61d7242f600530677b0466aac",
-                "reference": "65026b610f8c19e61d7242f600530677b0466aac",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/6225b22de9dcf36546be3a0b2fa8e3d986153f57",
+                "reference": "6225b22de9dcf36546be3a0b2fa8e3d986153f57",
                 "shasum": ""
             },
             "require": {
@@ -736,11 +739,11 @@
                 "psr/log": "~1.0"
             },
             "require-dev": {
-                "aws/aws-sdk-php": "~2.4, >2.4.8",
-                "doctrine/couchdb": "~1.0@dev",
-                "graylog2/gelf-php": "~1.0",
+                "aws/aws-sdk-php": "~2.4.8",
+                "doctrine/couchdb": "dev-master",
+                "mlehner/gelf-php": "1.0.*",
                 "phpunit/phpunit": "~3.7.0",
-                "raven/raven": "~0.5",
+                "raven/raven": "0.5.*",
                 "ruflin/elastica": "0.90.*"
             },
             "suggest": {
@@ -748,20 +751,19 @@
                 "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "raven/raven": "Allow sending log messages to a Sentry server",
-                "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9.x-dev"
+                    "dev-master": "1.7.x-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Monolog\\": "src/Monolog"
+                "psr-0": {
+                    "Monolog": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -783,7 +785,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-04-24 13:29:03"
+            "time": "2013-11-14 19:48:31"
         },
         {
             "name": "nesbot/carbon",
@@ -1256,17 +1258,17 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v2.4.3",
+            "version": "v2.4.4",
             "target-dir": "Symfony/Component/BrowserKit",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/BrowserKit.git",
-                "reference": "1f5e42db799e05e85d03fe8504c5b1c92c46968d"
+                "reference": "90a4d3536598f8a372df8d0730daf0874fec6e5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/1f5e42db799e05e85d03fe8504c5b1c92c46968d",
-                "reference": "1f5e42db799e05e85d03fe8504c5b1c92c46968d",
+                "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/90a4d3536598f8a372df8d0730daf0874fec6e5b",
+                "reference": "90a4d3536598f8a372df8d0730daf0874fec6e5b",
                 "shasum": ""
             },
             "require": {
@@ -1309,7 +1311,7 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-27 14:53:17"
+            "time": "2014-04-18 20:37:09"
         },
         {
             "name": "symfony/console",
@@ -1815,17 +1817,17 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.4.3",
+            "version": "v2.4.4",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "c09c3b08455c35688eee3e481fdfc85518ef01d7"
+                "reference": "8721f1476d5d38a43c7d6ccb6435b351cf8f3bb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/c09c3b08455c35688eee3e481fdfc85518ef01d7",
-                "reference": "c09c3b08455c35688eee3e481fdfc85518ef01d7",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/8721f1476d5d38a43c7d6ccb6435b351cf8f3bb7",
+                "reference": "8721f1476d5d38a43c7d6ccb6435b351cf8f3bb7",
                 "shasum": ""
             },
             "require": {
@@ -1860,7 +1862,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-26 11:35:33"
+            "time": "2014-04-27 13:34:57"
         },
         {
             "name": "symfony/routing",
@@ -2434,6 +2436,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
+        "koraktor/steam-condenser": 20,
         "way/generators": 20,
         "thomaswelton/laravel-gravatar": 20,
         "zizaco/entrust": 20,

@@ -29,7 +29,11 @@ Route::get('test', function()
 	//     E_USER_ERROR);
 	// }
 
-	return View::make('hello');
+	//return View::make('hello');
+
+	$server = new Server;
+
+	dd($server);
 
 });
 
@@ -105,20 +109,19 @@ Route::get('maps/{slug}', 'MapController@show');
 
 
 
-Route::get( 'login',                  		'UserController@login');
+Route::get( 'login','UserController@login');
 Route::post('login',                  		'UserController@do_login');
-Route::get( 'login/forgot_password',        'UserController@forgot_password');
-Route::post('login/forgot_password',        'UserController@do_forgot_password');
+Route::get( 'login/forgot-password',        'UserController@forgot_password');
+Route::post('login/forgot-password',        'UserController@do_forgot_password');
 Route::get( 'logout',                 		'UserController@logout');
 
+Route::get( 'login/reset-password/{token}', 'UserController@reset_password');
+Route::post('login/reset-password',         'UserController@do_reset_password');
+Route::get( 'login/confirm/{code}',         'UserController@confirm');
 
-
-	// Confide routes
 	Route::get( 'user/create',                 'UserController@create');
 	Route::post('user',                        'UserController@store');
-	Route::get( 'user/reset_password/{token}', 'UserController@reset_password');
-	Route::post('user/reset_password',         'UserController@do_reset_password');
-	Route::get( 'user/confirm/{code}',         'UserController@confirm');
+
 // ===============================================
 // ADMIN SECTION =================================
 // ===============================================
@@ -144,5 +147,6 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	// {
 	// 	return View::make('posts.create');
 	// });
+	// Confide routes
 
 });

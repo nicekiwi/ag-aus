@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*",
-		"koraktor/steam-condenser": "1.3.*",
+		"koraktor/steam-condenser": "dev-psr-0",
 		"aws/aws-sdk-php-laravel": "1.*",
 		"stripe/stripe-php": "v1.9.0",
 		"way/generators": "dev-master",
@@ -29,10 +29,7 @@
 		],
 		"psr-0": {
 			"Acme": "app/"
-		},
-		"files": [
-			"vendor/koraktor/steam-condenser/lib/steam-condenser.php"
-		]
+		}
 	},
 
 	"scripts": {
