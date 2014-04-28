@@ -181,7 +181,7 @@ class MapController extends BaseController {
 			$map->filesize = $file->getSize();
 			$map->filename = $file_name;
 			$map->s3_path = 'https://s3-ap-southeast-2.amazonaws.com/ag-maps/' . $file_name;
-			$map->type = Input::get('type');
+			$map->map_type_id = Input::get('type');
 			$map->name = Input::get('name');
 			$map->revision = Input::get('revision');
 			$map->more_info_url = Input::get('more_info_url');
@@ -237,7 +237,7 @@ class MapController extends BaseController {
 	public function update($id)
 	{
 		$map = Map::findOrFail($id);
-		$map->type = Input::get('type');
+		$map->map_type_id = Input::get('type');
 		$map->name = Input::get('name');
 		$map->revision = Input::get('revision');
 		$map->more_info_url = Input::get('more_info_url');

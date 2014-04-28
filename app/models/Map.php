@@ -34,7 +34,7 @@ class Map extends Ardent
 
 	public function mapType()
     {
-        return $this->belongsTo('MapType','type');
+        return $this->belongsTo('MapType','map_type_id');
     }
 
 

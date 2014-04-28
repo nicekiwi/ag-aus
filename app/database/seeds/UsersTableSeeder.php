@@ -30,6 +30,7 @@ class UsersTableSeeder extends Seeder {
         // before saving. This field will be used in Ardent's
         // auto validation.
         $user->password_confirmation = 'password';
+        $user->confirmed = 1;
 
         // Save if valid. Password field will be hashed before save
         $user->save();

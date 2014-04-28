@@ -4,16 +4,16 @@
 
 <h1>Maps</h1>
 
+<p>
 <ul class="nav nav-pills">
-	<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></li>
+	<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All ({{ count($maps) }})</a></li>
 	@foreach($map_types as $type)
-	<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }}</a></li>
+	<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</a></li>
 	@endforeach
 </ul>
+</p>
 
-
-@if(count($maps) > 0)
-<table id="maps-list" class="table table-striped table-responsive">
+<table id="maps-list" class="table table-hover table-bordered table-striped table-responsive">
 	<thead>
 		<tr>
 			<td>Type</td>
@@ -26,6 +26,7 @@
 		</tr>
 	</thead>
 	<tbody>
+		@if(count($maps) > 0)
 		@foreach($maps as $map)
 		<tr>
 			<td>{{ $map->maptype->type }}</td>
@@ -37,12 +38,14 @@
 			<td><a target="_blank" href="https://s3-ap-southeast-2.amazonaws.com/alternative-gaming/{{ $map->s3_path }}"><i class="fa fa-cloud-download fa-lg"></i> Download</a></td>
 		</tr>
 		@endforeach
+		@else
+		<tr>
+			<td colspan="7">No maps found.</td>
+		</tr>
+		@endif
 	</tbody>
 	
 </table>
-@else
-<p>No maps available.</p>
-@endif
 
 @stop
 

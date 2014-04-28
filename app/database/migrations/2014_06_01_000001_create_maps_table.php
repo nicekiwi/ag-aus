@@ -15,7 +15,7 @@ class CreateMapsTable extends Migration {
 		Schema::create('maps', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('type');
+			$table->integer('map_type_id');
 			$table->string('filename')->unique();
 			$table->string('filesize');
 			$table->string('filetype');
