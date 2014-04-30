@@ -11,6 +11,6 @@ class MapTypesTableSeeder extends Seeder {
 		MapType::create(['type' => 'mvm', 'name'=> 'Mann Vs Machine']);
 		MapType::create(['type' => 'pl', 'name'=> 'Payload']);
 		MapType::create(['type' => 'plr', 'name'=> 'Payload Race']);
-		MapType::create(['type' => 'custom', 'name'=> 'Custom']);
+		MapType::create(['type' => 'special', 'name'=> 'Special']);
 	}
 }

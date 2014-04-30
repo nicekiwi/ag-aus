@@ -37,5 +37,15 @@ class Map extends Ardent
         return $this->belongsTo('MapType','map_type_id');
     }
 
+    public function mapFiles()
+    {
+        return $this->hasMany('MapFile','map_id');
+    }
+
+    public function mapTags()
+    {
+    	return $this->hasMany('MapTag','map_tag_id');
+    }
+
 
 }

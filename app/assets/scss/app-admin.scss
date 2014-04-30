@@ -1,8 +1,7 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.min.css");
-@import url("https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css");
+@import url(https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.min.css);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css);
 
 @import "variable-override.scss";
 @import "bootstrap-override.scss";
-//@import "bootstrap.scss";
 
-@import url("../../../bower_components/blueimp-file-upload/css/jquery.fileupload.css");
+@import "blueimp-file-upload/css/jquery.fileupload.css";

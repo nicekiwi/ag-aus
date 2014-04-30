@@ -41,7 +41,6 @@
 			<td>Type</td>
 			<td>Name</td>
 			<td>Filename</td>
-			<td>Nav</td>
 			<td>Size (MB)</td>
 			<td>Added</td>
 		</tr>
@@ -49,15 +48,17 @@
 	<tbody>
 		@foreach($maps as $map)
 		<tr>
-			<td>{{ $map->maptype->type }}</td>
+			<td>{{ $map->mapType->type }}</td>
 			<td>
-				<a href="/admin/maps/{{ $map->id }}/edit">{{ $map->name }} {{ $map->revision }}</a>
+				<a href="/admin/maps/{{ $map->id }}/edit">{{ $map->name }} - {{ $map->revision }}</a>
 			</td>
-			<td>{{ $map->filename }}</td>
 			<td>
-			@if($map->hasNav)
-				<i style="color:green" class="fa fa-circle"></i>
-			@endif
+				{{ $map->filename }}
+				@if($map->mapFiles->count() > 0)
+				@foreach($map->mapFiles as $file)
+				<span class="label label-primary" style="text-transform:uppercase;">{{ $file->filetype }}</span>
+				@endforeach
+				@endif
 			</td>
 			<td>{{ round(($map->filesize/1048576), 2) }}</td>
 			<td>{{ $map->created_at->diffForHumans() }}</td>
