@@ -23,9 +23,8 @@
 			<td>Type</td>
 			<td>Name</td>
 			<td>Filename</td>
-			<td>Size (MB)</td>
+			<td>Size</td>
 			<td>Popularity</td>
-			<!-- <td>Added</td> -->
 		</tr>
 	</thead>
 	<tbody>

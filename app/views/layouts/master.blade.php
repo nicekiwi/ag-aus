@@ -38,6 +38,8 @@
               <li><a href="/events">Events</a></li>
               <li><a href="/maps">Maps</a></li>
               <li><a href="/donate">Donate</a></li>
+              <li><a href="/tools">Tools</a></li>
+              <li><a href="/bans">Bans</a></li>
               <li><a href="http://ag-aus.gameme.com" target="_blank">Stats</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

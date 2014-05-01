@@ -1,0 +1,1 @@
+/www/ag-aus/app/views/bans/show.blade.php
