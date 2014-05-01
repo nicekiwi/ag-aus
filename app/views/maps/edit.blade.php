@@ -15,7 +15,7 @@
 <div class="form-group">
   {{ Form::label('type', 'Map Type', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-    {{ Form::select('type', $map_types, ['class'=>'form-control']); }}
+    {{ Form::select('map_type_id', $map_types, null, ['class'=>'form-control']) }}
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-//= include ../../../bower_components/jquery/jquery.js
+//= include ../../../bower_components/jquery/dist/jquery.js
 
 //= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/alert.js
 //= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/button.js
@@ -11,6 +11,5 @@
 //= include ../../../bower_components/datatables/media/js/jquery.dataTables.js
 
 $(document).ready(function() {
-
-	
+	//meow	
 });

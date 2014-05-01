@@ -119,8 +119,7 @@ Route::get( 'login/reset-password/{token}', 'UserController@reset_password');
 Route::post('login/reset-password',         'UserController@do_reset_password');
 Route::get( 'login/confirm/{code}',         'UserController@confirm');
 
-	Route::get( 'user/create',                 'UserController@create');
-	Route::post('user',                        'UserController@store');
+	
 
 // ===============================================
 // ADMIN SECTION =================================
@@ -132,6 +131,9 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	{
 		return View::make('admin.index');
 	});
+
+	Route::get( 'user/create','UserController@create');
+	Route::post('user','UserController@store');
 
 	Route::resource('posts', 'PostController');
 	Route::resource('maps', 'MapController');

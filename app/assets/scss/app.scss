@@ -5,14 +5,21 @@
 @import "bootstrap-override.scss";
 
 .map-filter {
+	@extend .col-sm-12;
+	//@extend .col-md-6;
+
 	padding: 0;
 	margin: 0;
 	list-style: none;
+
+	margin-bottom: 25px;
 }
 
 .map-filter li {
-	float: left;
-	margin: 0 5px;
+
+	@extend .col-md-2;
+	margin: 5px 0;
+	padding: 0;
 }
 
 .map-filter li.active {
@@ -24,4 +31,13 @@
 #maps-list tr td:nth-child(5),
 #maps-list tr td:nth-child(6) {
 	text-align: center;
+}
+
+
+
+
+.map-filter {
+	padding: 0;
+	margin: 0;
+	list-style: none;
 }

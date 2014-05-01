@@ -106,12 +106,25 @@ class MapController extends BaseController {
         	// Make sure Object is a valid file (Objects of size 0 are folders)
         	if($map['Size'] > 0)
         	{
+        		// Get Filename
         		$rel_path = explode('/', $map['Key']);
         		$name = $rel_path[count($rel_path)-1];
 
+        		// Get File Extenstion
         		$ext = explode('.', $name);
         		$ext = $ext[count($ext)-1];
 
+        		// Get MapType from filename
+        		$type = explode('_', $name);
+        		$type = $type[0];
+
+        		// Check if MapType exists in DB
+        		$checkType = MapType::where('type', $type)->first();
+
+        		// Get Special MapType ID
+        		$special = MapType::where('type','special')->first();
+
+        		// Check if filetype is TF2 Map or not
         		if($ext == 'bz2')
         		{
         			if(Map::where('filename',$name)->count() < 1)
@@ -121,6 +134,13 @@ class MapController extends BaseController {
 						$new_map->filename = $name;
 						$new_map->filetype = $ext;
 						$new_map->s3_path = $map['Key'];
+
+						// Pass MapType ID to Map Row
+						if($checkType->id)
+							$new_map->map_type_id = $checkType->id;
+						else
+							$new_map->map_type_id = $special->id;
+
 						$new_map->save();
 
 						$sync_count++;
