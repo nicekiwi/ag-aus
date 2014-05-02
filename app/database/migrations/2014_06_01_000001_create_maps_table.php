@@ -16,6 +16,7 @@ class CreateMapsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('map_type_id');
+			$table->integer('game_id');
 			$table->string('filename')->unique();
 			$table->string('filesize');
 			$table->string('filetype');

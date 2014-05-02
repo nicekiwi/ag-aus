@@ -33,11 +33,19 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">AG Admin</a>
+            <a class="navbar-brand" href="/admin">AG Admin</a>
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+              @if(Auth::user()->can("manage_servers"))
+              <li><a href="/admin/servers">Servers</a></li>
+              @endif
+              @if(Auth::user()->can("manage_maps"))
               <li><a href="/admin/maps">Maps</a></li>
+              @endif
+              @if(Auth::user()->can("manage_bans"))
+              <li><a href="/admin/bans">Bans</a></li>
+              @endif
               @if(Auth::user()->can("manage_users"))
               <li><a href="/admin/users">Users</a></li>
               @endif

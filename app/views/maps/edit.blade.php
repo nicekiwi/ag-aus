@@ -50,18 +50,18 @@
   <div class="col-md-4">
   	{{ Form::text('images', null, ['class'=>'form-control input-md','required'=>'true']) }}
     <!-- The fileinput-button span is used to style the file input field as button -->
-    <!-- <span class="btn btn-success fileinput-button">
+    <span class="btn btn-success fileinput-button">
         <i class="fa fa-plus"></i>
-        <span>Upload images...</span> -->
+        <span>Upload images...</span>
         <!-- The file input field used as target for the file upload widget -->
-        <!-- <input id="imageupload" type="file" name="file" accept="image/jpg, image/jpeg, image/png, image/gif" multiple> -->
-    <!-- </span>
+        <input id="imageupload" type="file" name="file" accept="image/jpg, image/jpeg, image/png, image/gif" multiple>
+    </span>
     <br>
-    <br> -->
+    <br>
     <!-- The global progress bar -->
-    <!-- <div id="progress" class="progress">
+    <div id="progress" class="progress">
         <div class="progress-bar progress-bar-success"></div>
-    </div> -->
+    </div>
     <!-- <span class="help-block">Up to 5 images of the map. JPEG/PNG Only. Max 1MB.</span> -->
   </div>
 </div>
@@ -128,8 +128,8 @@
 @section('footer')
 <script type="text/javascript">
 
-  // $(function () {
-  //   'use strict';
+  $(function () {
+    'use strict';
 
   //   // try {
   //   //     var img = document.getElementById('myCanvas').toDataURL('image/jpeg', 0.9).split(',')[1];
@@ -148,27 +148,27 @@
   //     }
   //   }
 
-  //   $('#imageupload').fileupload({
-  //     url: 'https://api.imgur.com/3/image',
-  //     headers: {
-  //       Authorization: 'Client-ID a318c02ce0760fb'
-  //     },
-  //     dataType: 'base64',
-  //     data: {
-  //       image: 'file'
-  //     },
-  //     done: function (e, data) {
-  //       $.each(data.result.files, function (index, file) {
-  //         $('<p/>').text(file.name).appendTo('#files');
-  //       });
-  //     },
-  //     progressall: function (e, data) {
-  //       var progress = parseInt(data.loaded / data.total * 100, 10);
-  //       $('#progress .progress-bar').css('width',progress + '%');
-  //     }
-  //   }).prop('disabled', !$.support.fileInput)
-  //   .parent().addClass($.support.fileInput ? undefined : 'disabled');
-  // });
+    $('#imageupload').fileupload({
+      url: 'https://api.imgur.com/3/image',
+      headers: {
+        Authorization: 'Client-ID a318c02ce0760fb'
+      },
+      dataType: 'json',
+      data: {
+        image: 'file'
+      },
+      done: function (e, data) {
+        $.each(data.result.files, function (index, file) {
+          $('<p/>').text(file.name).appendTo('#files');
+        });
+      },
+      progressall: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css('width',progress + '%');
+      }
+    }).prop('disabled', !$.support.fileInput)
+    .parent().addClass($.support.fileInput ? undefined : 'disabled');
+  });
 </script>
 
 @stop

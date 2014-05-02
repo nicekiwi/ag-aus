@@ -95,7 +95,14 @@ Route::filter('csrf', function()
 
 App::missing(function($exception)
 {
-    return Response::view('errors.missing', array(), 404);
+    if (Request::is('admin/*'))
+    {
+        return Response::view('errors.admin-missing', array(), 404);
+    }
+    else
+    {
+        return Response::view('errors.public-missing', array(), 404);
+    } 
 });
 
 /*

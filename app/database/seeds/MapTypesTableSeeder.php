@@ -7,7 +7,7 @@ class MapTypesTableSeeder extends Seeder {
 		MapType::create(['type' => 'arena', 'name'=> 'Arena']);
 		MapType::create(['type' => 'ctf', 'name'=> 'Capture the Flag']);
 		MapType::create(['type' => 'cp', 'name'=> 'Control Point']);
-		MapType::create(['type' => 'tfdb', 'name'=> 'Dodgebrightall']);
+		MapType::create(['type' => 'tfdb', 'name'=> 'Dodgeball']);
 		MapType::create(['type' => 'koth', 'name'=> 'King of the Hill']);
 		MapType::create(['type' => 'mvm', 'name'=> 'Mann Vs Machine']);
 		MapType::create(['type' => 'pl', 'name'=> 'Payload']);

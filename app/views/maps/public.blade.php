@@ -4,7 +4,7 @@
 
 <h1>Maps</h1>
 
-<h3>Filter by Map Type:</h3>
+<h4>Filter by Map Type:</h4>
 <p>
 <ul class="map-filter">
 	
@@ -26,6 +26,7 @@
 			<td>Filename</td>
 			<td>Popularity</td>
 			<td>Size</td>
+			<td>Action</td>
 		</tr>
 	</thead>
 	<tbody>

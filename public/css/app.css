@@ -4260,8 +4260,3 @@ button.close {
 
 #maps-list tr td:nth-child(1), #maps-list tr td:nth-child(4), #maps-list tr td:nth-child(5), #maps-list tr td:nth-child(6) {
   text-align: center; }
-
-.map-filter {
-  padding: 0;
-  margin: 0;
-  list-style: none; }

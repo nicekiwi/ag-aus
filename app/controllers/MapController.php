@@ -9,28 +9,28 @@ class MapController extends BaseController {
 	 */
 	public function index()
 	{
-		// $s3 = AWS::get('s3');
+		$s3 = AWS::get('s3');
 
-		// $postObject = new \Aws\S3\Model\PostObject($s3, 'alternative-gaming', [
+		$postObject = new \Aws\S3\Model\PostObject($s3, 'alternative-gaming', [
+			'acl' => 'public-read',
+			//'key' => 'games/team-fortress-2/maps'
+		]);
+
+		// $postObject = $s3->postObject('alternative-gaming', [
 		// 	'acl' => 'public-read',
-		// 	//'key' => 'games/team-fortress-2/maps'
+		// 	'key' => 'games/team-fortress-2/maps'
 		// ]);
 
-		// // $postObject = $s3->postObject('alternative-gaming', [
-		// // 	'acl' => 'public-read',
-		// // 	'key' => 'games/team-fortress-2/maps'
-		// // ]);
+		$form = $postObject->prepareData()->getFormInputs();
 
-		// $form = $postObject->prepareData()->getFormInputs();
-
-		// $options = new stdClass;
-		// $options->policy = $form['policy'];
-		// $options->signature = $form['signature'];
-		// $options->uid = uniqid();
-		// $options->accessKey = $form['AWSAccessKeyId'];
-		// $options->bucket = 'alternative-gaming';
-		// $options->key = 'games/team-fortress-2/maps';//$form['key'];
-		// $options->acl = $form['acl'];
+		$options = new stdClass;
+		$options->policy = $form['policy'];
+		$options->signature = $form['signature'];
+		$options->uid = uniqid();
+		$options->accessKey = $form['AWSAccessKeyId'];
+		$options->bucket = 'alternative-gaming';
+		$options->key = 'games/team-fortress-2/maps';//$form['key'];
+		$options->acl = $form['acl'];
 
 		//dd($form);
 

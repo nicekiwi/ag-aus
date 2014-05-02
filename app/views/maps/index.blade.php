@@ -13,7 +13,7 @@
     <i class="fa fa-plus"></i>
     <span>Upload maps...</span>
     <!-- The file input field used as target for the file upload widget -->
-    <input id="fileupload" type="file" name="file" accept="application/bzip2, text/nav" multiple>
+    <input id="fileupload" type="file" name="file" accept="application/bzip2, application/nav, text/nav" multiple>
 </span>
 <br>
 <br>
@@ -27,11 +27,15 @@
 <p>Only .bz2 and .nav files are accepted. No max filesize.</p>
 
 
-<ul class="nav nav-pills">
-	<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></li>
+<ul class="map-filter">
+	
+	<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/admin/maps">All Maps</a></li>
 	@foreach($map_types as $type)
-	<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }}</a></li>
+	@if($type->maps->count() > 0)
+	<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/admin/maps?type={{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</a></li>
+	@endif
 	@endforeach
+	
 </ul>
 
 @if(count($maps) > 0)
