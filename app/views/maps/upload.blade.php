@@ -14,13 +14,12 @@
     <input id="fileupload" type="file" name="file" accept="application/bzip2, application/nav, text/nav, image/jpg, image/jpeg" multiple>
 </div>
 <!-- The global progress bar -->
-<div id="progress" class="progress">
+<div id="progress" class="progress progress-striped">
     <div class="progress-bar progress-bar-success"></div>
 </div>
-<!-- The container for the uploaded files -->
-<div id="files" class="files"></div>
 
-<table id="maps-list" class="table table-striped table-bordered" width="100%">
+<!-- The container for the uploaded files -->
+<table id="files" class="table table-striped table-bordered" width="100%">
 	<thead>
 		<tr>
 			<td>Type</td>
@@ -90,13 +89,22 @@
 		    },
 			dataType: 'json',
 			done: function (e, data) {
-				$.each(data.result.files, function (index, file) {
+
+				console.log(data);
+
+				$.each(data.files, function (index, file) {
 					$('<p/>').text(file.name).appendTo('#files');
+				});
+			},
+			completed : function(e, data) {
+				$.ajax({
+				  type: "POST",
+				  url: "/admin/maps/create"
 				});
 			},
 			progressall: function (e, data) {
 				var progress = parseInt(data.loaded / data.total * 100, 10);
-				$('#progress .progress-bar').css('width',progress + '%');
+				$('#progress .progress-bar').css('width',progress + '%').text( progress + '%');
 			}
 		}).prop('disabled', !$.support.fileInput)
 		.parent().addClass($.support.fileInput ? undefined : 'disabled');

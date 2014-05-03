@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +67,8 @@ Route::get('players', function()
 
 Route::get('check-steamid/{id}', function($id)
 {
+	namespace \Acme\Donations;
+
 	$data = new StdClass;
 
 	try 
