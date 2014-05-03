@@ -5,18 +5,18 @@
 <h1>Maps</h1>
 
 <h4>Filter by Map Type:</h4>
-<p>
-<ul class="map-filter">
-	
-	<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All Maps</a></li>
-	@foreach($map_types as $type)
-	@if($type->maps->count() > 0)
-	<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</a></li>
-	@endif
-	@endforeach
-	
-</ul>
-</p>
+
+<div class="well col-sm-12">
+	<ul class="map-filter">
+		
+		<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></li>
+		@foreach($map_types as $type)
+		@if($type->maps->count() > 0)
+		<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</a></li>
+		@endif
+		@endforeach
+	</ul>
+</div>
 
 <table id="maps-list" class="table table-hover table-bordered table-striped	table-responsive">
 	<thead>

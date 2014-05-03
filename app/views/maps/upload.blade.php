@@ -30,13 +30,10 @@
 		</tr>
 	</thead>
 	<tbody>
-		
 		<tr>
 			<td colspan="5">No Maps Uploaded.</td>
 		</tr>
-
 	</tbody>
-	
 </table>
 
 @stop
@@ -95,10 +92,9 @@
 				$.each(data.files, function (index, file) {
 					$('<p/>').text(file.name).appendTo('#files');
 				});
-			},
-			completed : function(e, data) {
+
 				$.ajax({
-				  type: "POST",
+				  type: "GET",
 				  url: "/admin/maps/create"
 				});
 			},

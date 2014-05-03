@@ -50,18 +50,18 @@
   <div class="col-md-4">
   	{{ Form::text('images', null, ['class'=>'form-control input-md','required'=>'true']) }}
     <!-- The fileinput-button span is used to style the file input field as button -->
-    <span class="btn btn-success fileinput-button">
+    <!-- <span class="btn btn-success fileinput-button">
         <i class="fa fa-plus"></i>
-        <span>Upload images...</span>
+        <span>Upload images...</span> -->
         <!-- The file input field used as target for the file upload widget -->
-        <input id="imageupload" type="file" name="file" accept="image/jpg, image/jpeg, image/png, image/gif" multiple>
+        <!-- <input id="imageupload" type="file" name="file" accept="image/jpg, image/jpeg, image/png, image/gif" multiple>
     </span>
     <br>
-    <br>
+    <br> -->
     <!-- The global progress bar -->
-    <div id="progress" class="progress">
+    <!-- <div id="progress" class="progress">
         <div class="progress-bar progress-bar-success"></div>
-    </div>
+    </div> -->
     <!-- <span class="help-block">Up to 5 images of the map. JPEG/PNG Only. Max 1MB.</span> -->
   </div>
 </div>
