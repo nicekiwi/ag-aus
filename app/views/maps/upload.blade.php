@@ -7,22 +7,18 @@
 <p>It the upload space below or drag 'n drop files to being the upload.</p>
 
 <!-- The fileinput-button span is used to style the file input field as button -->
-<span class="jumbotron fileinput-button">
+<div class="jumbotron fileinput-button">
     <i class="fa fa-plus"></i>
-    <span>Upload maps...</span>
+    <span>Select or Drag 'n Drop files here..<br><small>Only .bz2 and .nav files are accepted. No max filesize.</small></span>
     <!-- The file input field used as target for the file upload widget -->
     <input id="fileupload" type="file" name="file" accept="application/bzip2, application/nav, text/nav, image/jpg, image/jpeg" multiple>
-</span>
-<br>
-<br>
+</div>
 <!-- The global progress bar -->
 <div id="progress" class="progress">
     <div class="progress-bar progress-bar-success"></div>
 </div>
 <!-- The container for the uploaded files -->
 <div id="files" class="files"></div>
-
-<p>Only .bz2 and .nav files are accepted. No max filesize.</p>
 
 <table id="maps-list" class="table table-striped table-bordered" width="100%">
 	<thead>
@@ -52,6 +48,7 @@
 	.fileinput-button {
 	  position: relative;
 	  overflow: hidden;
+	  text-align: center;
 	}
 	.fileinput-button input {
 	  position: absolute;
@@ -105,10 +102,10 @@
 		.parent().addClass($.support.fileInput ? undefined : 'disabled');
 	});
 	
-	$('#maps-list').dataTable({
-		"bPaginate": false,
-		"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
-	});
+	// $('#maps-list').dataTable({
+	// 	"bPaginate": false,
+	// 	"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
+	// });
 </script>
 
 @stop

@@ -30,7 +30,7 @@ class ServersTableSeeder extends Seeder {
 		// 	// 'players'			=> '0'
 		// ]);
 
-		Serverx::create([
+		Server::create([
 			'order' 			=> 3,
 			'name'				=> '#3 Apeture Test Server',
 			'vanilla_name' 		=> 'TF2 Server #3',
