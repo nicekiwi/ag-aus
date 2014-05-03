@@ -13,7 +13,9 @@ class UserController extends BaseController {
 
     public function index()
     {
-        return View::make('users.index');
+        $users = User::all();
+
+        return View::make('users.index')->with(compact('users'));
     }
 
     /**

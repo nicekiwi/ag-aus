@@ -2,30 +2,7 @@
 
 @section('content')
 
-<h1>Maps</h1>
-
-@if(Auth::check())
-	<p><a href="/admin/maps/create">Sync with Amazon</a> <i class="fa fa-refresh"></i></p>
-@endif
-
-<!-- The fileinput-button span is used to style the file input field as button -->
-<span class="btn btn-success fileinput-button">
-    <i class="fa fa-plus"></i>
-    <span>Upload maps...</span>
-    <!-- The file input field used as target for the file upload widget -->
-    <input id="fileupload" type="file" name="file" accept="application/bzip2, application/nav, text/nav" multiple>
-</span>
-<br>
-<br>
-<!-- The global progress bar -->
-<div id="progress" class="progress">
-    <div class="progress-bar progress-bar-success"></div>
-</div>
-<!-- The container for the uploaded files -->
-<div id="files" class="files"></div>
-
-<p>Only .bz2 and .nav files are accepted. No max filesize.</p>
-
+<h1>Maps <a class="btn btn-primary" href="/admin/maps/upload">Upload</a></h1>
 
 <ul class="map-filter">
 	
@@ -45,7 +22,7 @@
 			<td>Type</td>
 			<td>Name</td>
 			<td>Filename</td>
-			<td>Size (MB)</td>
+			<td>Size</td>
 			<td>Added</td>
 		</tr>
 	</thead>
@@ -64,7 +41,11 @@
 				@endforeach
 				@endif
 			</td>
-			<td>{{ round(($map->filesize/1048576), 2) }}</td>
+			@if ($map->filesize >= 1048576)
+	            <td>{{ number_format($map->filesize / 1048576, 2) . ' MB' }}</td>
+	        @elseif ($map->filesize >= 1024)
+	            <td>{{ number_format($map->filesize / 1024, 2) . ' KB' }}</td>
+	        @endif
 			<td>{{ $map->created_at->diffForHumans() }}</td>
 		</tr>
 		@endforeach
@@ -83,6 +64,7 @@
 			<td>Name</td>
 			<td>Size (MB)</td>
 			<td>Added</td>
+			<td></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -92,6 +74,7 @@
 			<td>{{ $file->filetype }}</td>
 			<td>{{ round(($file->filesize/1048576), 2) }}</td>
 			<td>{{ $file->created_at->diffForHumans() }}</td>
+			<td>delete</td>
 		</tr>
 		@endforeach
 	</tbody>

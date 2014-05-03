@@ -19,3 +19,14 @@
 .map-filter li.active {
 	font-weight: bold;
 }
+
+.full-table {
+	@include .table;
+	// @extend .table-striped;
+	@include .table-bordered;
+}
+
+// .full-table-data {
+// 	@extend .full-table;
+// 	@extend .dataTable;
+// }

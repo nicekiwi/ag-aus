@@ -1,8 +1,8 @@
 <?php
 
-class Serverx extends Eloquent 
+class Server extends Eloquent 
 {
-	protected $table = 'servers';
+	// protected $table = 'servers';
 
 	public function initServer($ip,$port)
 	{

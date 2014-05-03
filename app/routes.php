@@ -120,7 +120,6 @@ Route::post('login/reset-password',         'UserController@do_reset_password');
 Route::get( 'login/confirm/{code}',         'UserController@confirm');
 
 	
-
 // ===============================================
 // ADMIN SECTION =================================
 // ===============================================
@@ -135,8 +134,13 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	Route::get( 'user/create','UserController@create');
 	Route::post('user','UserController@store');
 
+	Route::get('maps/upload', 'MapController@upload');
+
+	Route::resource('users', 'UserController');
 	Route::resource('posts', 'PostController');
 	Route::resource('maps', 'MapController');
+
+	
 
 	// // subpage for the posts found at /admin/posts (app/views/admin/posts.blade.php)
 	// Route::get('posts', function()
@@ -152,3 +156,4 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	// Confide routes
 
 });
+
