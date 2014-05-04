@@ -38,9 +38,9 @@
 
 <!-- Text input-->
 <div class="form-group">
-  {{ Form::label('s3_path', 'Amazon S3 Path', ['class'=>'col-md-4 control-label'])}}
+  {{ Form::label('filename', 'Filename', ['class'=>'col-md-4 control-label'])}}
   <div class="col-md-4">
-    {{ Form::text('s3_path', null, ['disabled' => true,'class'=>'form-control input-md']) }}
+    {{ Form::text('filename', null, ['disabled' => true,'class'=>'form-control input-md']) }}
   </div>
 </div>
 
