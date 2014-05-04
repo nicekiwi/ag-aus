@@ -1,5 +1,7 @@
 <?php
 
+//use SteamCondenser\Community;
+
 class ServerController extends \BaseController {
 
 	/**
@@ -23,6 +25,30 @@ class ServerController extends \BaseController {
 		//
 	}
 
+	public function getID($id)
+	{
+		$steam = "\SteamCondenser\Community\SteamId";
+
+		$data = new StdClass;
+
+		try 
+		{
+			$steamID = $steam::create($id);
+
+			$data->steamId = $steamID->getCustomUrl();
+			$data->steamId64 = $steamID->getSteamId64();
+			$data->nickname = $steamID->getNickname();
+			$data->profileImage = $steamID->imageUrl;
+			$data->id2 = $steamID->convertCommunityIdToSteamId($data->steamId64);
+			//$data->
+		} 
+		catch (Exception $e) 
+		{
+			$data->message = $e->getMessage(); //'Profile does not exist or it set to Private.';
+		}
+
+		return json_encode($data);
+	}
 
 	/**
 	 * Store a newly created resource in storage.

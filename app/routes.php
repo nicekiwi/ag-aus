@@ -65,26 +65,7 @@ Route::get('players', function()
 	//var_dump($players);
 });
 
-Route::get('check-steamid/{id}', function($id)
-{
-	namespace \Acme\Donations;
-
-	$data = new StdClass;
-
-	try 
-	{
-		$steamID = SteamId::create($id);
-		$data->steamid = $steamID->getCustomUrl();
-		$data->nickname = $steamID->getNickname();
-		$data->profileImage = $steamID->imageUrl;
-	} 
-	catch (SteamCondenserException $e) 
-	{
-		$data->message = $e->getMessage(); //'Profile does not exist or it set to Private.';
-	}
-
-	return json_encode($data);
-});
+Route::get('check-steamid/{id}', 'ServerController@getID');
 
 Route::get('donate', 'DonationController@public_index');
 Route::post('donate', 'DonationController@validate_donation');

@@ -187,6 +187,7 @@ return array(
 		'Gravatar' 		  => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
 		'Entrust'    	  => 'Zizaco\Entrust\EntrustFacade',
 		'Confide'    	  => 'Zizaco\Confide\ConfideFacade',
+		'Condenser'    	  => '',
 	),
 
 );
