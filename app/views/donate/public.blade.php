@@ -71,7 +71,7 @@
 
             <fieldset>
                 <!-- Checkbox input-->
-                <div class="form-group row">
+<!--                 <div class="form-group row">
                     <div class="col-md-offset-4 col-md-8">
                         <div class="checkbox">
                             <label>
@@ -79,7 +79,7 @@
                             </label>   
                         </div>
                     </div>
-                </div>            	
+                </div>   -->          	
 
             	<!-- Text input-->
                 <div class="form-group row">
@@ -181,12 +181,12 @@ $( "#steam_id" ).blur(function()
     var steam_input = $( this );
     $.getJSON( "/check-steamid/"+$(this).val(), function( json ) {
 
-        if(typeof(json.steamid) != "undefined")
+        if(typeof(json.steamId) != "undefined")
         {
             steam_id_valid = true;
             steam_input.css('background-color', 'green');
 
-            $( "#steam_id_valid" ).append( '<strong>'+ json.nickname +'</strong><img src="'+ json.profileImage +'.jpg">' );
+            $( "#steam_id_valid" ).append( '<img src="'+ json.profileImage +'.jpg"><strong>'+ json.nickname +'</strong><br>' + json.id2  );
 
             $('<input>', {
                 type: 'hidden',
