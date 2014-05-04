@@ -2,41 +2,32 @@
 
 @section('content')
 
-<h1>Donations</h1>
 
-<p><a href="/donors">See list of donors.</a></p>
 
-<h4>Reasons to donate:</h4>
-<ul>
-    <li>You're supporting the AG Community (Yay).</li>
-    <li>You'll get exclusive donator privilages in our Team Fortress 2 Servers.</li>
-    <li>Because you're worth it!</li>
-</ul>
+<div class="col-sm-12 col-md-4" style="float:right;">
+      
+    <label class="btn btn-primary btn-lg btn-block active">
+        <h3>3 Months</h3>
+        <p>$18.00 AUD</p>
+        {{ Form::radio('donation', '3months', null, ['style'=>'display:none']) }}
+    </label>
 
-<h4>Costs Breakdown:</h4>
 
-<p></p>
+    
+    <label class="btn btn-primary btn-lg btn-block">
+        <h3>6 Months</h3>
+        <p>$32.00 AUD</p>
+        {{ Form::radio('donation', '6months', null, ['style'=>'display:none']) }}
+    </label>
 
-<h4>Donatoer Perks:</h4>
 
-<p>Donators get a special status ingame, making them invulnerable during the Humiliation mode at the end of a round; and exclusive access to extra player slots on the servers (<a href="/help/donators#player-slots">How do I use this?</a>).</p>
+    
+    <label class="btn btn-primary btn-lg btn-block">
+        <h3>1 Year</h3>
+        <p>$60.00 AUD</p>
+        {{ Form::radio('donation', '12months', null, ['style'=>'display:none']) }}
+    </label>
 
-<div class="row">
-    <div class="col-sm-12 col-md-4">
-        <h2>Donator $18</h2>
-        <p>3 Months</p>
-    </div>
-
-    <div class="col-sm-12 col-md-4">
-        <h2>Super Donator $32</h2>
-        <p>6 Months</p>
-    </div>
-
-    <div class="col-sm-12 col-md-4">
-    <h2>Super Donator $60</h2>
-        <p>1 Year</p>
-    </div>
-</div>
 
 
 {{ Form::open([
@@ -49,65 +40,74 @@
 ]) }}
 
 
-            <fieldset>
-                <!-- Text input-->
-                <div class="form-group row">
-                    <label class="col-md-4 control-label" for="steamid">Steam Login ID</label>
-
-                    <div class="col-md-8 input-group">
-                        <span class="input-group-addon">
-                            <img width="18" src="/img/icons/steam.png"></span>
-	  					{{ Form::text('steam_id', null, [
-                            'class' => 'form-control', 
-                            'id' => 'steam_id'
-                        ]) }}
-                    </div>
+        <fieldset>
+            <!-- Text input-->
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <img width="18" src="/img/icons/steam.png"></span>
+                        {{ Form::text('steam_id', null, ['class' => 'form-control', 'id' => 'steam_id', 'placeholder' => 'Steam Login ID']) }}
                 </div>
+            </div>
 
-                <div id="steam_id_valid"></div>
-            </fieldset>
+            <div id="steam_id_valid"></div>    
 
-            <hr>
-
-            <fieldset>
-                <!-- Checkbox input-->
-<!--                 <div class="form-group row">
-                    <div class="col-md-offset-4 col-md-8">
-                        <div class="checkbox">
-                            <label>
-                                {{ Form::checkbox('null', $value = null, false) }} Make my donation anonymous.
-                            </label>   
-                        </div>
+            <!-- Text input-->
+            <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                            {{ Form::text('amount', $value = null, [
+                                'class' => 'form-control', 
+                                'id' => 'donation-amount', 
+                                'placeholder' => '5.00'
+                            ]) }}
+                        <span class="input-group-btn">
+                            <button id="donation_submit" class="btn btn-success" type="submit">Make Donation</button>
+                        </span>
                     </div>
-                </div>   -->          	
-
-            	<!-- Text input-->
-                <div class="form-group row">
-                    <label class="col-md-4 control-label" for="amount">Amount</label>
-
-<div id="slider"></div>
-
-                    <div class="col-md-8">
-                        <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                                {{ Form::text('amount', $value = null, [
-                                    'class' => 'form-control', 
-                                    'id' => 'donation-amount', 
-                                    'placeholder' => '0.00'
-                                ]) }}
-                            <span class="input-group-btn">
-                                <button id="donation_submit" class="btn btn-success" type="submit">Make Donation</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-
-    
+            </div>
+        </fieldset>
 
     {{ Form::token(); }}
 {{ Form::close() }}
 
+</div>
+
+
+
+
+
+<div class="col-sm-12 col-md-8">
+    
+
+
+
+<h1>Donations</h1>
+
+<p><a href="/donors">See list of donors.</a></p>
+
+<h4>Costs Breakdown:</h4>
+
+<p>Goal: {{ $goal }}, Collected so far: {{ $total_amount }}</p>
+
+<div class="progress progress-striped active">
+  <div class="progress-bar"  role="progressbar" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $percentage }}%">
+    {{ $percentage }}%
+  </div>
+</div>
+
+<ul class="col-sm-12">
+    
+    @foreach($donations as $donation)
+    <li class="col-md-3">{{ $donation->donator->steam_id }}</li>
+    @endforeach
+
+</ul>
+
+<h4>Donatoer Perks:</h4>
+
+<p>Donators get a special status ingame, making them invulnerable during the Humiliation mode at the end of a round; and exclusive access to extra player slots on the servers (<a href="/help/donators#player-slots">How do I use this?</a>).</p>
+</div>
 @stop
 
 @section('footer')
@@ -179,6 +179,9 @@ $( "#steam_id" ).blur(function()
 {
     if(steam_id_valid) return false;
     var steam_input = $( this );
+
+    if(steam_input.val() == '') return false;
+
     $.getJSON( "/check-steamid/"+$(this).val(), function( json ) {
 
         if(typeof(json.steamId) != "undefined")

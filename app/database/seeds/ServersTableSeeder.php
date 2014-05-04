@@ -4,31 +4,33 @@ class ServersTableSeeder extends Seeder {
 
 	public function run()
 	{
-		// Serverx::create([
-		// 	'order' 			=> 1,
-		// 	'name'				=> '#1 Chill Out Server',
-		// 	'vanilla_name' 		=> 'TF2 Server #1',
-		// 	'ip' 				=> '203.33.121.205',
-		// 	'port'			 	=> '27021',
-		// 	// 'type'				=> 'source',
-		// 	'game_id'			 	=> '1',
-		// 	// 'offline'			=> '0',
-		// 	'maxPlayers'		=> '24',
-		// 	// 'players'			=> '0'
-		// ]);
+		Server::create([
+			'order' 			=> 1,
+			'name'				=> '#1 Chill Out Server',
+			'vanilla_name' 		=> 'TF2 Server #1',
+			'ip' 				=> '203.33.121.205',
+			'port'			 	=> '27021',
+			// 'type'				=> 'source',
+			'game_id'			 	=> '1',
+			// 'offline'			=> '0',
+			'maxPlayers'		=> '24',
+			'monthlyCost'		=> '39.95',
+			// 'players'			=> '0'
+		]);
 
-		// Serverx::create([
-		// 	'order' 			=> 2,
-		// 	'name'				=> '#2 Straight Up Server',
-		// 	'vanilla_name' 		=> 'TF2 Server #2',
-		// 	'ip' 				=> '203.33.121.205',
-		// 	'port'			 	=> '27058',
-		// 	// 'type'				=> 'source',
-		// 	'game_id'			 	=> '1',
-		// 	// 'offline'			=> '0',
-		// 	'maxPlayers'		=> '18',
-		// 	// 'players'			=> '0'
-		// ]);
+		Server::create([
+			'order' 			=> 2,
+			'name'				=> '#2 Straight Up Server',
+			'vanilla_name' 		=> 'TF2 Server #2',
+			'ip' 				=> '203.33.121.205',
+			'port'			 	=> '27058',
+			// 'type'				=> 'source',
+			'game_id'			 	=> '1',
+			// 'offline'			=> '0',
+			'maxPlayers'		=> '18',
+			'monthlyCost'		=> '19.95',
+			// 'players'			=> '0'
+		]);
 
 		Server::create([
 			'order' 			=> 3,
@@ -40,6 +42,7 @@ class ServersTableSeeder extends Seeder {
 			'game_id'			 	=> '1',
 			// 'offline'			=> '0',
 			'maxPlayers'		=> '18',
+			'monthlyCost'		=> '19.95',
 			// 'players'			=> '0'
 		]);
 

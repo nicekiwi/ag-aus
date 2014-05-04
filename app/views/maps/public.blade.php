@@ -4,12 +4,10 @@
 
 <h1>Maps</h1>
 
-<h4>Filter by Map Type:</h4>
-
 <div class="well col-sm-12">
 	<ul class="map-filter">
 		
-		<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All</a></li>
+		<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All ({{ $map_total }})</a></li>
 		@foreach($map_types as $type)
 		@if($type->maps->count() > 0)
 		<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</a></li>
@@ -22,9 +20,9 @@
 	<thead>
 		<tr>
 			<td>Type</td>
-			<td>Name</td>
+			<!-- <td>Name</td> -->
 			<td>Filename</td>
-			<td>Popularity</td>
+			<!-- <td>Popularity</td> -->
 			<td>Size</td>
 			<td>Action</td>
 		</tr>
@@ -34,7 +32,7 @@
 		@foreach($maps as $map)
 		<tr>
 			<td>{{ $map->maptype->type }}</td>
-			<td><a href="/maps/{{ $map->slug }}">{{ $map->name }} {{ $map->revision }}</a></td>
+			<!-- <td><a href="/maps/{{ $map->slug }}">{{ $map->name }} {{ $map->revision }}</a></td> -->
 			<td>
 				{{ $map->filename }}
 				@if($map->mapFiles->count() > 0)
@@ -44,7 +42,7 @@
 				@endif
 			</td>
 
-			<td><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i></td>
+			<!-- <td><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i></td> -->
 
 			@if ($map->filesize >= 1048576)
 	            <td>{{ number_format($map->filesize / 1048576, 2) . ' MB' }}</td>

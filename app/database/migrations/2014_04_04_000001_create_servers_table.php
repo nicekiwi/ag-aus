@@ -24,6 +24,7 @@ class CreateServersTable extends Migration {
 			$table->integer('order');
 
 			$table->integer('maxPlayers');
+			$table->decimal('monthlyCost',5,2);
 
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();

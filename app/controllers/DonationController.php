@@ -17,7 +17,26 @@ class DonationController extends BaseController {
 
 	public function public_index()
 	{
-		return View::make('donate.public');//->with(compact('posts'));
+		$quater_goal = Server::sum('monthlyCost') * 3;
+
+		$donations = Donation::whereBetween('created_at', ['2014-01-01','2014-06-01']);
+
+		$total_amount = $donations->sum('amount');
+		$donations = $donations->get();
+
+		$percentage = number_format(($total_amount / $quater_goal) * 100);
+							//->sum('amount');//Donator::where('created_at', '==' ,new \Carbon\Carbon('this year'))->get();
+
+		// $donators = Donator::whereBetween('created_at', ['2014-01-01','2014-06-01'])
+		// 				   ->orderBy('created_at','asc')
+		// 				   ->get();
+
+		return View::make('donate.public')->with([
+			'total_amount'=>$total_amount,
+			'percentage'=>$percentage,
+			'donations'=> $donations,
+			'goal'=>$quater_goal
+		]);
 	}
 
 	public function display_donation_widgit($view)

@@ -32,24 +32,30 @@ class MapController extends BaseController {
 	public function index()
 	{
 		$maps = $this->get_maps();
+		$map_total = Map::count();
 		$map_files = MapFile::all();
 		$map_types = MapType::orderBy('name','asc')->get();
+
+		dd($map_total);
 
         return View::make('maps.index')->with([
         	'maps' => $maps,
         	'map_files' => $map_files,
         	'map_types' => $map_types,
+        	'map_total' => $map_total
         ]);
 	}
 
 	public function index_public()
 	{
 		$maps = $this->get_maps();
+		$map_total = Map::count();
 		$map_types = MapType::orderBy('name','asc')->get();
 
         return View::make('maps.public')->with([
         	'maps'=>$maps,
-        	'map_types'=>$map_types
+        	'map_types'=>$map_types,
+        	'map_total' => $map_total
         ]);
 	}
 
