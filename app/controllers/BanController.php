@@ -1,6 +1,6 @@
 <?php
 
-class BansController extends \BaseController {
+class BanController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -11,6 +11,33 @@ class BansController extends \BaseController {
 	public function index()
 	{
 		//
+	}
+
+	public function pull_bans()
+	{
+		$steamClass = "\SteamCondenser\Community\SteamId";
+
+		$remotePath = 'service311/tf/cfg/banned_user.cfg';
+		//$remotePath = 'remote-configs/banned_user.cfg';
+		$contents = SSH::into('pantheon')->getString($remotePath);
+		$contents = preg_split("/((\r?\n)|(\r\n?))/", $contents);
+
+		$count = 0;
+
+		foreach($contents as $line)
+		{
+			if($count >= 5) break;
+
+			$line = explode(' ', $line);
+
+			$steam64ID = $line[2];
+			$steamID = $steamClass::convertSteamIdToCommunityId($steam64ID);
+			$steamID = $steamClass::create($steamID);
+
+			echo $steamID->getNickname() . '<br>';
+
+			$count++;
+		}
 	}
 
 	/**

@@ -19,13 +19,38 @@ class CreateConfigsTable extends Migration {
 
 			$table->string('title');
 
-			$table->text('content');
+			$table->text('desc');
 			
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();
 			$table->integer('created_by')->nullable();
 			$table->timestamps();
 		});
+
+		// Schema::create('config_variables', function(Blueprint $table)
+		// {
+		// 	$table->increments('id');
+		// 	$table->integer('server_id');
+
+		// 	$table->string('title');
+
+		// 	$table->text('desc');
+			
+		// 	$table->softDeletes();
+		// 	$table->integer('updated_by')->nullable();
+		// 	$table->integer('created_by')->nullable();
+		// 	$table->timestamps();
+		// });
+
+		// Schema::create('config_variable', function(Blueprint $table)
+		// {
+		// 	$table->increments('id');
+
+		// 	$table->integer('config_id');
+		// 	$table->integer('variable_id');
+
+			
+		// });
 	}
 
 	/**

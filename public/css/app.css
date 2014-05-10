@@ -1512,7 +1512,7 @@ table td[class*="col-"], table th[class*="col-"] {
 .table > thead > tr > td.active, .table > thead > tr > th.active, .table > thead > tr.active > td, .table > thead > tr.active > th, .table > tbody > tr > td.active, .table > tbody > tr > th.active, .table > tbody > tr.active > td, .table > tbody > tr.active > th, .table > tfoot > tr > td.active, .table > tfoot > tr > th.active, .table > tfoot > tr.active > td, .table > tfoot > tr.active > th {
   background-color: #f5f5f5; }
 
-.table-hover > tbody > tr > td.active:hover, .table-hover > tbody > tr > th.active:hover, .table-hover > tbody > tr.active:hover > td, .table-hover > tbody > tr:hover > .active, .table-hover > tbody > tr.active:hover > th {
+.table-hover > tbody > tr > td.active:hover, .table-hover > tbody > tr > th.active:hover, .table-hover > tbody > tr.active:hover > td, .table-hover > tbody > tr:hover > .active, .table-hover > tbody > tr:hover > input[type="radio"]:checked + label, input[type="radio"]:checked + .table-hover > tbody > tr:hover > label, .table-hover > tbody > tr.active:hover > th {
   background-color: #e8e8e8; }
 
 .table > thead > tr > td.success, .table > thead > tr > th.success, .table > thead > tr.success > td, .table > thead > tr.success > th, .table > tbody > tr > td.success, .table > tbody > tr > th.success, .table > tbody > tr.success > td, .table > tbody > tr.success > th, .table > tfoot > tr > td.success, .table > tfoot > tr > th.success, .table > tfoot > tr.success > td, .table > tfoot > tr.success > th {
@@ -1879,14 +1879,14 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
-  .btn:focus, .btn:active:focus, .btn.active:focus {
+  .btn:focus, .btn:active:focus, .btn.active:focus, input[type="radio"]:checked + label.btn:focus {
     outline: thin dotted;
     outline: 5px auto-webkit-focus-ring-color;
     outline-offset: -2px; }
   .btn:hover, .btn:focus {
     color: #333;
     text-decoration: none; }
-  .btn:active, .btn.active {
+  .btn:active, .btn.active, input[type="radio"]:checked + label.btn {
     outline: 0;
     background-image: none;
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
@@ -1901,13 +1901,13 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
   color: #333;
   background-color: #fff;
   border-color: #ccc; }
-  .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
+  .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, input[type="radio"]:checked + label.btn-default, .open > .btn-default.dropdown-toggle {
     color: #333;
     background-color: #e6e6e6;
     border-color: #adadad; }
-  .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
+  .btn-default:active, .btn-default.active, input[type="radio"]:checked + label.btn-default, .open > .btn-default.dropdown-toggle {
     background-image: none; }
-  .btn-default.disabled, .btn-default.disabled:hover, .btn-default.disabled:focus, .btn-default.disabled:active, .btn-default.disabled.active, .btn-default[disabled], .btn-default[disabled]:hover, .btn-default[disabled]:focus, .btn-default[disabled]:active, .btn-default[disabled].active, fieldset[disabled] .btn-default, fieldset[disabled] .btn-default:hover, fieldset[disabled] .btn-default:focus, fieldset[disabled] .btn-default:active, fieldset[disabled] .btn-default.active {
+  .btn-default.disabled, .btn-default.disabled:hover, .btn-default.disabled:focus, .btn-default.disabled:active, .btn-default.disabled.active, input[type="radio"]:checked + label.btn-default.disabled, .btn-default[disabled], .btn-default[disabled]:hover, .btn-default[disabled]:focus, .btn-default[disabled]:active, .btn-default[disabled].active, input[type="radio"]:checked + label.btn-default[disabled], fieldset[disabled] .btn-default, fieldset[disabled] .btn-default:hover, fieldset[disabled] .btn-default:focus, fieldset[disabled] .btn-default:active, fieldset[disabled] .btn-default.active, fieldset[disabled] input[type="radio"]:checked + label.btn-default, input[type="radio"]:checked + fieldset[disabled] label.btn-default {
     background-color: #fff;
     border-color: #ccc; }
   .btn-default .badge {
@@ -1918,13 +1918,13 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
   color: #fff;
   background-color: #428bca;
   border-color: #3580bd; }
-  .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .btn-primary.dropdown-toggle {
+  .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, input[type="radio"]:checked + label.btn-primary, .open > .btn-primary.dropdown-toggle {
     color: #fff;
     background-color: #3073a9;
     border-color: #28608e; }
-  .btn-primary:active, .btn-primary.active, .open > .btn-primary.dropdown-toggle {
+  .btn-primary:active, .btn-primary.active, input[type="radio"]:checked + label.btn-primary, .open > .btn-primary.dropdown-toggle {
     background-image: none; }
-  .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
+  .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled:active, .btn-primary.disabled.active, input[type="radio"]:checked + label.btn-primary.disabled, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, input[type="radio"]:checked + label.btn-primary[disabled], fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active, fieldset[disabled] input[type="radio"]:checked + label.btn-primary, input[type="radio"]:checked + fieldset[disabled] label.btn-primary {
     background-color: #428bca;
     border-color: #3580bd; }
   .btn-primary .badge {
@@ -1935,13 +1935,13 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
   color: #fff;
   background-color: #5cb85c;
   border-color: #4eae4c; }
-  .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .btn-success.dropdown-toggle {
+  .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, input[type="radio"]:checked + label.btn-success, .open > .btn-success.dropdown-toggle {
     color: #fff;
     background-color: #469d44;
     border-color: #3b8439; }
-  .btn-success:active, .btn-success.active, .open > .btn-success.dropdown-toggle {
+  .btn-success:active, .btn-success.active, input[type="radio"]:checked + label.btn-success, .open > .btn-success.dropdown-toggle {
     background-image: none; }
-  .btn-success.disabled, .btn-success.disabled:hover, .btn-success.disabled:focus, .btn-success.disabled:active, .btn-success.disabled.active, .btn-success[disabled], .btn-success[disabled]:hover, .btn-success[disabled]:focus, .btn-success[disabled]:active, .btn-success[disabled].active, fieldset[disabled] .btn-success, fieldset[disabled] .btn-success:hover, fieldset[disabled] .btn-success:focus, fieldset[disabled] .btn-success:active, fieldset[disabled] .btn-success.active {
+  .btn-success.disabled, .btn-success.disabled:hover, .btn-success.disabled:focus, .btn-success.disabled:active, .btn-success.disabled.active, input[type="radio"]:checked + label.btn-success.disabled, .btn-success[disabled], .btn-success[disabled]:hover, .btn-success[disabled]:focus, .btn-success[disabled]:active, .btn-success[disabled].active, input[type="radio"]:checked + label.btn-success[disabled], fieldset[disabled] .btn-success, fieldset[disabled] .btn-success:hover, fieldset[disabled] .btn-success:focus, fieldset[disabled] .btn-success:active, fieldset[disabled] .btn-success.active, fieldset[disabled] input[type="radio"]:checked + label.btn-success, input[type="radio"]:checked + fieldset[disabled] label.btn-success {
     background-color: #5cb85c;
     border-color: #4eae4c; }
   .btn-success .badge {
@@ -1952,13 +1952,13 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
   color: #fff;
   background-color: #5bc0de;
   border-color: #46bada; }
-  .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
+  .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, input[type="radio"]:checked + label.btn-info, .open > .btn-info.dropdown-toggle {
     color: #fff;
     background-color: #31b2d5;
     border-color: #269cbc; }
-  .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
+  .btn-info:active, .btn-info.active, input[type="radio"]:checked + label.btn-info, .open > .btn-info.dropdown-toggle {
     background-image: none; }
-  .btn-info.disabled, .btn-info.disabled:hover, .btn-info.disabled:focus, .btn-info.disabled:active, .btn-info.disabled.active, .btn-info[disabled], .btn-info[disabled]:hover, .btn-info[disabled]:focus, .btn-info[disabled]:active, .btn-info[disabled].active, fieldset[disabled] .btn-info, fieldset[disabled] .btn-info:hover, fieldset[disabled] .btn-info:focus, fieldset[disabled] .btn-info:active, fieldset[disabled] .btn-info.active {
+  .btn-info.disabled, .btn-info.disabled:hover, .btn-info.disabled:focus, .btn-info.disabled:active, .btn-info.disabled.active, input[type="radio"]:checked + label.btn-info.disabled, .btn-info[disabled], .btn-info[disabled]:hover, .btn-info[disabled]:focus, .btn-info[disabled]:active, .btn-info[disabled].active, input[type="radio"]:checked + label.btn-info[disabled], fieldset[disabled] .btn-info, fieldset[disabled] .btn-info:hover, fieldset[disabled] .btn-info:focus, fieldset[disabled] .btn-info:active, fieldset[disabled] .btn-info.active, fieldset[disabled] input[type="radio"]:checked + label.btn-info, input[type="radio"]:checked + fieldset[disabled] label.btn-info {
     background-color: #5bc0de;
     border-color: #46bada; }
   .btn-info .badge {
@@ -1969,13 +1969,13 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
   color: #fff;
   background-color: #f0ad4e;
   border-color: #eea236; }
-  .btn-warning:hover, .btn-warning:focus, .btn-warning:active, .btn-warning.active, .open > .btn-warning.dropdown-toggle {
+  .btn-warning:hover, .btn-warning:focus, .btn-warning:active, .btn-warning.active, input[type="radio"]:checked + label.btn-warning, .open > .btn-warning.dropdown-toggle {
     color: #fff;
     background-color: #ec971f;
     border-color: #d58112; }
-  .btn-warning:active, .btn-warning.active, .open > .btn-warning.dropdown-toggle {
+  .btn-warning:active, .btn-warning.active, input[type="radio"]:checked + label.btn-warning, .open > .btn-warning.dropdown-toggle {
     background-image: none; }
-  .btn-warning.disabled, .btn-warning.disabled:hover, .btn-warning.disabled:focus, .btn-warning.disabled:active, .btn-warning.disabled.active, .btn-warning[disabled], .btn-warning[disabled]:hover, .btn-warning[disabled]:focus, .btn-warning[disabled]:active, .btn-warning[disabled].active, fieldset[disabled] .btn-warning, fieldset[disabled] .btn-warning:hover, fieldset[disabled] .btn-warning:focus, fieldset[disabled] .btn-warning:active, fieldset[disabled] .btn-warning.active {
+  .btn-warning.disabled, .btn-warning.disabled:hover, .btn-warning.disabled:focus, .btn-warning.disabled:active, .btn-warning.disabled.active, input[type="radio"]:checked + label.btn-warning.disabled, .btn-warning[disabled], .btn-warning[disabled]:hover, .btn-warning[disabled]:focus, .btn-warning[disabled]:active, .btn-warning[disabled].active, input[type="radio"]:checked + label.btn-warning[disabled], fieldset[disabled] .btn-warning, fieldset[disabled] .btn-warning:hover, fieldset[disabled] .btn-warning:focus, fieldset[disabled] .btn-warning:active, fieldset[disabled] .btn-warning.active, fieldset[disabled] input[type="radio"]:checked + label.btn-warning, input[type="radio"]:checked + fieldset[disabled] label.btn-warning {
     background-color: #f0ad4e;
     border-color: #eea236; }
   .btn-warning .badge {
@@ -1986,13 +1986,13 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
   color: #fff;
   background-color: #d9534f;
   border-color: #d43d3a; }
-  .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .btn-danger.dropdown-toggle {
+  .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, input[type="radio"]:checked + label.btn-danger, .open > .btn-danger.dropdown-toggle {
     color: #fff;
     background-color: #c92e2c;
     border-color: #ac2525; }
-  .btn-danger:active, .btn-danger.active, .open > .btn-danger.dropdown-toggle {
+  .btn-danger:active, .btn-danger.active, input[type="radio"]:checked + label.btn-danger, .open > .btn-danger.dropdown-toggle {
     background-image: none; }
-  .btn-danger.disabled, .btn-danger.disabled:hover, .btn-danger.disabled:focus, .btn-danger.disabled:active, .btn-danger.disabled.active, .btn-danger[disabled], .btn-danger[disabled]:hover, .btn-danger[disabled]:focus, .btn-danger[disabled]:active, .btn-danger[disabled].active, fieldset[disabled] .btn-danger, fieldset[disabled] .btn-danger:hover, fieldset[disabled] .btn-danger:focus, fieldset[disabled] .btn-danger:active, fieldset[disabled] .btn-danger.active {
+  .btn-danger.disabled, .btn-danger.disabled:hover, .btn-danger.disabled:focus, .btn-danger.disabled:active, .btn-danger.disabled.active, input[type="radio"]:checked + label.btn-danger.disabled, .btn-danger[disabled], .btn-danger[disabled]:hover, .btn-danger[disabled]:focus, .btn-danger[disabled]:active, .btn-danger[disabled].active, input[type="radio"]:checked + label.btn-danger[disabled], fieldset[disabled] .btn-danger, fieldset[disabled] .btn-danger:hover, fieldset[disabled] .btn-danger:focus, fieldset[disabled] .btn-danger:active, fieldset[disabled] .btn-danger.active, fieldset[disabled] input[type="radio"]:checked + label.btn-danger, input[type="radio"]:checked + fieldset[disabled] label.btn-danger {
     background-color: #d9534f;
     border-color: #d43d3a; }
   .btn-danger .badge {
@@ -2129,7 +2129,7 @@ tbody.collapse.in {
   color: #262626;
   background-color: #f5f5f5; }
 
-.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+.dropdown-menu > .active > a, .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .dropdown-menu > .active > label, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .dropdown-menu > .active > label, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .dropdown-menu > .active > label {
   color: #fff;
   text-decoration: none;
   outline: 0;
@@ -2201,7 +2201,7 @@ tbody.collapse.in {
   .btn-group > .btn, .btn-group-vertical > .btn {
     position: relative;
     float: left; }
-    .btn-group > .btn:hover, .btn-group > .btn:focus, .btn-group > .btn:active, .btn-group > .btn.active, .btn-group-vertical > .btn:hover, .btn-group-vertical > .btn:focus, .btn-group-vertical > .btn:active, .btn-group-vertical > .btn.active {
+    .btn-group > .btn:hover, .btn-group > .btn:focus, .btn-group > .btn:active, .btn-group > .btn.active, .btn-group > input[type="radio"]:checked + label.btn, input[type="radio"]:checked + .btn-group > label.btn, .btn-group-vertical > .btn:hover, .btn-group-vertical > .btn:focus, .btn-group-vertical > .btn:active, .btn-group-vertical > .btn.active, .btn-group-vertical > input[type="radio"]:checked + label.btn, input[type="radio"]:checked + .btn-group-vertical > label.btn {
       z-index: 2; }
     .btn-group > .btn:focus, .btn-group-vertical > .btn:focus {
       outline: 0; }
@@ -2503,18 +2503,18 @@ tbody.collapse.in {
   .nav-tabs-justified > li > a, .nav-tabs-justified > li > .nav-tabs.nav-justified, .nav-tabs-justified > li > .nav-tabs.nav-justified {
     margin-right: 0;
     border-radius: 4px; }
-  .nav-tabs-justified > .active > a, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > a:hover, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > a:focus, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified {
+  .nav-tabs-justified > .active > a, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .nav-tabs-justified > .active > label, .nav-tabs-justified > .active > a:hover, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .nav-tabs-justified > .active > label, .nav-tabs-justified > .active > a:focus, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .nav-tabs-justified > .active > label {
     border: 1px solid #ddd; }
   @media (min-width: 768px) {
     .nav-tabs-justified > li > a, .nav-tabs-justified > li > .nav-tabs.nav-justified, .nav-tabs-justified > li > .nav-tabs.nav-justified {
       border-bottom: 1px solid #ddd;
       border-radius: 4px 4px 0 0; }
-    .nav-tabs-justified > .active > a, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > a:hover, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > a:focus, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified {
+    .nav-tabs-justified > .active > a, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .nav-tabs-justified > .active > label, .nav-tabs-justified > .active > a:hover, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .nav-tabs-justified > .active > label, .nav-tabs-justified > .active > a:focus, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > .nav-tabs.nav-justified, .nav-tabs-justified > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .nav-tabs-justified > .active > label {
       border-bottom-color: #fff; } }
 
 .tab-content > .tab-pane {
   display: none; }
-.tab-content > .active {
+.tab-content > .active, .tab-content > input[type="radio"]:checked + label, input[type="radio"]:checked + .tab-content > label {
   display: block; }
 
 .nav-tabs .dropdown-menu {
@@ -2758,7 +2758,7 @@ tbody.collapse.in {
     .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
       color: #333;
       background-color: transparent; }
-  .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-default .navbar-nav > .active > label, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-default .navbar-nav > .active > label, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-default .navbar-nav > .active > label {
     color: #555;
     background-color: #e7e7e7; }
   .navbar-default .navbar-nav > .disabled > a, .navbar-default .navbar-nav > .disabled > a:hover, .navbar-default .navbar-nav > .disabled > a:focus {
@@ -2781,7 +2781,7 @@ tbody.collapse.in {
       .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
         color: #333;
         background-color: transparent; }
-    .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-default .navbar-nav .open .dropdown-menu > .active > label, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-default .navbar-nav .open .dropdown-menu > .active > label, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus, .navbar-default .navbar-nav .open .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-default .navbar-nav .open .dropdown-menu > .active > label {
       color: #555;
       background-color: #e7e7e7; }
     .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a, .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {
@@ -2813,7 +2813,7 @@ tbody.collapse.in {
     .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
       color: #fff;
       background-color: transparent; }
-  .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+  .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-inverse .navbar-nav > .active > label, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-inverse .navbar-nav > .active > label, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-inverse .navbar-nav > .active > label {
     color: #fff;
     background-color: #2b2b2b; }
   .navbar-inverse .navbar-nav > .disabled > a, .navbar-inverse .navbar-nav > .disabled > a:hover, .navbar-inverse .navbar-nav > .disabled > a:focus {
@@ -2840,7 +2840,7 @@ tbody.collapse.in {
       .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {
         color: #fff;
         background-color: transparent; }
-    .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {
+    .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-inverse .navbar-nav .open .dropdown-menu > .active > label, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-inverse .navbar-nav .open .dropdown-menu > .active > label, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .navbar-inverse .navbar-nav .open .dropdown-menu > .active > label {
       color: #fff;
       background-color: #2b2b2b; }
     .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a, .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:focus {
@@ -2869,7 +2869,7 @@ tbody.collapse.in {
       content: "/\00a0";
       padding: 0 5px;
       color: #ccc; }
-  .breadcrumb > .active {
+  .breadcrumb > .active, .breadcrumb > input[type="radio"]:checked + label, input[type="radio"]:checked + .breadcrumb > label {
     color: #999999; }
 
 .pagination {
@@ -2900,7 +2900,7 @@ tbody.collapse.in {
     color: #2a6596;
     background-color: #eeeeee;
     border-color: #ddd; }
-  .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus, .pagination > .active > span, .pagination > .active > span:hover, .pagination > .active > span:focus {
+  .pagination > .active > a, .pagination > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .pagination > .active > label, .pagination > .active > a:hover, .pagination > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .pagination > .active > label, .pagination > .active > a:focus, .pagination > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .pagination > .active > label, .pagination > .active > span, .pagination > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .pagination > .active > label, .pagination > .active > span:hover, .pagination > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .pagination > .active > label, .pagination > .active > span:focus, .pagination > .active > input[type="radio"]:checked + label, input[type="radio"]:checked + .pagination > .active > label {
     z-index: 2;
     color: #fff;
     background-color: #428bca;
@@ -3035,7 +3035,7 @@ a.label:hover, a.label:focus {
   .btn-xs .badge, .btn-xs .btn-group-xs > .btn, .btn-group-xs > .btn-xs .btn {
     top: 0;
     padding: 1px 5px; }
-  a.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
+  a.list-group-item.active > .badge, .nav-pills > .active > a > .badge, .nav-pills > .active > a > input[type="radio"]:checked + label, input[type="radio"]:checked + .nav-pills > .active > a > label {
     color: #428bca;
     background-color: #fff; }
   .nav-pills > li > a > .badge {
@@ -3195,7 +3195,7 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-size: 40px 40px; }
 
-.progress.active .progress-bar {
+.progress.active .progress-bar, .progress.active input[type="radio"]:checked + label.progress, input[type="radio"]:checked + .progress.active label.progress {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite; }
 
@@ -3296,14 +3296,14 @@ a.list-group-item {
     color: inherit; }
   .list-group-item.disabled .list-group-item-text, .list-group-item.disabled:hover .list-group-item-text, .list-group-item.disabled:focus .list-group-item-text {
     color: #999999; }
-.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+.list-group-item.active, input[type="radio"]:checked + label.list-group-item, .list-group-item.active:hover, input[type="radio"]:checked + label.list-group-item:hover, .list-group-item.active:focus, input[type="radio"]:checked + label.list-group-item:focus {
   z-index: 2;
   color: #fff;
   background-color: #428bca;
   border-color: #428bca; }
-  .list-group-item.active .list-group-item-heading, .list-group-item.active:hover .list-group-item-heading, .list-group-item.active:focus .list-group-item-heading {
+  .list-group-item.active .list-group-item-heading, .list-group-item.active input[type="radio"]:checked + label.list-group-item, input[type="radio"]:checked + .list-group-item.active label.list-group-item, .list-group-item.active:hover .list-group-item-heading, .list-group-item.active:hover input[type="radio"]:checked + label.list-group-item:hover, input[type="radio"]:checked + .list-group-item.active:hover label.list-group-item:hover, .list-group-item.active:focus .list-group-item-heading, .list-group-item.active:focus input[type="radio"]:checked + label.list-group-item:focus, input[type="radio"]:checked + .list-group-item.active:focus label.list-group-item:focus {
     color: inherit; }
-  .list-group-item.active .list-group-item-text, .list-group-item.active:hover .list-group-item-text, .list-group-item.active:focus .list-group-item-text {
+  .list-group-item.active .list-group-item-text, .list-group-item.active input[type="radio"]:checked + label.list-group-item, input[type="radio"]:checked + .list-group-item.active label.list-group-item, .list-group-item.active:hover .list-group-item-text, .list-group-item.active:hover input[type="radio"]:checked + label.list-group-item:hover, input[type="radio"]:checked + .list-group-item.active:hover label.list-group-item:hover, .list-group-item.active:focus .list-group-item-text, .list-group-item.active:focus input[type="radio"]:checked + label.list-group-item:focus, input[type="radio"]:checked + .list-group-item.active:focus label.list-group-item:focus {
     color: #e1edf7; }
 
 .list-group-item-success {
@@ -3927,9 +3927,9 @@ button.close {
       max-width: 100%;
       height: auto;
       line-height: 1; }
-  .carousel-inner > .active, .carousel-inner > .next, .carousel-inner > .prev {
+  .carousel-inner > .active, .carousel-inner > input[type="radio"]:checked + label, input[type="radio"]:checked + .carousel-inner > label, .carousel-inner > .next, .carousel-inner > .prev {
     display: block; }
-  .carousel-inner > .active {
+  .carousel-inner > .active, .carousel-inner > input[type="radio"]:checked + label, input[type="radio"]:checked + .carousel-inner > label {
     left: 0; }
   .carousel-inner > .next, .carousel-inner > .prev {
     position: absolute;
@@ -3941,9 +3941,9 @@ button.close {
     left: -100%; }
   .carousel-inner > .next.left, .carousel-inner > .prev.right {
     left: 0; }
-  .carousel-inner > .active.left {
+  .carousel-inner > .active.left, .carousel-inner > input[type="radio"]:checked + label.left, input[type="radio"]:checked + .carousel-inner > label.left {
     left: -100%; }
-  .carousel-inner > .active.right {
+  .carousel-inner > .active.right, .carousel-inner > input[type="radio"]:checked + label.right, input[type="radio"]:checked + .carousel-inner > label.right {
     left: 100%; }
 
 .carousel-control {
@@ -4020,7 +4020,7 @@ button.close {
     cursor: pointer;
     background-color: #000 \9;
     background-color: rgba(0, 0, 0, 0); }
-  .carousel-indicators .active {
+  .carousel-indicators .active, .carousel-indicators input[type="radio"]:checked + label, input[type="radio"]:checked + .carousel-indicators label {
     margin: 0;
     width: 12px;
     height: 12px;
@@ -4256,6 +4256,10 @@ button.close {
 .map-filter li.active {
   font-weight: bold; }
 
+
+
+.donation-options input {
+  display: none; }
 
 #maps-list tr td:nth-child(1), #maps-list tr td:nth-child(4), #maps-list tr td:nth-child(5), #maps-list tr td:nth-child(6) {
   text-align: center; }

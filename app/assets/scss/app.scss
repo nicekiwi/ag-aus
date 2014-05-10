@@ -6,7 +6,13 @@
 
 @import "shared.scss";
 
+input[type="radio"]:checked+label { 
+	@extend .active;
+}
 
+.donation-options input {
+	display: none;
+}
 
 #maps-list tr td:nth-child(1),
 #maps-list tr td:nth-child(4),

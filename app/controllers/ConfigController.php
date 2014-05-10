@@ -20,7 +20,7 @@ class ConfigController extends \BaseController {
 	 */
 	public function create()
 	{
-		//
+		return View::make('configs.create');
 	}
 
 

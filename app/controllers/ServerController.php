@@ -25,7 +25,50 @@ class ServerController extends \BaseController {
 		//
 	}
 
-	public function getID($id)
+	public function getGroupMembers($groupID = '2835397')
+	{
+		$groupClass = "\SteamCondenser\Community\SteamGroup";
+		$steamClass = "\SteamCondenser\Community\SteamId";
+
+		$data = new StdClass;
+		$data->members = array();
+
+		try 
+		{
+			$group = $groupClass::create($groupID);
+
+			$member = $group->getMembers();
+
+			$userID = $steamClass::create($member[3]->getSteamId64());
+
+			dd($userID->getNickname());
+
+			$d = 0;
+
+			foreach ($group->getMembers() as $member) 
+			{
+				
+				if($d > 1) break;
+
+				$userID = $steamClass::create($member->getSteamId64());
+
+				$user = new StdClass;
+				$user->nickname = $userID->getNickname();
+
+				$data->members[] = $user;
+
+				$d++;
+			}
+		} 
+		catch (Exception $e) 
+		{
+			$data->message = $e->getMessage(); //'Profile does not exist or it set to Private.';
+		}
+
+		dd($data);
+	}
+
+	public function getID($id, $public = true)
 	{
 		$steam = "\SteamCondenser\Community\SteamId";
 
@@ -47,7 +90,10 @@ class ServerController extends \BaseController {
 			$data->message = $e->getMessage(); //'Profile does not exist or it set to Private.';
 		}
 
-		return json_encode($data);
+		if($public)
+			return json_encode($data);
+		else
+			return $data;
 	}
 
 	/**

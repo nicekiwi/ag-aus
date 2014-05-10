@@ -26,18 +26,20 @@ return array(
 	|
 	*/
 
-	'connections' => array(
-
-		'production' => array(
-			'host'      => '',
-			'username'  => '',
-			'password'  => '',
-			'key'       => '',
-			'keyphrase' => '',
-			'root'      => '/var/www',
-		),
-
-	),
+	'connections' => Config::get('keys.laravel.remote-connections'),//array(
+//
+		// 'production' => array(
+		// 	'host'      => Config::get('keys.stripe.live_secret_key'),
+		// 	'username'  => Config::get('keys.stripe.live_secret_key'),
+		// 	'password'  => Config::get('keys.stripe.live_secret_key'),
+		// 	'key'       => Config::get('keys.stripe.live_secret_key'),
+		// 	'keyphrase' => Config::get('keys.stripe.live_secret_key'),
+		// 	'root'      => Config::get('keys.stripe.live_secret_key'),
+		// ),
+//
+		//'production' => Config::get('keys.remote.production'),
+//
+	//),
 
 	/*
 	|--------------------------------------------------------------------------

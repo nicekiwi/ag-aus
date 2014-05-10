@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
 |--------------------------------------------------------------------------
@@ -31,15 +31,24 @@ Route::get('test', function()
 
 	//return View::make('hello');
 
-	$server = new Server;
+	// $server = new Server;
+	//
+	// dd($server);
 
-	dd($server);
+	// $remotePath = 'service332/tf/cfg/server.cfg';
+	// $contents = SSH::into('pantheon')->getString($remotePath);
+
+	// echo '<pre>';
+	// echo $contents;
+	// echo '</pre>';
+
+
 
 });
 
 Route::get('server-info', function()
 {
-	$server = new Servers;
+	$server = new Server;
 	return json_encode($server->getServerLocal());
 });
 
@@ -65,7 +74,13 @@ Route::get('players', function()
 	//var_dump($players);
 });
 
+Route::get('get-bans', 'BanController@pull_bans');
+
+Route::get('dothing', 'DonationController@create_quarter');
+
 Route::get('check-steamid/{id}', 'ServerController@getID');
+
+Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
 
 Route::get('donate', 'DonationController@public_index');
 Route::post('donate', 'DonationController@validate_donation');
@@ -102,7 +117,7 @@ Route::get( 'login/reset-password/{token}', 'UserController@reset_password');
 Route::post('login/reset-password',         'UserController@do_reset_password');
 Route::get( 'login/confirm/{code}',         'UserController@confirm');
 
-	
+
 // ===============================================
 // ADMIN SECTION =================================
 // ===============================================
@@ -123,7 +138,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	Route::resource('posts', 'PostController');
 	Route::resource('maps', 'MapController');
 
-	
+
 
 	// // subpage for the posts found at /admin/posts (app/views/admin/posts.blade.php)
 	// Route::get('posts', function()
@@ -139,4 +154,3 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	// Confide routes
 
 });
-

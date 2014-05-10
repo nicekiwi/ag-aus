@@ -14,10 +14,11 @@ class CreateDonatorsTable extends Migration {
 	{
 		Schema::create('donators', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->increments('id')->unsigned();
 			$table->string('steam_id')->unique();
 			$table->text('steam_image')->nullable();
 			$table->string('email');
+			$table->string('donation_expires');
 			$table->string('card_token', 150);
 			$table->string('card_last4', 4);
 			$table->string('card_type', 10);

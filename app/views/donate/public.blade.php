@@ -4,31 +4,41 @@
 
 
 
-<div class="col-sm-12 col-md-4" style="float:right;">
-      
-    <label class="btn btn-primary btn-lg btn-block active">
-        <h3>3 Months</h3>
-        <p>$18.00 AUD</p>
-        {{ Form::radio('donation', '3months', null, ['style'=>'display:none']) }}
-    </label>
+<div class="col-sm-12 col-md-3" style="float:right;">
 
+    <!-- <div class="donation-options">
 
-    
-    <label class="btn btn-primary btn-lg btn-block">
-        <h3>6 Months</h3>
-        <p>$32.00 AUD</p>
-        {{ Form::radio('donation', '6months', null, ['style'=>'display:none']) }}
-    </label>
+        <div class="form-group">
+            
+            {{ Form::radio('donation', '3months', null, ['id'=>'donation1']) }}
+            <label for="donation1" class="btn btn-primary btn-lg btn-block">
+                <b>3 Months</b><br>
+                $18.00 AUD
+            </label>
 
+        </div>
 
-    
-    <label class="btn btn-primary btn-lg btn-block">
-        <h3>1 Year</h3>
-        <p>$60.00 AUD</p>
-        {{ Form::radio('donation', '12months', null, ['style'=>'display:none']) }}
-    </label>
+        <div class="form-group">
+            
+            {{ Form::radio('donation', '6months', null, ['id'=>'donation2']) }}
+            <label for="donation2" class="btn btn-primary btn-lg btn-block">
+                <b>6 Months</b><br>
+                $32.00 AUD
+            </label>
 
+        </div>
 
+        <div class="form-group">
+            
+            {{ Form::radio('donation', '12months', null, ['id'=>'donation3']) }}
+            <label for="donation3" class="btn btn-primary btn-lg btn-block">
+                <b>1 Year</b><br>
+                $60.00 AUD
+            </label>
+
+        </div>
+        
+    </div> -->
 
 {{ Form::open([
     'url' => '/donate', 
@@ -43,11 +53,7 @@
         <fieldset>
             <!-- Text input-->
             <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <img width="18" src="/img/icons/steam.png"></span>
-                        {{ Form::text('steam_id', null, ['class' => 'form-control', 'id' => 'steam_id', 'placeholder' => 'Steam Login ID']) }}
-                </div>
+                    {{ Form::text('steam_id', null, ['class' => 'form-control', 'id' => 'steam_id', 'placeholder' => 'STEAM_X:X:XXXXXX']) }}
             </div>
 
             <div id="steam_id_valid"></div>    
@@ -77,36 +83,28 @@
 
 
 
-<div class="col-sm-12 col-md-8">
-    
+<div class="col-sm-12 col-md-9">
+    <h1>Donations <small>{{ $quarter->title }}</small></h1>
 
+    <p>Quarter Goal: ${{ $quarter->goal_amount }}, Donated so far: ${{ $quarter->total_amount }}</p>
 
+    <div class="progress progress-striped active">
+      <div class="progress-bar progress-bar-{{ ($quarter->percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $pquarter->ercentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $quarter->percentage }}%">
+        {{ $quarter->percentage }}%
+      </div>
+    </div>
 
-<h1>Donations</h1>
+    <ul class="col-sm-12">
+        
+        @foreach($donations as $donation)
+        <li class="col-md-3"><img src="{{ $donation->donator->steam_image }}"> {{ $donation->donator->nickname }}</li>
+        @endforeach
 
-<p><a href="/donors">See list of donors.</a></p>
+    </ul>
 
-<h4>Costs Breakdown:</h4>
+    <h4>Donatoer Perks:</h4>
 
-<p>Goal: {{ $goal }}, Collected so far: {{ $total_amount }}</p>
-
-<div class="progress progress-striped active">
-  <div class="progress-bar"  role="progressbar" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $percentage }}%">
-    {{ $percentage }}%
-  </div>
-</div>
-
-<ul class="col-sm-12">
-    
-    @foreach($donations as $donation)
-    <li class="col-md-3">{{ $donation->donator->steam_id }}</li>
-    @endforeach
-
-</ul>
-
-<h4>Donatoer Perks:</h4>
-
-<p>Donators get a special status ingame, making them invulnerable during the Humiliation mode at the end of a round; and exclusive access to extra player slots on the servers (<a href="/help/donators#player-slots">How do I use this?</a>).</p>
+    <p>Donators get a special status ingame, making them invulnerable during the Humiliation mode at the end of a round; and exclusive access to extra player slots on the servers (<a href="/help/donators#player-slots">How do I use this?</a>).</p>
 </div>
 @stop
 
@@ -119,7 +117,7 @@
       var check_submit = false;
       var handler = StripeCheckout.configure({
         key: $('meta[name="stripe-key"]').attr('content'),
-        image: '/square-image.png',
+        image: 'https://pbs.twimg.com/profile_images/3397355192/f5964922332680947969dcf44e2a7d13.jpeg',
         token: function(token, args) {
 
             var this_form = $('#donation_form');
@@ -157,14 +155,14 @@
         var donation_amount = $('#donation-amount').val();
         var description = null;
 
-        if(donation_amount >= 48) description = '15 Months Donator Perks';
-        else if(donation_amount >= 12) description = '3 Months Donator Perks';
-        else description = 'Donation';
+        // if(donation_amount >= 48) description = '15 Months Donator Perks';
+        // else if(donation_amount >= 12) description = '3 Months Donator Perks';
+        // else description = 'Donation';
 
         // Open Checkout with further options
         handler.open({
-          name: 'Alternitive Gaming',
-          description: description,
+          name: 'Alternitive Gaming Australia',
+          description: 'Donation',
           amount: donation_amount,
           currency: 'AUD',
           panelLabel: 'Donate',
