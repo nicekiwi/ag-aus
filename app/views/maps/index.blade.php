@@ -20,19 +20,20 @@
 	<thead>
 		<tr>
 			<td>Type</td>
-			<td>Name</td>
+			<!-- <td>Name</td> -->
 			<td>Filename</td>
 			<td>Size</td>
 			<td>Added</td>
+			<td>Action</td>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach($maps as $map)
 		<tr>
 			<td>{{ $map->mapType->type }}</td>
-			<td>
-				<a href="/admin/maps/{{ $map->id }}/edit">{{ $map->name }} - {{ $map->revision }}</a>
-			</td>
+			<!-- <td>
+				<a href="/admin/maps/{{ $map->id }}/edit">{{ $map->name }} - {{ $map->revision }}</a> 
+			</td>-->
 			<td>
 				{{ $map->filename }}
 				@if($map->mapFiles->count() > 0)
@@ -46,7 +47,8 @@
 	        @elseif ($map->filesize >= 1024)
 	            <td>{{ number_format($map->filesize / 1024, 2) . ' KB' }}</td>
 	        @endif
-			<td>{{ $map->created_at->diffForHumans() }}</td>
+			<td>{{ $map->created_at->diffForHumans() }} by {{ $map->created_by->username }}</td>
+			<td>Delete Btn</td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -129,10 +131,19 @@
 		.parent().addClass($.support.fileInput ? undefined : 'disabled');
 	});
 	
-	$('#maps-list').dataTable({
-		"bPaginate": false,
-		"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
-	});
+	// $('#maps-list').dataTable({
+	// 	"bPaginate": false,
+	// 	"aoColumns": [
+	// 		null,
+	// 		null,
+	// 		{ "sType": "numeric" },
+	// 		null,
+	// 		null,
+
+	// 	],
+
+	// 	"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
+	// });
 </script>
 
 @stop

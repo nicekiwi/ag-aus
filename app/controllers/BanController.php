@@ -17,27 +17,29 @@ class BanController extends \BaseController {
 	{
 		$steamClass = "\SteamCondenser\Community\SteamId";
 
-		$remotePath = 'service311/tf/cfg/banned_user.cfg';
-		//$remotePath = 'remote-configs/banned_user.cfg';
+		//$remotePath = 'service311/tf/cfg/banned_user.cfg';
+		$remotePath = 'remote-configs/banned_user.cfg';
 		$contents = SSH::into('pantheon')->getString($remotePath);
 		$contents = preg_split("/((\r?\n)|(\r\n?))/", $contents);
 
-		$count = 0;
+		return View::make('bans.test')->with('bans', $contents);
 
-		foreach($contents as $line)
-		{
-			if($count >= 5) break;
+		//$count = 0;
 
-			$line = explode(' ', $line);
+		// foreach($contents as $line)
+		// {
+		// 	if($count >= 10) break;
 
-			$steam64ID = $line[2];
-			$steamID = $steamClass::convertSteamIdToCommunityId($steam64ID);
-			$steamID = $steamClass::create($steamID);
+		// 	$line = explode(' ', $line);
 
-			echo $steamID->getNickname() . '<br>';
+		// 	$steam64ID = $line[2];
+		// 	$steamID = $steamClass::convertSteamIdToCommunityId($steam64ID);
+		// 	$steamID = $steamClass::create($steamID);
 
-			$count++;
-		}
+		// 	echo $steamID->getNickname() . '<br>';
+
+		// 	$count++;
+		// }
 	}
 
 	/**

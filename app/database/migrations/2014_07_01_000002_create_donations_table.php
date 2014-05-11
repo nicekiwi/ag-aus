@@ -20,7 +20,7 @@ class CreateDonationsTable extends Migration {
 			$table->integer('quarter');
 			$table->integer('year');
 
-			$table->integer('goal_precentage');
+			$table->integer('goal_percentage');
 			$table->decimal('goal_amount',7,2);
 			$table->decimal('total_amount',7,2);
 

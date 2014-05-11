@@ -2,43 +2,7 @@
 
 @section('content')
 
-
-
 <div class="col-sm-12 col-md-3" style="float:right;">
-
-    <!-- <div class="donation-options">
-
-        <div class="form-group">
-            
-            {{ Form::radio('donation', '3months', null, ['id'=>'donation1']) }}
-            <label for="donation1" class="btn btn-primary btn-lg btn-block">
-                <b>3 Months</b><br>
-                $18.00 AUD
-            </label>
-
-        </div>
-
-        <div class="form-group">
-            
-            {{ Form::radio('donation', '6months', null, ['id'=>'donation2']) }}
-            <label for="donation2" class="btn btn-primary btn-lg btn-block">
-                <b>6 Months</b><br>
-                $32.00 AUD
-            </label>
-
-        </div>
-
-        <div class="form-group">
-            
-            {{ Form::radio('donation', '12months', null, ['id'=>'donation3']) }}
-            <label for="donation3" class="btn btn-primary btn-lg btn-block">
-                <b>1 Year</b><br>
-                $60.00 AUD
-            </label>
-
-        </div>
-        
-    </div> -->
 
 {{ Form::open([
     'url' => '/donate', 
@@ -65,7 +29,7 @@
                             {{ Form::text('amount', $value = null, [
                                 'class' => 'form-control', 
                                 'id' => 'donation-amount', 
-                                'placeholder' => '5.00'
+                                'placeholder' => '0.00'
                             ]) }}
                         <span class="input-group-btn">
                             <button id="donation_submit" class="btn btn-success" type="submit">Make Donation</button>
@@ -88,19 +52,19 @@
 
     <p>Quarter Goal: ${{ $quarter->goal_amount }}, Donated so far: ${{ $quarter->total_amount }}</p>
 
-    <div class="progress progress-striped active">
-      <div class="progress-bar progress-bar-{{ ($quarter->percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $pquarter->ercentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $quarter->percentage }}%">
-        {{ $quarter->percentage }}%
+    <div class="progress progress{{ ($quarter->goal_percentage >= 100) ?: '-striped active' }}">
+      <div class="progress-bar progress-bar-{{ ($quarter->goal_percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $pquarter->goal_percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($quarter->goal_percentage >= 100) ? '100' : $quarter->goal_percentage }}%">
+        {{ $quarter->goal_percentage }}%
       </div>
     </div>
 
-    <ul class="col-sm-12">
+    <div class="col-sm-12">
         
         @foreach($donations as $donation)
-        <li class="col-md-3"><img src="{{ $donation->donator->steam_image }}"> {{ $donation->donator->nickname }}</li>
+        <div class="col-md-3"><img src="/images/avatar/{{ urlencode($donation->donator->steam_image) }}"> {{ $donation->donator->steam_nickname }}</div>
         @endforeach
 
-    </ul>
+    </div>
 
     <h4>Donatoer Perks:</h4>
 
@@ -117,7 +81,7 @@
       var check_submit = false;
       var handler = StripeCheckout.configure({
         key: $('meta[name="stripe-key"]').attr('content'),
-        image: 'https://pbs.twimg.com/profile_images/3397355192/f5964922332680947969dcf44e2a7d13.jpeg',
+        image: '/img/ag-logo-stripe.png',
         token: function(token, args) {
 
             var this_form = $('#donation_form');
@@ -163,7 +127,7 @@
         handler.open({
           name: 'Alternitive Gaming Australia',
           description: 'Donation',
-          amount: donation_amount,
+          amount: donation_amount * 100,
           currency: 'AUD',
           panelLabel: 'Donate',
         });
@@ -175,6 +139,8 @@ var steam_id_valid = false;
 
 $( "#steam_id" ).blur(function() 
 {
+    var this_form = $('#donation_form');
+
     if(steam_id_valid) return false;
     var steam_input = $( this );
 
@@ -182,22 +148,45 @@ $( "#steam_id" ).blur(function()
 
     $.getJSON( "/check-steamid/"+$(this).val(), function( json ) {
 
-        if(typeof(json.steamId) != "undefined")
+        if(typeof(json.steam_url) != "undefined")
         {
             steam_id_valid = true;
             steam_input.css('background-color', 'green');
 
-            $( "#steam_id_valid" ).append( '<img src="'+ json.profileImage +'.jpg"><strong>'+ json.nickname +'</strong><br>' + json.id2  );
+            $( "#steam_id_valid" ).append( '<img src="'+ json.steam_image +'"><strong>'+ json.steam_nickname +'</strong><br>' + json.steam_id  );
 
             $('<input>', {
                 type: 'hidden',
                 name: 'steam_image',
-                value: json.profileImage
-            }).appendTo($('#donation_form'));
+                value: json.steam_image
+            }).appendTo(this_form);
+
+            $('<input>', {
+                type: 'hidden',
+                name: 'steam_nickname',
+                value: json.steam_nickname
+            }).appendTo(this_form);
+
+            $('<input>', {
+                type: 'hidden',
+                name: 'steam_id',
+                value: json.steam_id
+            }).appendTo(this_form);
+
+            $('<input>', {
+                type: 'hidden',
+                name: 'steam_64id',
+                value: json.steam_64id
+            }).appendTo(this_form);
+
+            $('<input>', {
+                type: 'hidden',
+                name: 'steam_url',
+                value: json.steam_url
+            }).appendTo(this_form);
         }
         else
         {
-            //alert(json.message);
             steam_input.css('background-color', 'yellow');
         }
     });

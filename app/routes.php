@@ -76,16 +76,14 @@ Route::get('players', function()
 
 Route::get('get-bans', 'BanController@pull_bans');
 
-Route::get('dothing', 'DonationController@create_quarter');
+Route::get('update-quarter', 'DonationController@update_quarter');
 
 Route::get('check-steamid/{id}', 'ServerController@getID');
 
-Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
+//Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
 
 Route::get('donate', 'DonationController@public_index');
 Route::post('donate', 'DonationController@validate_donation');
-
-Route::get('donors', 'DonationController@display_donations');
 
 Route::get('/', ['as' => 'home', function()
 {

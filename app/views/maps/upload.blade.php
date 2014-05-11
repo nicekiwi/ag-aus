@@ -41,31 +41,7 @@
 @section('footer')
 
 <style type="text/css">
-	.fileinput-button {
-	  position: relative;
-	  overflow: hidden;
-	  text-align: center;
-	}
-	.fileinput-button input {
-	  position: absolute;
-	  top: 0;
-	  right: 0;
-	  margin: 0;
-	  opacity: 0;
-	  -ms-filter: 'alpha(opacity=0)';
-	  font-size: 200px;
-	  direction: ltr;
-	  cursor: pointer;
-	}
-
-	/* Fixes for IE < 8 */
-	@media screen\9 {
-	  .fileinput-button input {
-	    filter: alpha(opacity=0);
-	    font-size: 100%;
-	    height: 100%;
-	  }
-	}
+	
 </style>
 
 <script type="text/javascript">

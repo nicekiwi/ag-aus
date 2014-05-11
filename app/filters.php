@@ -1,12 +1,5 @@
 <?php
 
-/* Entrust Rules */
-
-Entrust::routeNeedsPermission( 'admin/map*', 'manage_maps' );
-Entrust::routeNeedsPermission( 'admin/user*', 'manage_users' );
-Entrust::routeNeedsPermission( 'admin/server*', 'manage_servers' );
-Entrust::routeNeedsPermission( 'admin/ban*', 'manage_bans' );
-
 /*
 |--------------------------------------------------------------------------
 | Application & Route Filters

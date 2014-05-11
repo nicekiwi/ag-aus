@@ -72,20 +72,22 @@ class ServerController extends \BaseController {
 	{
 		$steam = "\SteamCondenser\Community\SteamId";
 
+		if(strpos($id, 'STEAM') !== false)
+			$id = $steam::convertSteamIdToCommunityId($id);
+
 		$data = new StdClass;
 
 		try 
 		{
 			$steamID = $steam::create($id);
 
-			$data->steamId = $steamID->getCustomUrl();
-			$data->steamId64 = $steamID->getSteamId64();
-			$data->nickname = $steamID->getNickname();
-			$data->profileImage = $steamID->imageUrl;
-			$data->id2 = $steamID->convertCommunityIdToSteamId($data->steamId64);
-			//$data->
+			$data->steam_url = $steamID->getCustomUrl();
+			$data->steam_64id = $steamID->getSteamId64();
+			$data->steam_nickname = $steamID->getNickname();
+			$data->steam_image = $steamID->getFullAvatarUrl();
+			$data->steam_id = $steamID->convertCommunityIdToSteamId($data->steamId64);
 		} 
-		catch (Exception $e) 
+		catch (Exception $e)
 		{
 			$data->message = $e->getMessage(); //'Profile does not exist or it set to Private.';
 		}

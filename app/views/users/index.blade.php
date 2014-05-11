@@ -5,20 +5,17 @@
 <div class="row">
 	<div class="small-12 columns">
 
-		<h1>Users</h1>
-
-		<p><a href="/admin/users/create" class="btn btn-primary btn-small"><i class="fa fa-plus"></i> Add User</a></p>
+		<h1>Users<a href="/admin/users/create" class="btn btn-primary btn-small"><i class="fa fa-plus"></i> Add User</a></h1>
 
 		<table class="table table-striped table-bordered" width="100%">
 			<thead>
 				<tr>
 					<td>Role</td>
-					<td>First Name</td>
-					<td>Last Name</td>
+					<td>Username</td>
 					<td>Email Address</td>
 					<td>Last Login</td>
 					<td>Created</td>
-					<td>x</td>
+					<td>Action</td>
 				</tr>
 			</thead>
 
@@ -26,8 +23,7 @@
 				@foreach($users as $user)
 				<tr>
 					<td>{{ $user->role }}</td>
-					<td>{{ $user->first_name }}</td>
-					<td>{{ $user->last_name }}</td>
+					<td>{{ $user->username }}</td>
 					<td><a href="/admin/users/{{ $user->id }}/edit">{{ $user->email }}</a></td>
 					<td>
 					@if($user->last_login !== null)

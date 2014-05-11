@@ -36,7 +36,7 @@ class MapController extends BaseController {
 		$map_files = MapFile::all();
 		$map_types = MapType::orderBy('name','asc')->get();
 
-		dd($map_total);
+		//dd($map_total);
 
         return View::make('maps.index')->with([
         	'maps' => $maps,

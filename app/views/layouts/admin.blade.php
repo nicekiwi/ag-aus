@@ -46,6 +46,9 @@
               @if(Auth::user()->can("manage_bans"))
               <li><a href="/admin/bans">Bans</a></li>
               @endif
+              @if(Auth::user()->can("manage_donations"))
+              <li><a href="/admin/donations">Donations</a></li>
+              @endif
               @if(Auth::user()->can("manage_users"))
               <li><a href="/admin/users">Users</a></li>
               @endif
