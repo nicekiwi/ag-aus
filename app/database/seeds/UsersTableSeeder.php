@@ -45,27 +45,40 @@ class UsersTableSeeder extends Seeder {
 		$manageUsers->display_name = 'Manage Users';
 		$manageUsers->save();
 
-		// Add Permissions to Roles
+		$readVariables = new Permission;
+		$readVariables->name = 'read_config_variable';
+		$readVariables->display_name = 'Read Config Variables';
+		$readVariables->save();
 
+		$writeVariables = new Permission;
+		$writeVariables->name = 'write_config_variable';
+		$writeVariables->display_name = 'Write Config Variables';
+		$writeVariables->save();
+
+		// Add Permissions to Roles
 		$owner->perms()->sync([
 			$manageConfigs->id,
 			$manageUsers->id,
 			$manageMaps->id,
 			$manageDonations->id,
-			$manageBans->id
+			$manageBans->id,
+			$writeVariables->id,
+			$readVariables->id
 		]);
 
 		$admin->perms()->sync([
 			$manageConfigs->id,
 			$manageMaps->id,
 			$manageDonations->id,
-			$manageBans->id
+			$manageBans->id,
+			$readVariables->id
 		]);
 
 		$mod->perms()->sync([
 			$manageConfigs->id,
 			$manageMaps->id,
-			$manageBans->id
+			$manageBans->id,
+			$readVariables->id
 		]);
 
 		// Add Users

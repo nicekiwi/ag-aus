@@ -19,7 +19,7 @@
 <table id="maps-list" class="table table-hover table-bordered table-striped	table-responsive">
 	<thead>
 		<tr>
-			<td>Type</td>
+			<td><!-- Type --></td>
 			<!-- <td>Name</td> -->
 			<td>Filename</td>
 			<!-- <td>Popularity</td> -->
@@ -31,7 +31,7 @@
 		@if(count($maps) > 0)
 		@foreach($maps as $map)
 		<tr>
-			<td>{{ $map->maptype->type }}</td>
+			<td><!-- {{ $map->maptype->type }} --></td>
 			<!-- <td><a href="/maps/{{ $map->slug }}">{{ $map->name }} {{ $map->revision }}</a></td> -->
 			<td>
 				{{ $map->filename }}

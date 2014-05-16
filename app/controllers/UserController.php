@@ -24,7 +24,9 @@ class UserController extends BaseController {
      */
     public function create()
     {
-        return View::make(Config::get('confide::signup_form'));
+        $roles = Role::all()->lists('name','id');
+
+        return View::make('users.create')->with(['roles'=>$roles]);//Config::get('confide::signup_form'));
     }
 
     /**
@@ -49,19 +51,19 @@ class UserController extends BaseController {
 
         if ( $user->id )
         {
-                        $notice = Lang::get('confide::confide.alerts.account_created') . ' ' . Lang::get('confide::confide.alerts.instructions_sent'); 
+            $notice = Lang::get('confide::confide.alerts.account_created') . ' ' . Lang::get('confide::confide.alerts.instructions_sent'); 
                     
             // Redirect with success message, You may replace "Lang::get(..." for your custom message.
-                        return Redirect::action('UserController@login')
-                            ->with( 'success_message', $notice );
+            return Redirect::action('UserController@login')
+                ->with( 'success_message', $notice );
         }
         else
         {
             // Get validation errors (see Ardent package)
             $error = $user->errors()->all(':message');
 
-                        return Redirect::action('UserController@create')
-                            ->withInput(Input::except('password'))
+            return Redirect::action('UserController@create')
+                ->withInput(Input::except('password'))
                 ->with( 'error_message', $error );
         }
     }
@@ -127,8 +129,8 @@ class UserController extends BaseController {
                 $err_msg = Lang::get('confide::confide.alerts.wrong_credentials');
             }
 
-                        return Redirect::action('UserController@login')
-                            ->withInput(Input::except('password'))
+            return Redirect::action('UserController@login')
+                ->withInput(Input::except('password'))
                 ->with( 'error_message', $err_msg );
         }
     }
@@ -230,7 +232,7 @@ class UserController extends BaseController {
     {
         Confide::logout();
         
-        return Redirect::to('/');
+        return Redirect::to('/login');
     }
 
 }

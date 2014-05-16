@@ -211,11 +211,11 @@ class MapController extends BaseController {
 			$map->developer_url = Input::get('developer_url');
 			$map->save();
 
-			Session::flash('message', 'Successfully created map!');
+			Session::flash('success_message', 'Successfully created map!');
 			return Redirect::to('maps');
 		}
 
-		Session::flash('message', 'Error');
+		Session::flash('error_message', 'Error');
         return Redirect::to('admin/maps');
 	}
 

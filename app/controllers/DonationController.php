@@ -124,6 +124,21 @@ class DonationController extends BaseController {
 		$quarter->save();
 	}
 
+	public function index()
+	{
+		// Get latest quter Object
+		$quarter = DonationQuarter::orderBy('id','desc')->first();
+		$donations = Donation::where('quarter_id',$quarter->id)->get();
+
+		//dd($donations);
+
+		// Return donate with quarter data
+		return View::make('donate.public')->with([
+			'donations' => $donations,
+			'quarter' 	=> $quarter
+		]);
+	}
+
 	public function public_index()
 	{
 		// Get latest quter Object
@@ -261,6 +276,10 @@ class DonationController extends BaseController {
 
 		$this->update_quarter();
 
-		return 'Charge of $' . $input['amount'] . 'AUD to **** **** **** ' . $cc_info[1] . ', Exp ' . $cc_info[2] . '/' . $cc_info[3] . ' was successful, ';
+		$message = 'Charge of $' . $input['amount'] . 'AUD to **** **** **** ' . $cc_info[1] . ', Exp ' . $cc_info[2] . '/' . $cc_info[3] . ' was successful, ';
+
+		return View::make('donate.public')->with('success_message', $message);
+
+		//return 'Charge of $' . $input['amount'] . 'AUD to **** **** **** ' . $cc_info[1] . ', Exp ' . $cc_info[2] . '/' . $cc_info[3] . ' was successful, ';
 	}
 }

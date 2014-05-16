@@ -1,7 +1,11 @@
 @if(Session::get('error_message'))
 <div class="alert alert-danger alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  {{ Session::get('error_message') }}
+	@if ( is_array(Session::get('error_message')) )
+		{{ head(Session::get('error_message')) }}
+	@else
+		{{ Session::get('error_message') }}
+	@endif
 </div>
 @endif
 

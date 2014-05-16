@@ -22,7 +22,7 @@
 			<tbody>
 				@foreach($users as $user)
 				<tr>
-					<td>{{ $user->role }}</td>
+					<td>{{ $user->role->name }}</td>
 					<td>{{ $user->username }}</td>
 					<td><a href="/admin/users/{{ $user->id }}/edit">{{ $user->email }}</a></td>
 					<td>
@@ -31,7 +31,9 @@
 					@endif
 					</td>
 					<td>{{ $user->created_at->diffForHumans() }}</td>
-					<td>delete_btn</td>
+					<td>
+						{{ Form::delete('admin/users/'. $user->id, 'Delete', null, array('class' => 'btn btn-danger btn-sm')) }}
+					</td>
 				</tr>
 				@endforeach
 			</tbody>

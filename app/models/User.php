@@ -78,4 +78,9 @@ class User extends ConfideUser implements UserInterface, RemindableInterface {
 	    return 'remember_token';
 	}
 
+	public function role()
+	{
+		return $this->hasOne('Role','id');
+	}
+
 }

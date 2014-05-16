@@ -15,8 +15,10 @@ class CreateServersTable extends Migration {
 		Schema::create('servers', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('game_id');
-			$table->integer('config_id');
+			
+			$table->integer('game_id')->unsigned()->index();
+			$table->foreign('game_id')->references('id')->on('games')->onUpdate('cascade')->onDelete('cascade');
+			// $table->integer('config_id');
 			$table->string('name');
 			$table->text('vanilla_name');
 			$table->string('ip');

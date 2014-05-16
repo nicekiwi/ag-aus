@@ -15,7 +15,7 @@ class CreateBansTable extends Migration {
 		Schema::create('bans', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('steam_id');
+			$table->string('steam_id')->unique();
 			$table->string('nickname');
 			$table->string('initiator');
 			$table->string('reason');
