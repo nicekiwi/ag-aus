@@ -48,7 +48,7 @@
 	            <td>{{ number_format($map->filesize / 1024, 2) . ' KB' }}</td>
 	        @endif
 			<td>{{ $map->created_at->diffForHumans() }} by {{ $map->created_by->username }}</td>
-			<td>Delete Btn</td>
+			<td>{{ Form::delete('admin/maps/'. $map->id, 'Delete', null, array('class' => 'btn btn-danger btn-sm')) }}</td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -59,11 +59,14 @@
 @endif
 
 @if(count($map_files) > 0)
+
+<h3>Map files without accosiated Maps.</h3>
+
 <table id="maps-list" class="table table-striped table-bordered" width="100%">
 	<thead>
 		<tr>
-			<td>Type</td>
 			<td>Name</td>
+			<td>Type</td>
 			<td>Size (MB)</td>
 			<td>Added</td>
 			<td></td>
@@ -76,7 +79,7 @@
 			<td>{{ $file->filetype }}</td>
 			<td>{{ round(($file->filesize/1048576), 2) }}</td>
 			<td>{{ $file->created_at->diffForHumans() }}</td>
-			<td>delete</td>
+			<td>{{ Form::delete('admin/maps-files/'. $file->id, 'Delete', null, array('class' => 'btn btn-danger btn-sm')) }}</td>
 		</tr>
 		@endforeach
 	</tbody>

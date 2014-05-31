@@ -40,6 +40,11 @@ class UsersTableSeeder extends Seeder {
 		$manageMaps->display_name = 'Manage Maps';
 		$manageMaps->save();
 
+		$managePosts = new Permission;
+		$managePosts->name = 'manage_posts';
+		$managePosts->display_name = 'Manage Posts';
+		$managePosts->save();
+
 		$manageUsers = new Permission;
 		$manageUsers->name = 'manage_users';
 		$manageUsers->display_name = 'Manage Users';
@@ -60,6 +65,7 @@ class UsersTableSeeder extends Seeder {
 			$manageConfigs->id,
 			$manageUsers->id,
 			$manageMaps->id,
+			$managePosts->id,
 			$manageDonations->id,
 			$manageBans->id,
 			$writeVariables->id,
@@ -69,6 +75,7 @@ class UsersTableSeeder extends Seeder {
 		$admin->perms()->sync([
 			$manageConfigs->id,
 			$manageMaps->id,
+			$managePosts->id,
 			$manageDonations->id,
 			$manageBans->id,
 			$readVariables->id
@@ -82,7 +89,6 @@ class UsersTableSeeder extends Seeder {
 		]);
 
 		// Add Users
-
 		$user = new User;
 
         $user->username = 'webmaster';

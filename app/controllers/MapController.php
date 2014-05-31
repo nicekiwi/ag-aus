@@ -33,7 +33,7 @@ class MapController extends BaseController {
 	{
 		$maps = $this->get_maps();
 		$map_total = Map::count();
-		$map_files = MapFile::all();
+		$map_files = MapFile::where('map_id',null)->get();
 		$map_types = MapType::orderBy('name','asc')->get();
 
 		//dd($map_total);
@@ -139,6 +139,8 @@ class MapController extends BaseController {
 						else
 							$new_map->map_type_id = $special->id;
 
+						$new_map->created_by = Auth::user()->id;
+						$new_map->updated_by = Auth::user()->id;
 						$new_map->save();
 
 						$sync_count++;
@@ -157,10 +159,25 @@ class MapController extends BaseController {
 
 						$sync_count++;
 		    		}
+		    		// else
+		    		// {
+		    		// 	// If there is no map accociated with the file, add it.
+		    		// 	if(MapFile::where('filename',$name)->pluck('map_id') == null)
+		    		// 	{
+
+		    		// 	}
+
+		    		// 	$map = MapFile::where('filename',$name)->first();
+		    		// 	$file = Map::where('id',$map->id);
+		    		// }
         		}
+
+        		$this->linkMapFiles();
 
         	}
     	}
+
+
 
     	Session::flash('success_message', $sync_count . ' new files were synced from Amazon S3.');
     	return Redirect::to('admin/maps');
@@ -168,6 +185,32 @@ class MapController extends BaseController {
     	//$map_list_updated = Map::where('filename',$map['Key'])->count() < 1
 
         //return View::make('maps.create')->with(['map_types' => $map_types, 'map_list' => $map_list]);
+	}
+
+	// Link MapFiles with Maps with the same filename.
+	public function linkMapFiles()
+	{
+		// Get all files without maps assigned to them
+		$files = MapFile::where('map_id', null)->get();
+
+		// Go through each file 
+		foreach ($files as $file) 
+		{
+			// Get file name
+			$name = explode('.', $file->filename);
+        	$name = $name[0];
+
+        	// Check if a map with the same name exists
+        	$map = Map::where('filename',$name.'.bsp.bz2')->first();
+
+        	// If the map exists
+        	if($map->id != null)
+        	{
+        		// Save the Map ID to the file
+        		$file->map_id = $map->id;
+        		$file->save();
+        	}
+		}
 	}
 
 	/**
@@ -279,7 +322,13 @@ class MapController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		// delete
+		$map = Map::findOrFail($id);
+		$map->delete();
+
+		// redirect
+		Session::flash('success_message', $map->filename . ' deleted.');
+		return Redirect::to('admin/posts');
 	}
 
 }

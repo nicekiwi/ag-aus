@@ -135,6 +135,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	Route::resource('users', 'UserController');
 	Route::resource('posts', 'PostController');
 	Route::resource('maps', 'MapController');
+	Route::resource('map-files', 'MapFileController');
 
 
 

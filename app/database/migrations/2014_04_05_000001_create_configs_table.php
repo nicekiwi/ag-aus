@@ -78,9 +78,9 @@ class CreateConfigsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('config_variables');
 		Schema::drop('config_values');
-
+		Schema::drop('config_variables');
+		
 		Schema::drop('config_variable_groups');
 		Schema::drop('configs');
 	}
