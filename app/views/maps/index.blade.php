@@ -3,17 +3,22 @@
 @section('content')
 
 <h1>Maps <a class="btn btn-primary" href="/admin/maps/upload">Upload</a></h1>
-
-<ul class="map-filter">
-	
-	<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/admin/maps">All Maps</a></li>
-	@foreach($map_types as $type)
-	@if($type->maps->count() > 0)
-	<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/admin/maps?type={{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</a></li>
-	@endif
-	@endforeach
-	
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#">Maps</a></li>
+  <li class=""><a href="#">Configs</a></li>
+  <li class=""><a href="#">Trash</a></li>
 </ul>
+
+
+	<select class="form-control">
+		<option value="all">All ({{ $map_total }})</option>
+		@foreach($map_types as $type)
+		@if($type->maps->count() > 0)
+		<option value="{{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</option>
+		@endif
+		@endforeach
+	</select>
+
 
 @if(count($maps) > 0)
 <table id="maps-list" class="table table-striped table-bordered" width="100%">
@@ -47,8 +52,8 @@
 	        @elseif ($map->filesize >= 1024)
 	            <td>{{ number_format($map->filesize / 1024, 2) . ' KB' }}</td>
 	        @endif
-			<td>{{ $map->created_at->diffForHumans() }} by {{ $map->created_by->username }}</td>
-			<td>{{ Form::delete('admin/maps/'. $map->id, 'Delete', null, array('class' => 'btn btn-danger btn-sm')) }}</td>
+			<td>{{ $map->created_at->diffForHumans() }} by {{ $map->user->username }}</td>
+			<td>{{ Form::delete('admin/maps/'. $map->id) }}</td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -79,7 +84,7 @@
 			<td>{{ $file->filetype }}</td>
 			<td>{{ round(($file->filesize/1048576), 2) }}</td>
 			<td>{{ $file->created_at->diffForHumans() }}</td>
-			<td>{{ Form::delete('admin/maps-files/'. $file->id, 'Delete', null, array('class' => 'btn btn-danger btn-sm')) }}</td>
+			<td>{{ Form::delete('admin/maps-files/'. $file->id) }}</td>
 		</tr>
 		@endforeach
 	</tbody>

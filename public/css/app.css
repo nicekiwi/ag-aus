@@ -4257,6 +4257,13 @@ button.close {
   font-weight: bold; }
 
 
+.delete-form .btn {
+  padding: 0 5px 0;
+  color: #b80029; }
+
+.delete-form i {
+  color: #b80029; }
+
 
 .donation-options input {
   display: none; }

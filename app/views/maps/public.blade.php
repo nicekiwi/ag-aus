@@ -5,15 +5,14 @@
 <h1>Maps</h1>
 
 <div class="well col-sm-12">
-	<ul class="map-filter">
-		
-		<li class="{{ (!Input::has('type') ? 'active' : '') }}"><a href="/maps">All ({{ $map_total }})</a></li>
+	<select class="form-control">
+		<option value="all">All ({{ $map_total }})</option>
 		@foreach($map_types as $type)
 		@if($type->maps->count() > 0)
-		<li class="{{ (Input::get('type') == $type->type ? 'active' : '') }}"><a href="/maps?type={{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</a></li>
+		<option value="{{ $type->type }}">{{ $type->name }} ({{ $type->maps->count() }})</option>
 		@endif
 		@endforeach
-	</ul>
+	</select>
 </div>
 
 <table id="maps-list" class="table table-hover table-bordered table-striped	table-responsive">

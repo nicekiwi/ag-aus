@@ -47,5 +47,10 @@ class Map extends Ardent
     	return $this->hasMany('MapTag','map_tag_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('User', 'created_by');
+    }
+
 
 }

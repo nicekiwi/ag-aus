@@ -8,13 +8,11 @@
 
 <div class="row">
 	<div class="small-12 columns">
-		<table style="width:100%;">
+		<table class="table table-striped table-bordered" width="100%">
 			<thead>
 				<tr>
 					<td>ID</td>
-					<td>Image</td>
 					<td>Title</td>
-					<td>Creator</td>
 					<td>Added</td>
 					<td>Action</td>
 				</tr>
@@ -24,18 +22,14 @@
 				<tr>
 					<td>{{ $post->id }}</td>
 					<td>
+						<a href="/admin/posts/{{ $post->id }}/edit">{{ $post->title }}</a>
 						@if($post->featured_image != '')
 							<i class="fa fa-picture-o"></i>
 						@endif
 					</td>
-					<td><a href="/admin/posts/{{ $post->id }}/edit">{{ $post->title }}</a></td>
-					<td>{{ $post->user->username }}</td>
-					<td>{{ $post->created_at->diffForHumans() }}</td>
+					<td>{{ $post->created_at->diffForHumans() }} by {{ $post->user->username }}</td>
 					<td>
-						{{ Form::open(array('url' => '/admin/posts/' . $post->id, 'class' => 'pull-right')) }}
-							{{ Form::hidden('_method', 'DELETE') }}
-							{{ Form::submit('Delete', array('class' => 'button tiny alert')) }}
-						{{ Form::close() }}
+						{{ Form::delete('/admin/posts/' . $post->id) }}
 					</td>
 				</tr>
 				@endforeach

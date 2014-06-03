@@ -133,7 +133,7 @@ class DonationController extends BaseController {
 		//dd($donations);
 
 		// Return donate with quarter data
-		return View::make('donate.public')->with([
+		return View::make('donate.index')->with([
 			'donations' => $donations,
 			'quarter' 	=> $quarter
 		]);

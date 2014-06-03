@@ -58,7 +58,7 @@
 
         <div class="form-actions form-group">
         	<div class="col-md-offset-4 col-sm-8">
-          		<button type="submit" class="btn btn-primary input-md">{{{ Lang::get('confide::confide.signup.submit') }}}</button>
+          		<button type="submit" class="btn btn-primary input-md">Create New User</button>
           	</div>
         </div>
 

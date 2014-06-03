@@ -46,6 +46,14 @@ Route::get('test', function()
 
 });
 
+Route::get('donators', function()
+{
+	$gen = new Generator;
+
+	return $gen->donators();
+
+});
+
 Route::get('server-info', function()
 {
 	$server = new Server;
@@ -80,7 +88,7 @@ Route::get('update-quarter', 'DonationController@update_quarter');
 
 Route::get('check-steamid/{id}', 'ServerController@getID');
 
-//Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
+Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
 
 Route::get('donate', 'DonationController@public_index');
 Route::post('donate', 'DonationController@validate_donation');
@@ -97,7 +105,7 @@ Route::get('/', ['as' => 'home', function()
 //Route::resource('sessions', 'SessionsController');
 
 Route::get('news', 'PostController@index_public');
-Route::get('news/{slug}', 'PostsController@show');
+Route::get('news/{slug}', 'PostController@show');
 
 Route::get('maps', 'MapController@index_public');
 Route::get('maps/{slug}', 'MapController@show');
@@ -127,6 +135,8 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 		return View::make('admin.index');
 	});
 
+	Route::get('donations','DonationController@index');
+
 	Route::get( 'user/create','UserController@create');
 	Route::post('user','UserController@store');
 
@@ -134,8 +144,11 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 
 	Route::resource('users', 'UserController');
 	Route::resource('posts', 'PostController');
+	Route::resource('maps/configs', 'MapConfigController');
 	Route::resource('maps', 'MapController');
 	Route::resource('map-files', 'MapFileController');
+
+
 
 
 

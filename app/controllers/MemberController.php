@@ -1,10 +1,10 @@
 <?php
 
-class BanController extends \BaseController {
+class MemberController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
-	 * GET /bans
+	 * GET /member
 	 *
 	 * @return Response
 	 */
@@ -13,38 +13,9 @@ class BanController extends \BaseController {
 		//
 	}
 
-	public function pull_bans()
-	{
-		$steamClass = "\SteamCondenser\Community\SteamId";
-
-		$remotePath = 'service311/tf/cfg/banned_user.cfg';
-		//$remotePath = 'remote-configs/banned_user.cfg';
-		$contents = SSH::into('pantheon')->getString($remotePath);
-		$contents = preg_split("/((\r?\n)|(\r\n?))/", $contents);
-
-		return View::make('bans.test')->with('bans', $contents);
-
-		//$count = 0;
-
-		// foreach($contents as $line)
-		// {
-		// 	if($count >= 10) break;
-
-		// 	$line = explode(' ', $line);
-
-		// 	$steam64ID = $line[2];
-		// 	$steamID = $steamClass::convertSteamIdToCommunityId($steam64ID);
-		// 	$steamID = $steamClass::create($steamID);
-
-		// 	echo $steamID->getNickname() . '<br>';
-
-		// 	$count++;
-		// }
-	}
-
 	/**
 	 * Show the form for creating a new resource.
-	 * GET /bans/create
+	 * GET /member/create
 	 *
 	 * @return Response
 	 */
@@ -55,7 +26,7 @@ class BanController extends \BaseController {
 
 	/**
 	 * Store a newly created resource in storage.
-	 * POST /bans
+	 * POST /member
 	 *
 	 * @return Response
 	 */
@@ -66,7 +37,7 @@ class BanController extends \BaseController {
 
 	/**
 	 * Display the specified resource.
-	 * GET /bans/{id}
+	 * GET /member/{id}
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -78,7 +49,7 @@ class BanController extends \BaseController {
 
 	/**
 	 * Show the form for editing the specified resource.
-	 * GET /bans/{id}/edit
+	 * GET /member/{id}/edit
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -90,7 +61,7 @@ class BanController extends \BaseController {
 
 	/**
 	 * Update the specified resource in storage.
-	 * PUT /bans/{id}
+	 * PUT /member/{id}
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -102,7 +73,7 @@ class BanController extends \BaseController {
 
 	/**
 	 * Remove the specified resource from storage.
-	 * DELETE /bans/{id}
+	 * DELETE /member/{id}
 	 *
 	 * @param  int  $id
 	 * @return Response

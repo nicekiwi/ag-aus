@@ -32,7 +32,7 @@
 					</td>
 					<td>{{ $user->created_at->diffForHumans() }}</td>
 					<td>
-						{{ Form::delete('admin/users/'. $user->id, 'Delete', null, array('class' => 'btn btn-danger btn-sm')) }}
+						{{ Form::delete('admin/users/'. $user->id) }}
 					</td>
 				</tr>
 				@endforeach

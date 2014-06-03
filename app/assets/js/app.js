@@ -10,64 +10,64 @@
 //= include ../../../bower_components/unveil/jquery.unveil.js
 //= include ../../../bower_components/datatables/media/js/jquery.dataTables.js
 
-    var check_submit = false;
-    var this_form = $('#donation_form');
-    var donation_amount = $('#donation-amount').val();
-    var handler = StripeCheckout.configure({
-        key: $('meta[name="stripe-key"]').attr('content'),
-        image: '/img/ag-logo-stripe.png',
-        token: function(token, args) {
+//     var check_submit = false;
+//     var this_form = $('#donation_form');
+//     var donation_amount = $('#donation-amount').val();
+//     var handler = StripeCheckout.configure({
+//         key: $('meta[name="stripe-key"]').attr('content'),
+//         image: '/img/ag-logo-stripe.png',
+//         token: function(token, args) {
 
-            check_submit = true;
+//             check_submit = true;
 
-            $('#donation_submit').text('Proccessing').prop('disabled', true);
+//             $('#donation_submit').text('Proccessing').prop('disabled', true);
 
-            // Use the token to create the charge with a server-side script.
-            $('<input>', {
-                type: 'hidden',
-                name: 'email',
-                value: token.card.name
-            }).appendTo(this_form);
+//             // Use the token to create the charge with a server-side script.
+//             $('<input>', {
+//                 type: 'hidden',
+//                 name: 'email',
+//                 value: token.card.name
+//             }).appendTo(this_form);
 
-            $('<input>', {
-                type: 'hidden',
-                name: 'stripe_token',
-                value: token.id
-            }).appendTo(this_form);
+//             $('<input>', {
+//                 type: 'hidden',
+//                 name: 'stripe_token',
+//                 value: token.id
+//             }).appendTo(this_form);
 
-            $('<input>', {
-                type: 'hidden',
-                name: 'stripe_data',
-                value: token.card.type+','+token.card.last4+','+token.card.exp_month+','+token.card.exp_year
-            }).appendTo(this_form);
+//             $('<input>', {
+//                 type: 'hidden',
+//                 name: 'stripe_data',
+//                 value: token.card.type+','+token.card.last4+','+token.card.exp_month+','+token.card.exp_year
+//             }).appendTo(this_form);
 
-            this_form.submit();
+//             this_form.submit();
 
-        },
-        opened: function() {
-            $('#donation_submit').text('Proccessing').prop('disabled', true);
-        },
-        closed: function() {
-            if(check_submit === false) $('#donation_submit').text('Make Donation').prop('disabled', false);
-        }
-    });
+//         },
+//         opened: function() {
+//             $('#donation_submit').text('Proccessing').prop('disabled', true);
+//         },
+//         closed: function() {
+//             if(check_submit === false) $('#donation_submit').text('Make Donation').prop('disabled', false);
+//         }
+//     });
 
-    (function() {
-      document.getElementById('donation_submit').addEventListener('click', function(e) {
+//     (function() {
+//       document.getElementById('donation_submit').addEventListener('click', function(e) {
 
-        // Open Checkout with further options
-        handler.open({
-          name: 'Alternitive Gaming Australia',
-          description: 'Donation',
-          amount: donation_amount * 100,
-          currency: 'AUD',
-          panelLabel: 'Donate',
-        });
-        e.preventDefault();
-      });
-    })();
+//         // Open Checkout with further options
+//         handler.open({
+//           name: 'Alternitive Gaming Australia',
+//           description: 'Donation',
+//           amount: donation_amount * 100,
+//           currency: 'AUD',
+//           panelLabel: 'Donate',
+//         });
+//         e.preventDefault();
+//       });
+//     })();
 
-var steam_id_valid = false;
+// var steam_id_valid = false;
 
 $( "#steam_id" ).blur(function() 
 {
@@ -76,7 +76,7 @@ $( "#steam_id" ).blur(function()
     if(steam_id_valid) return false;
     var steam_input = $( this );
 
-    if(steam_input.val() == '') return false;
+    if(steam_input.val() === '') return false;
 
     $.getJSON( "/check-steamid/"+$(this).val(), function( json ) {
 
