@@ -54,7 +54,7 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => '127.0.0.1',
+			'host'      => 'localhost',
 			'database'  => Config::get('keys.laravel.database.db_name'),
 			'username'  => Config::get('keys.laravel.database.username'),
 			'password'  => Config::get('keys.laravel.database.password'),

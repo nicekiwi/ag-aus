@@ -3,9 +3,9 @@
 return array(
 	'connections' => array(
 		'mysql' => array(
-			'database'  => 'ag-aus',
-			'username'  => 'root',
-			'password'  => 'password',
+			'database'  => 'ag_aus',
+			'username'  => 'homestead',
+			'password'  => 'secret',
 		),
 	),
 );
