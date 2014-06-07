@@ -15,11 +15,16 @@ class CreateBansTable extends Migration {
 		Schema::create('bans', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('steam_id')->unique();
-			$table->string('nickname');
-			$table->string('initiator');
-			$table->string('reason');
-			$table->integer('duration');
+
+			$table->integer('player_id')->unsigned()->index();
+			$table->foreign('player_id')->references('id')->on('players');
+
+			$table->integer('banned_by')->unsigned()->index();
+			$table->foreign('banned_by')->references('id')->on('players');
+
+			$table->text('banned_for');
+
+			$table->timestamp('banned_until');
 			$table->timestamps();
 		});
 	}

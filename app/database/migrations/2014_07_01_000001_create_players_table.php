@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDonatorsTable extends Migration {
+class CreatePlayersTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateDonatorsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('donators', function(Blueprint $table)
+		Schema::create('players', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
 			$table->string('steam_nickname')->nullable();
@@ -20,17 +20,22 @@ class CreateDonatorsTable extends Migration {
 			$table->string('steam_64id')->unique()->nullable();
 			$table->text('steam_image')->nullable();
 			$table->text('steam_url')->nullable();
-			$table->string('email');
+			
 			$table->string('donation_expires')->nullable();
-			$table->string('card_token', 150);
-			$table->string('card_last4', 4);
-			$table->string('card_type', 10);
-			$table->string('card_month', 3);
-			$table->string('card_year', 6);
 
 			$table->softDeletes();
 			$table->timestamps();
 		});
+
+		// Creates the assigned_roles (Many-to-Many relation) table
+        Schema::create('player_roles', function($table)
+        {
+            $table->increments('id')->unsigned();
+            $table->integer('player_id')->unsigned();
+            $table->integer('role_id')->unsigned();
+            $table->foreign('player_id')->references('id')->on('players'); // assumes a users table
+            $table->foreign('role_id')->references('id')->on('roles');
+        });
 	}
 
 	/**
@@ -40,7 +45,8 @@ class CreateDonatorsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('donators');
+		Schema::drop('player_roles');
+		Schema::drop('players');
 	}
 
 }
