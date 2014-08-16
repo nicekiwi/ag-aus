@@ -19,6 +19,7 @@ function donationPayment() {
 
   var check_submit 		= false;
   var this_form 			= $('#donation_form');
+  var sbumit_btn      = $('#donation_submit');
   var donation_amount = $('#donation-amount').val();
   var handler 				= StripeCheckout.configure({
 
@@ -28,7 +29,7 @@ function donationPayment() {
 
         check_submit = true;
 
-        $('#donation_submit').text('Proccessing').prop('disabled', true);
+        sbumit_btn.text('Proccessing').prop('disabled', true);
 
         // Use the token to create the charge with a server-side script.
         $('<input>', {
@@ -53,29 +54,26 @@ function donationPayment() {
 
     },
     opened: function() {
-       $('#donation_submit').text('Proccessing').prop('disabled', true);
+       sbumit_btn.text('Proccessing').prop('disabled', true);
     },
     closed: function() {
       if(check_submit === false) {
-      	$('#donation_submit').text('Make Donation').prop('disabled', false);
+      	sbumit_btn.text('Make Donation').prop('disabled', false);
       }
     }
   });
 
-  (function() {
-  	$('donation_submit').on('click', function(e){
-  		// Open Checkout with further options
-      handler.open({
-        name: 'Alternitive Gaming Australia',
-        description: 'Donation',
-        amount: donation_amount * 100,
-        currency: 'AUD',
-        panelLabel: 'Donate',
-      });
-      e.preventDefault();
-  	});
-
-  })();
+	sbumit_btn.on('click', function(e){
+		// Open Checkout with further options
+    handler.open({
+      name: 'Alternitive Gaming Australia',
+      description: 'Donation',
+      amount: donation_amount * 100,
+      currency: 'AUD',
+      panelLabel: 'Donate',
+    });
+    e.preventDefault();
+	});
 
 	var steam_id_valid = false;
 

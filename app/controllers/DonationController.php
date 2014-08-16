@@ -329,9 +329,9 @@ class DonationController extends BaseController
 			}
 
 			// Setup file paths
-			$filePath = 'quelle/remote-configs/donators/';
+			$filePath = 'quelle/donators/';
 			$spritePath = 'donators.txt';
-			$adminsPath = 'admins.txt';
+			$adminsPath = 'admins.cfg';
 
 			// Write contents
 			$contents = SSH::into('pantheon')->getString($remotePath);

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8c2d680c3ebdc7d8cd574b3f1ab5800b",
+    "hash": "9250c8c16f65fbf1724c5ebcaacb9f47",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2174,7 +2174,7 @@
             ],
             "authors": [
                 {
-                    "name": "Thomas Appel",
+                    "name": "iwyg",
                     "email": "mail@thomas-appel.com"
                 }
             ],
@@ -2390,46 +2390,39 @@
         },
         {
             "name": "zizaco/confide",
-            "version": "4.0.0-rc.2",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Zizaco/confide.git",
-                "reference": "5dd57ad32c7af78d1290c57fb0109caf3769e828"
+                "reference": "e0e67e42b7c02ff458963a869da146c8f1809b6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Zizaco/confide/zipball/5dd57ad32c7af78d1290c57fb0109caf3769e828",
-                "reference": "5dd57ad32c7af78d1290c57fb0109caf3769e828",
+                "url": "https://api.github.com/repos/Zizaco/confide/zipball/e0e67e42b7c02ff458963a869da146c8f1809b6d",
+                "reference": "e0e67e42b7c02ff458963a869da146c8f1809b6d",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "~4.2",
-                "php": ">=5.4.0"
+                "illuminate/support": "~4.1",
+                "laravelbook/ardent": "dev-master",
+                "php": ">=5.3.0"
             },
             "require-dev": {
-                "illuminate/auth": "~4.2",
-                "illuminate/console": "~4.2",
-                "illuminate/database": "~4.2",
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "~0.6"
+                "illuminate/auth": "~4.1",
+                "illuminate/database": "~4.1",
+                "mockery/mockery": "0.7.2"
             },
             "suggest": {
                 "zizaco/entrust": "add Role-based Permissions to Laravel 4"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.0-dev"
-                }
-            },
             "autoload": {
                 "classmap": [
                     "src/migrations",
                     "src/commands"
                 ],
-                "psr-4": {
-                    "Zizaco\\Confide\\": "src/Confide/"
+                "psr-0": {
+                    "Zizaco\\Confide": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2438,12 +2431,13 @@
             ],
             "authors": [
                 {
-                    "name": "Andrew Elkins",
-                    "homepage": "http://www.andrewelkins.com"
+                    "name": "Zizaco Zizuini",
+                    "email": "zizaco@gmail.com",
+                    "homepage": "http://www.zizaco.net"
                 },
                 {
-                    "name": "Zizaco Zizuini",
-                    "homepage": "http://www.zizaco.net"
+                    "name": "Andrew Elkins",
+                    "homepage": "http://www.andrewelkins.com"
                 }
             ],
             "description": "Confide is an authentication solution for Laravel 4",
@@ -2452,7 +2446,7 @@
                 "illuminate",
                 "laravel"
             ],
-            "time": "2014-08-06 05:22:56"
+            "time": "2014-04-16 10:06:16"
         },
         {
             "name": "zizaco/entrust",

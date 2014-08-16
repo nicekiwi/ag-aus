@@ -24,7 +24,7 @@ class BansController extends \BaseController {
 	{
 		$steamClass = "\SteamCondenser\Community\SteamId";
 
-		$remotePath = 'service311/tf/cfg/banned_user.cfg';
+		$remotePath = 'quelle/bans/banned_user.cfg';
 		//$remotePath = 'remote-configs/banned_user.cfg';
 		$contents = SSH::into('pantheon')->getString($remotePath);
 		$contents = preg_split("/((\r?\n)|(\r\n?))/", $contents);

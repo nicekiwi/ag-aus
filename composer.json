@@ -12,7 +12,7 @@
 		"vtalbot/markdown": "1.*",
 		"thomaswelton/laravel-gravatar": "dev-master",
 		"zizaco/entrust": "1.2.x",
-		"zizaco/confide": "4.0.0-rc.2",
+		"zizaco/confide": "3.2.x",
 		"laravelbook/ardent": "dev-master",
 		"thapp/jitimage": "dev-master",
 		"jyc/rcon": "dev-default",
