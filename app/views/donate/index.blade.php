@@ -16,7 +16,7 @@
     <div class="col-sm-12">
         
         @foreach($donations as $donation)
-        <div class="col-md-3"><img src="/images/avatar/{{ urlencode($donation->donator->steam_image) }}"> {{ $donation->donator->steam_nickname }}</div>
+        <div class="col-md-3"><img src="/images/avatar/{{ urlencode($donation->donator->steam_image) }}"> {{ $donation->player->steam_nickname }}</div>
         @endforeach
 
     </div>

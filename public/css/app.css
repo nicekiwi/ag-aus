@@ -457,7 +457,6 @@ figure {
   margin: 1em 40px; }
 
 hr {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   height: 0; }
 
@@ -494,7 +493,6 @@ input {
   line-height: normal; }
 
 input[type="checkbox"], input[type="radio"] {
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0; }
 
@@ -503,7 +501,6 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 input[type="search"] {
   -webkit-appearance: textfield;
-  -moz-box-sizing: content-box;
   box-sizing: content-box; }
 
 input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration {
@@ -575,11 +572,9 @@ td, th {
     border: 1px solid #ddd !important; } }
 
 * {
-  -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
 *:before, *:after {
-  -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
 html {
@@ -606,7 +601,7 @@ a {
     text-decoration: underline; }
   a:focus {
     outline: thin dotted;
-    outline: 5px auto-webkit-focus-ring-color;
+    outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px; }
 
 figure {
@@ -1585,7 +1580,6 @@ label {
   font-weight: bold; }
 
 input[type="search"] {
-  -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
 input[type="radio"], input[type="checkbox"] {
@@ -1605,7 +1599,7 @@ select[multiple], select[size] {
 
 input[type="file"]:focus, input[type="radio"]:focus, input[type="checkbox"]:focus {
   outline: thin dotted;
-  outline: 5px auto-webkit-focus-ring-color;
+  outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px; }
 
 output {
@@ -1881,7 +1875,7 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
   user-select: none; }
   .btn:focus, .btn:active:focus, .btn.active:focus, input[type="radio"]:checked + label.btn:focus {
     outline: thin dotted;
-    outline: 5px auto-webkit-focus-ring-color;
+    outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px; }
   .btn:hover, .btn:focus {
     color: #333;
@@ -2251,9 +2245,6 @@ tbody.collapse.in {
 .btn-group .dropdown-toggle:active, .btn-group.open .dropdown-toggle {
   outline: 0; }
 
-
-
-
 .btn-group > .btn + .dropdown-toggle {
   padding-left: 8px;
   padding-right: 8px; }
@@ -2346,8 +2337,6 @@ tbody.collapse.in {
     float: left;
     width: 100%;
     margin-bottom: 0; }
-
-
 
 .input-group-addon, .input-group-btn, .input-group .form-control {
   display: table-cell; }
@@ -4256,7 +4245,6 @@ button.close {
 .map-filter li.active {
   font-weight: bold; }
 
-
 .delete-form .btn {
   padding: 0 5px 0;
   color: #b80029; }
@@ -4264,9 +4252,11 @@ button.close {
 .delete-form i {
   color: #b80029; }
 
-
 .donation-options input {
   display: none; }
 
 #maps-list tr td:nth-child(1), #maps-list tr td:nth-child(4), #maps-list tr td:nth-child(5), #maps-list tr td:nth-child(6) {
   text-align: center; }
+
+.container {
+  max-width: 900px; }

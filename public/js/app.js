@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v2.1.0
+ * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-01-23T21:10Z
+ * Date: 2014-05-01T17:11Z
  */
 
 (function( global, factory ) {
@@ -59,8 +59,6 @@ var toString = class2type.toString;
 
 var hasOwn = class2type.hasOwnProperty;
 
-var trim = "".trim;
-
 var support = {};
 
 
@@ -69,7 +67,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.0",
+	version = "2.1.1",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -77,6 +75,10 @@ var
 		// Need init if jQuery is called (just allow error to be thrown if not included)
 		return new jQuery.fn.init( selector, context );
 	},
+
+	// Support: Android<4.1
+	// Make sure we trim BOM and NBSP
+	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
 
 	// Matches dashed string for camelizing
 	rmsPrefix = /^-ms-/,
@@ -108,10 +110,10 @@ jQuery.fn = jQuery.prototype = {
 	get: function( num ) {
 		return num != null ?
 
-			// Return a 'clean' array
+			// Return just the one element from the set
 			( num < 0 ? this[ num + this.length ] : this[ num ] ) :
 
-			// Return just the object
+			// Return all the elements in a clean array
 			slice.call( this );
 	},
 
@@ -267,7 +269,7 @@ jQuery.extend({
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
 		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
 		// subtraction forces infinities to NaN
-		return obj - parseFloat( obj ) >= 0;
+		return !jQuery.isArray( obj ) && obj - parseFloat( obj ) >= 0;
 	},
 
 	isPlainObject: function( obj ) {
@@ -279,16 +281,8 @@ jQuery.extend({
 			return false;
 		}
 
-		// Support: Firefox <20
-		// The try/catch suppresses exceptions thrown when attempting to access
-		// the "constructor" property of certain host objects, ie. |window.location|
-		// https://bugzilla.mozilla.org/show_bug.cgi?id=814622
-		try {
-			if ( obj.constructor &&
-					!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
-				return false;
-			}
-		} catch ( e ) {
+		if ( obj.constructor &&
+				!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
 			return false;
 		}
 
@@ -398,8 +392,11 @@ jQuery.extend({
 		return obj;
 	},
 
+	// Support: Android<4.1
 	trim: function( text ) {
-		return text == null ? "" : trim.call( text );
+		return text == null ?
+			"" :
+			( text + "" ).replace( rtrim, "" );
 	},
 
 	// results is for internal usage only
@@ -551,14 +548,14 @@ function isArraylike( obj ) {
 }
 var Sizzle =
 /*!
- * Sizzle CSS Selector Engine v1.10.16
+ * Sizzle CSS Selector Engine v1.10.19
  * http://sizzlejs.com/
  *
  * Copyright 2013 jQuery Foundation, Inc. and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-01-13
+ * Date: 2014-04-18
  */
 (function( window ) {
 
@@ -567,7 +564,9 @@ var i,
 	Expr,
 	getText,
 	isXML,
+	tokenize,
 	compile,
+	select,
 	outermostContext,
 	sortInput,
 	hasDuplicate,
@@ -634,17 +633,23 @@ var i,
 	// Proper syntax: http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
 	identifier = characterEncoding.replace( "w", "w#" ),
 
-	// Acceptable operators http://www.w3.org/TR/selectors/#attribute-selectors
-	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")" + whitespace +
-		"*(?:([*^$|!~]?=)" + whitespace + "*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + ")|)|)" + whitespace + "*\\]",
+	// Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors
+	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")(?:" + whitespace +
+		// Operator (capture 2)
+		"*([*^$|!~]?=)" + whitespace +
+		// "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
+		"*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
+		"*\\]",
 
-	// Prefer arguments quoted,
-	//   then not containing pseudos/brackets,
-	//   then attribute selectors/non-parenthetical expressions,
-	//   then anything else
-	// These preferences are here to reduce the number of selectors
-	//   needing tokenize in the PSEUDO preFilter
-	pseudos = ":(" + characterEncoding + ")(?:\\(((['\"])((?:\\\\.|[^\\\\])*?)\\3|((?:\\\\.|[^\\\\()[\\]]|" + attributes.replace( 3, 8 ) + ")*)|.*)\\)|)",
+	pseudos = ":(" + characterEncoding + ")(?:\\((" +
+		// To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
+		// 1. quoted (capture 3; capture 4 or capture 5)
+		"('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|" +
+		// 2. simple (capture 6)
+		"((?:\\\\.|[^\\\\()[\\]]|" + attributes + ")*)|" +
+		// 3. anything else (capture 2)
+		".*" +
+		")\\)|)",
 
 	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
 	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
@@ -689,7 +694,7 @@ var i,
 	funescape = function( _, escaped, escapedWhitespace ) {
 		var high = "0x" + escaped - 0x10000;
 		// NaN means non-codepoint
-		// Support: Firefox
+		// Support: Firefox<24
 		// Workaround erroneous numeric interpretation of +"0x"
 		return high !== high || escapedWhitespace ?
 			escaped :
@@ -1085,7 +1090,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 				var m = context.getElementById( id );
 				// Check parentNode to catch when Blackberry 4.6 returns
 				// nodes that are no longer in the document #6963
-				return m && m.parentNode ? [m] : [];
+				return m && m.parentNode ? [ m ] : [];
 			}
 		};
 		Expr.filter["ID"] = function( id ) {
@@ -1165,11 +1170,13 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// setting a boolean content attribute,
 			// since its presence should be enough
 			// http://bugs.jquery.com/ticket/12359
-			div.innerHTML = "<select t=''><option selected=''></option></select>";
+			div.innerHTML = "<select msallowclip=''><option selected=''></option></select>";
 
-			// Support: IE8, Opera 10-12
+			// Support: IE8, Opera 11-12.16
 			// Nothing should be selected when empty strings follow ^= or $= or *=
-			if ( div.querySelectorAll("[t^='']").length ) {
+			// The test attribute must be unknown in Opera but "safe" for WinRT
+			// http://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
+			if ( div.querySelectorAll("[msallowclip^='']").length ) {
 				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:''|\"\")" );
 			}
 
@@ -1212,7 +1219,8 @@ setDocument = Sizzle.setDocument = function( node ) {
 		});
 	}
 
-	if ( (support.matchesSelector = rnative.test( (matches = docElem.webkitMatchesSelector ||
+	if ( (support.matchesSelector = rnative.test( (matches = docElem.matches ||
+		docElem.webkitMatchesSelector ||
 		docElem.mozMatchesSelector ||
 		docElem.oMatchesSelector ||
 		docElem.msMatchesSelector) )) ) {
@@ -1393,7 +1401,7 @@ Sizzle.matchesSelector = function( elem, expr ) {
 		} catch(e) {}
 	}
 
-	return Sizzle( expr, document, null, [elem] ).length > 0;
+	return Sizzle( expr, document, null, [ elem ] ).length > 0;
 };
 
 Sizzle.contains = function( context, elem ) {
@@ -1522,7 +1530,7 @@ Expr = Sizzle.selectors = {
 			match[1] = match[1].replace( runescape, funescape );
 
 			// Move the given value to match[3] whether quoted or unquoted
-			match[3] = ( match[4] || match[5] || "" ).replace( runescape, funescape );
+			match[3] = ( match[3] || match[4] || match[5] || "" ).replace( runescape, funescape );
 
 			if ( match[2] === "~=" ) {
 				match[3] = " " + match[3] + " ";
@@ -1565,15 +1573,15 @@ Expr = Sizzle.selectors = {
 
 		"PSEUDO": function( match ) {
 			var excess,
-				unquoted = !match[5] && match[2];
+				unquoted = !match[6] && match[2];
 
 			if ( matchExpr["CHILD"].test( match[0] ) ) {
 				return null;
 			}
 
 			// Accept quoted arguments as-is
-			if ( match[3] && match[4] !== undefined ) {
-				match[2] = match[4];
+			if ( match[3] ) {
+				match[2] = match[4] || match[5] || "";
 
 			// Strip excess characters from unquoted arguments
 			} else if ( unquoted && rpseudo.test( unquoted ) &&
@@ -1978,7 +1986,7 @@ function setFilters() {}
 setFilters.prototype = Expr.filters = Expr.pseudos;
 Expr.setFilters = new setFilters();
 
-function tokenize( selector, parseOnly ) {
+tokenize = Sizzle.tokenize = function( selector, parseOnly ) {
 	var matched, match, tokens, type,
 		soFar, groups, preFilters,
 		cached = tokenCache[ selector + " " ];
@@ -2043,7 +2051,7 @@ function tokenize( selector, parseOnly ) {
 			Sizzle.error( selector ) :
 			// Cache the tokens
 			tokenCache( selector, groups ).slice( 0 );
-}
+};
 
 function toSelector( tokens ) {
 	var i = 0,
@@ -2120,6 +2128,15 @@ function elementMatcher( matchers ) {
 			return true;
 		} :
 		matchers[0];
+}
+
+function multipleContexts( selector, contexts, results ) {
+	var i = 0,
+		len = contexts.length;
+	for ( ; i < len; i++ ) {
+		Sizzle( selector, contexts[i], results );
+	}
+	return results;
 }
 
 function condense( unmatched, map, filter, context, xml ) {
@@ -2390,7 +2407,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 		superMatcher;
 }
 
-compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
+compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 	var i,
 		setMatchers = [],
 		elementMatchers = [],
@@ -2398,12 +2415,12 @@ compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 
 	if ( !cached ) {
 		// Generate a function of recursive functions that can be used to check each element
-		if ( !group ) {
-			group = tokenize( selector );
+		if ( !match ) {
+			match = tokenize( selector );
 		}
-		i = group.length;
+		i = match.length;
 		while ( i-- ) {
-			cached = matcherFromTokens( group[i] );
+			cached = matcherFromTokens( match[i] );
 			if ( cached[ expando ] ) {
 				setMatchers.push( cached );
 			} else {
@@ -2413,74 +2430,83 @@ compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 
 		// Cache the compiled function
 		cached = compilerCache( selector, matcherFromGroupMatchers( elementMatchers, setMatchers ) );
+
+		// Save selector and tokenization
+		cached.selector = selector;
 	}
 	return cached;
 };
 
-function multipleContexts( selector, contexts, results ) {
-	var i = 0,
-		len = contexts.length;
-	for ( ; i < len; i++ ) {
-		Sizzle( selector, contexts[i], results );
-	}
-	return results;
-}
-
-function select( selector, context, results, seed ) {
+/**
+ * A low-level selection function that works with Sizzle's compiled
+ *  selector functions
+ * @param {String|Function} selector A selector or a pre-compiled
+ *  selector function built with Sizzle.compile
+ * @param {Element} context
+ * @param {Array} [results]
+ * @param {Array} [seed] A set of elements to match against
+ */
+select = Sizzle.select = function( selector, context, results, seed ) {
 	var i, tokens, token, type, find,
-		match = tokenize( selector );
+		compiled = typeof selector === "function" && selector,
+		match = !seed && tokenize( (selector = compiled.selector || selector) );
 
-	if ( !seed ) {
-		// Try to minimize operations if there is only one group
-		if ( match.length === 1 ) {
+	results = results || [];
 
-			// Take a shortcut and set the context if the root selector is an ID
-			tokens = match[0] = match[0].slice( 0 );
-			if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
-					support.getById && context.nodeType === 9 && documentIsHTML &&
-					Expr.relative[ tokens[1].type ] ) {
+	// Try to minimize operations if there is no seed and only one group
+	if ( match.length === 1 ) {
 
-				context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
-				if ( !context ) {
-					return results;
-				}
-				selector = selector.slice( tokens.shift().value.length );
+		// Take a shortcut and set the context if the root selector is an ID
+		tokens = match[0] = match[0].slice( 0 );
+		if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
+				support.getById && context.nodeType === 9 && documentIsHTML &&
+				Expr.relative[ tokens[1].type ] ) {
+
+			context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
+			if ( !context ) {
+				return results;
+
+			// Precompiled matchers will still verify ancestry, so step up a level
+			} else if ( compiled ) {
+				context = context.parentNode;
 			}
 
-			// Fetch a seed set for right-to-left matching
-			i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
-			while ( i-- ) {
-				token = tokens[i];
+			selector = selector.slice( tokens.shift().value.length );
+		}
 
-				// Abort if we hit a combinator
-				if ( Expr.relative[ (type = token.type) ] ) {
-					break;
-				}
-				if ( (find = Expr.find[ type ]) ) {
-					// Search, expanding context for leading sibling combinators
-					if ( (seed = find(
-						token.matches[0].replace( runescape, funescape ),
-						rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
-					)) ) {
+		// Fetch a seed set for right-to-left matching
+		i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
+		while ( i-- ) {
+			token = tokens[i];
 
-						// If seed is empty or no tokens remain, we can return early
-						tokens.splice( i, 1 );
-						selector = seed.length && toSelector( tokens );
-						if ( !selector ) {
-							push.apply( results, seed );
-							return results;
-						}
+			// Abort if we hit a combinator
+			if ( Expr.relative[ (type = token.type) ] ) {
+				break;
+			}
+			if ( (find = Expr.find[ type ]) ) {
+				// Search, expanding context for leading sibling combinators
+				if ( (seed = find(
+					token.matches[0].replace( runescape, funescape ),
+					rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
+				)) ) {
 
-						break;
+					// If seed is empty or no tokens remain, we can return early
+					tokens.splice( i, 1 );
+					selector = seed.length && toSelector( tokens );
+					if ( !selector ) {
+						push.apply( results, seed );
+						return results;
 					}
+
+					break;
 				}
 			}
 		}
 	}
 
-	// Compile and execute a filtering function
+	// Compile and execute a filtering function if one is not provided
 	// Provide `match` to avoid retokenization if we modified the selector above
-	compile( selector, match )(
+	( compiled || compile( selector, match ) )(
 		seed,
 		context,
 		!documentIsHTML,
@@ -2488,7 +2514,7 @@ function select( selector, context, results, seed ) {
 		rsibling.test( selector ) && testContext( context.parentNode ) || context
 	);
 	return results;
-}
+};
 
 // One-time assignments
 
@@ -3365,8 +3391,9 @@ jQuery.extend({
 		readyList.resolveWith( document, [ jQuery ] );
 
 		// Trigger any bound ready events
-		if ( jQuery.fn.trigger ) {
-			jQuery( document ).trigger("ready").off("ready");
+		if ( jQuery.fn.triggerHandler ) {
+			jQuery( document ).triggerHandler( "ready" );
+			jQuery( document ).off( "ready" );
 		}
 	}
 });
@@ -3738,11 +3765,15 @@ jQuery.fn.extend({
 				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {
 					i = attrs.length;
 					while ( i-- ) {
-						name = attrs[ i ].name;
 
-						if ( name.indexOf( "data-" ) === 0 ) {
-							name = jQuery.camelCase( name.slice(5) );
-							dataAttr( elem, name, data[ name ] );
+						// Support: IE11+
+						// The attrs elements can be null (#14894)
+						if ( attrs[ i ] ) {
+							name = attrs[ i ].name;
+							if ( name.indexOf( "data-" ) === 0 ) {
+								name = jQuery.camelCase( name.slice(5) );
+								dataAttr( elem, name, data[ name ] );
+							}
 						}
 					}
 					data_priv.set( elem, "hasDataAttrs", true );
@@ -3972,10 +4003,17 @@ var rcheckableType = (/^(?:checkbox|radio)$/i);
 
 (function() {
 	var fragment = document.createDocumentFragment(),
-		div = fragment.appendChild( document.createElement( "div" ) );
+		div = fragment.appendChild( document.createElement( "div" ) ),
+		input = document.createElement( "input" );
 
 	// #11217 - WebKit loses check when the name is after the checked attribute
-	div.innerHTML = "<input type='radio' checked='checked' name='t'/>";
+	// Support: Windows Web Apps (WWA)
+	// `name` and `type` need .setAttribute for WWA
+	input.setAttribute( "type", "radio" );
+	input.setAttribute( "checked", "checked" );
+	input.setAttribute( "name", "t" );
+
+	div.appendChild( input );
 
 	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
 	// old WebKit doesn't clone checked state correctly in fragments
@@ -3995,7 +4033,7 @@ support.focusinBubbles = "onfocusin" in window;
 
 var
 	rkeyEvent = /^key/,
-	rmouseEvent = /^(?:mouse|contextmenu)|click/,
+	rmouseEvent = /^(?:mouse|pointer|contextmenu)|click/,
 	rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
 	rtypenamespace = /^([^.]*)(?:\.(.+)|)$/;
 
@@ -4564,7 +4602,7 @@ jQuery.event = {
 
 				// Support: Firefox 20+
 				// Firefox doesn't alert if the returnValue field is not set.
-				if ( event.result !== undefined ) {
+				if ( event.result !== undefined && event.originalEvent ) {
 					event.originalEvent.returnValue = event.result;
 				}
 			}
@@ -4615,9 +4653,9 @@ jQuery.Event = function( src, props ) {
 		// Events bubbling up the document may have been marked as prevented
 		// by a handler lower down the tree; reflect the correct value.
 		this.isDefaultPrevented = src.defaultPrevented ||
-				// Support: Android < 4.0
 				src.defaultPrevented === undefined &&
-				src.getPreventDefault && src.getPreventDefault() ?
+				// Support: Android < 4.0
+				src.returnValue === false ?
 			returnTrue :
 			returnFalse;
 
@@ -4664,7 +4702,14 @@ jQuery.Event.prototype = {
 		}
 	},
 	stopImmediatePropagation: function() {
+		var e = this.originalEvent;
+
 		this.isImmediatePropagationStopped = returnTrue;
+
+		if ( e && e.stopImmediatePropagation ) {
+			e.stopImmediatePropagation();
+		}
+
 		this.stopPropagation();
 	}
 };
@@ -4673,7 +4718,9 @@ jQuery.Event.prototype = {
 // Support: Chrome 15+
 jQuery.each({
 	mouseenter: "mouseover",
-	mouseleave: "mouseout"
+	mouseleave: "mouseout",
+	pointerenter: "pointerover",
+	pointerleave: "pointerout"
 }, function( orig, fix ) {
 	jQuery.event.special[ orig ] = {
 		delegateType: fix,
@@ -5098,7 +5145,7 @@ jQuery.extend({
 	},
 
 	cleanData: function( elems ) {
-		var data, elem, events, type, key, j,
+		var data, elem, type, key,
 			special = jQuery.event.special,
 			i = 0;
 
@@ -5107,9 +5154,8 @@ jQuery.extend({
 				key = elem[ data_priv.expando ];
 
 				if ( key && (data = data_priv.cache[ key ]) ) {
-					events = Object.keys( data.events || {} );
-					if ( events.length ) {
-						for ( j = 0; (type = events[j]) !== undefined; j++ ) {
+					if ( data.events ) {
+						for ( type in data.events ) {
 							if ( special[ type ] ) {
 								jQuery.event.remove( elem, type );
 
@@ -5412,14 +5458,15 @@ var iframe,
  */
 // Called only from within defaultDisplay
 function actualDisplay( name, doc ) {
-	var elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
+	var style,
+		elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
 
 		// getDefaultComputedStyle might be reliably used only on attached element
-		display = window.getDefaultComputedStyle ?
+		display = window.getDefaultComputedStyle && ( style = window.getDefaultComputedStyle( elem[ 0 ] ) ) ?
 
 			// Use of this method is a temporary fix (more like optmization) until something better comes along,
 			// since it was removed from specification and supported only in FF
-			window.getDefaultComputedStyle( elem[ 0 ] ).display : jQuery.css( elem[ 0 ], "display" );
+			style.display : jQuery.css( elem[ 0 ], "display" );
 
 	// We don't have any data stored on the element,
 	// so use "detach" method as fast way to get rid of the element
@@ -5542,28 +5589,32 @@ function addGetHookIf( conditionFn, hookFn ) {
 
 (function() {
 	var pixelPositionVal, boxSizingReliableVal,
-		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
-		divReset = "padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;" +
-			"-moz-box-sizing:content-box;box-sizing:content-box",
 		docElem = document.documentElement,
 		container = document.createElement( "div" ),
 		div = document.createElement( "div" );
+
+	if ( !div.style ) {
+		return;
+	}
 
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
-	container.style.cssText = "border:0;width:0;height:0;position:absolute;top:0;left:-9999px;" +
-		"margin-top:1px";
+	container.style.cssText = "border:0;width:0;height:0;top:0;left:-9999px;margin-top:1px;" +
+		"position:absolute";
 	container.appendChild( div );
 
 	// Executing both pixelPosition & boxSizingReliable tests require only one layout
 	// so they're executed at the same time to save the second computation.
 	function computePixelPositionAndBoxSizingReliable() {
-		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
-		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
-			"box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;" +
-			"position:absolute;top:1%";
+		div.style.cssText =
+			// Support: Firefox<29, Android 2.3
+			// Vendor-prefix box-sizing
+			"-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
+			"box-sizing:border-box;display:block;margin-top:1%;top:1%;" +
+			"border:1px;padding:1px;width:4px;position:absolute";
+		div.innerHTML = "";
 		docElem.appendChild( container );
 
 		var divStyle = window.getComputedStyle( div, null );
@@ -5573,9 +5624,10 @@ function addGetHookIf( conditionFn, hookFn ) {
 		docElem.removeChild( container );
 	}
 
-	// Use window.getComputedStyle because jsdom on node.js will break without it.
+	// Support: node.js jsdom
+	// Don't assume that getComputedStyle is a property of the global object
 	if ( window.getComputedStyle ) {
-		jQuery.extend(support, {
+		jQuery.extend( support, {
 			pixelPosition: function() {
 				// This test is executed only once but we still do memoizing
 				// since we can use the boxSizingReliable pre-computing.
@@ -5597,7 +5649,13 @@ function addGetHookIf( conditionFn, hookFn ) {
 				// This support function is only executed once so no memoizing is needed.
 				var ret,
 					marginDiv = div.appendChild( document.createElement( "div" ) );
-				marginDiv.style.cssText = div.style.cssText = divReset;
+
+				// Reset CSS: box-sizing; display; margin; border; padding
+				marginDiv.style.cssText = div.style.cssText =
+					// Support: Firefox<29, Android 2.3
+					// Vendor-prefix box-sizing
+					"-webkit-box-sizing:content-box;-moz-box-sizing:content-box;" +
+					"box-sizing:content-box;display:block;margin:0;border:0;padding:0";
 				marginDiv.style.marginRight = marginDiv.style.width = "0";
 				div.style.width = "1px";
 				docElem.appendChild( container );
@@ -5605,9 +5663,6 @@ function addGetHookIf( conditionFn, hookFn ) {
 				ret = !parseFloat( window.getComputedStyle( marginDiv, null ).marginRight );
 
 				docElem.removeChild( container );
-
-				// Clean up the div for other support tests.
-				div.innerHTML = "";
 
 				return ret;
 			}
@@ -5647,8 +5702,8 @@ var
 
 	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
 	cssNormalTransform = {
-		letterSpacing: 0,
-		fontWeight: 400
+		letterSpacing: "0",
+		fontWeight: "400"
 	},
 
 	cssPrefixes = [ "Webkit", "O", "Moz", "ms" ];
@@ -5795,13 +5850,10 @@ function showHide( elements, show ) {
 				values[ index ] = data_priv.access( elem, "olddisplay", defaultDisplay(elem.nodeName) );
 			}
 		} else {
+			hidden = isHidden( elem );
 
-			if ( !values[ index ] ) {
-				hidden = isHidden( elem );
-
-				if ( display && display !== "none" || !hidden ) {
-					data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css(elem, "display") );
-				}
+			if ( display !== "none" || !hidden ) {
+				data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css( elem, "display" ) );
 			}
 		}
 	}
@@ -5840,6 +5892,8 @@ jQuery.extend({
 	cssNumber: {
 		"columnCount": true,
 		"fillOpacity": true,
+		"flexGrow": true,
+		"flexShrink": true,
 		"fontWeight": true,
 		"lineHeight": true,
 		"opacity": true,
@@ -5904,9 +5958,6 @@ jQuery.extend({
 
 			// If a hook was provided, use that value, otherwise just set the specified value
 			if ( !hooks || !("set" in hooks) || (value = hooks.set( elem, value, extra )) !== undefined ) {
-				// Support: Chrome, Safari
-				// Setting style to blank string required to delete "style: x !important;"
-				style[ name ] = "";
 				style[ name ] = value;
 			}
 
@@ -5962,7 +6013,7 @@ jQuery.each([ "height", "width" ], function( i, name ) {
 			if ( computed ) {
 				// certain elements can have dimension info if we invisibly show them
 				// however, it must have a current display style that would benefit from this
-				return elem.offsetWidth === 0 && rdisplayswap.test( jQuery.css( elem, "display" ) ) ?
+				return rdisplayswap.test( jQuery.css( elem, "display" ) ) && elem.offsetWidth === 0 ?
 					jQuery.swap( elem, cssShow, function() {
 						return getWidthOrHeight( elem, name, extra );
 					}) :
@@ -6283,7 +6334,7 @@ function createTween( value, prop, animation ) {
 
 function defaultPrefilter( elem, props, opts ) {
 	/* jshint validthis: true */
-	var prop, value, toggle, tween, hooks, oldfire, display,
+	var prop, value, toggle, tween, hooks, oldfire, display, checkDisplay,
 		anim = this,
 		orig = {},
 		style = elem.style,
@@ -6327,13 +6378,12 @@ function defaultPrefilter( elem, props, opts ) {
 		// Set display property to inline-block for height/width
 		// animations on inline elements that are having width/height animated
 		display = jQuery.css( elem, "display" );
-		// Get default display if display is currently "none"
-		if ( display === "none" ) {
-			display = defaultDisplay( elem.nodeName );
-		}
-		if ( display === "inline" &&
-				jQuery.css( elem, "float" ) === "none" ) {
 
+		// Test default display if display is currently "none"
+		checkDisplay = display === "none" ?
+			data_priv.get( elem, "olddisplay" ) || defaultDisplay( elem.nodeName ) : display;
+
+		if ( checkDisplay === "inline" && jQuery.css( elem, "float" ) === "none" ) {
 			style.display = "inline-block";
 		}
 	}
@@ -6363,6 +6413,10 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 			orig[ prop ] = dataShow && dataShow[ prop ] || jQuery.style( elem, prop );
+
+		// Any non-fx value stops us from restoring the original display value
+		} else {
+			display = undefined;
 		}
 	}
 
@@ -6405,6 +6459,10 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 		}
+
+	// If this is a noop like .hide().hide(), restore an overwritten display value
+	} else if ( (display === "none" ? defaultDisplay( elem.nodeName ) : display) === "inline" ) {
+		style.display = display;
 	}
 }
 
@@ -7297,6 +7355,16 @@ jQuery.fn.extend({
 
 jQuery.extend({
 	valHooks: {
+		option: {
+			get: function( elem ) {
+				var val = jQuery.find.attr( elem, "value" );
+				return val != null ?
+					val :
+					// Support: IE10-11+
+					// option.text throws exceptions (#14686, #14858)
+					jQuery.trim( jQuery.text( elem ) );
+			}
+		},
 		select: {
 			get: function( elem ) {
 				var value, option,
@@ -7343,7 +7411,7 @@ jQuery.extend({
 
 				while ( i-- ) {
 					option = options[ i ];
-					if ( (option.selected = jQuery.inArray( jQuery(option).val(), values ) >= 0) ) {
+					if ( (option.selected = jQuery.inArray( option.value, values ) >= 0) ) {
 						optionSet = true;
 					}
 				}
@@ -8550,10 +8618,15 @@ jQuery.ajaxTransport(function( options ) {
 				// Create the abort callback
 				callback = xhrCallbacks[ id ] = callback("abort");
 
-				// Do send the request
-				// This may raise an exception which is actually
-				// handled in jQuery.ajax (so no try/catch here)
-				xhr.send( options.hasContent && options.data || null );
+				try {
+					// Do send the request (this may raise an exception)
+					xhr.send( options.hasContent && options.data || null );
+				} catch ( e ) {
+					// #14683: Only rethrow if this hasn't been notified as an error yet
+					if ( callback ) {
+						throw e;
+					}
+				}
 			},
 
 			abort: function() {
@@ -8760,7 +8833,7 @@ jQuery.fn.load = function( url, params, callback ) {
 		off = url.indexOf(" ");
 
 	if ( off >= 0 ) {
-		selector = url.slice( off );
+		selector = jQuery.trim( url.slice( off ) );
 		url = url.slice( 0, off );
 	}
 
@@ -9068,6 +9141,12 @@ jQuery.fn.andSelf = jQuery.fn.addBack;
 // derived from file names, and jQuery is normally delivered in a lowercase
 // file name. Do this after creating the global so that if an AMD module wants
 // to call noConflict to hide this version of jQuery, it will work.
+
+// Note that for maximum portability, libraries that are not jQuery should
+// declare themselves as anonymous modules, and avoid setting a global if an
+// AMD loader is present. jQuery is a special case. For more information, see
+// https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
+
 if ( typeof define === "function" && define.amd ) {
 	define( "jquery", [], function() {
 		return jQuery;
@@ -9512,2286 +9591,9 @@ return jQuery;
 
 
 
-/*!
- * fancyBox - jQuery Plugin
- * version: 2.1.5 (Fri, 14 Jun 2013)
- * @requires jQuery v1.6 or later
- *
- * Examples at http://fancyapps.com/fancybox/
- * License: www.fancyapps.com/fancybox/#license
- *
- * Copyright 2012 Janis Skarnelis - janis@fancyapps.com
- *
- */
-
-(function (window, document, $, undefined) {
-	"use strict";
-
-	var H = $("html"),
-		W = $(window),
-		D = $(document),
-		F = $.fancybox = function () {
-			F.open.apply( this, arguments );
-		},
-		IE =  navigator.userAgent.match(/msie/i),
-		didUpdate	= null,
-		isTouch		= document.createTouch !== undefined,
-
-		isQuery	= function(obj) {
-			return obj && obj.hasOwnProperty && obj instanceof $;
-		},
-		isString = function(str) {
-			return str && $.type(str) === "string";
-		},
-		isPercentage = function(str) {
-			return isString(str) && str.indexOf('%') > 0;
-		},
-		isScrollable = function(el) {
-			return (el && !(el.style.overflow && el.style.overflow === 'hidden') && ((el.clientWidth && el.scrollWidth > el.clientWidth) || (el.clientHeight && el.scrollHeight > el.clientHeight)));
-		},
-		getScalar = function(orig, dim) {
-			var value = parseInt(orig, 10) || 0;
-
-			if (dim && isPercentage(orig)) {
-				value = F.getViewport()[ dim ] / 100 * value;
-			}
-
-			return Math.ceil(value);
-		},
-		getValue = function(value, dim) {
-			return getScalar(value, dim) + 'px';
-		};
-
-	$.extend(F, {
-		// The current version of fancyBox
-		version: '2.1.5',
-
-		defaults: {
-			padding : 15,
-			margin  : 20,
-
-			width     : 800,
-			height    : 600,
-			minWidth  : 100,
-			minHeight : 100,
-			maxWidth  : 9999,
-			maxHeight : 9999,
-			pixelRatio: 1, // Set to 2 for retina display support
-
-			autoSize   : true,
-			autoHeight : false,
-			autoWidth  : false,
-
-			autoResize  : true,
-			autoCenter  : !isTouch,
-			fitToView   : true,
-			aspectRatio : false,
-			topRatio    : 0.5,
-			leftRatio   : 0.5,
-
-			scrolling : 'auto', // 'auto', 'yes' or 'no'
-			wrapCSS   : '',
-
-			arrows     : true,
-			closeBtn   : true,
-			closeClick : false,
-			nextClick  : false,
-			mouseWheel : true,
-			autoPlay   : false,
-			playSpeed  : 3000,
-			preload    : 3,
-			modal      : false,
-			loop       : true,
-
-			ajax  : {
-				dataType : 'html',
-				headers  : { 'X-fancyBox': true }
-			},
-			iframe : {
-				scrolling : 'auto',
-				preload   : true
-			},
-			swf : {
-				wmode: 'transparent',
-				allowfullscreen   : 'true',
-				allowscriptaccess : 'always'
-			},
-
-			keys  : {
-				next : {
-					13 : 'left', // enter
-					34 : 'up',   // page down
-					39 : 'left', // right arrow
-					40 : 'up'    // down arrow
-				},
-				prev : {
-					8  : 'right',  // backspace
-					33 : 'down',   // page up
-					37 : 'right',  // left arrow
-					38 : 'down'    // up arrow
-				},
-				close  : [27], // escape key
-				play   : [32], // space - start/stop slideshow
-				toggle : [70]  // letter "f" - toggle fullscreen
-			},
-
-			direction : {
-				next : 'left',
-				prev : 'right'
-			},
-
-			scrollOutside  : true,
-
-			// Override some properties
-			index   : 0,
-			type    : null,
-			href    : null,
-			content : null,
-			title   : null,
-
-			// HTML templates
-			tpl: {
-				wrap     : '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>',
-				image    : '<img class="fancybox-image" src="{href}" alt="" />',
-				iframe   : '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen' + (IE ? ' allowtransparency="true"' : '') + '></iframe>',
-				error    : '<p class="fancybox-error">The requested content cannot be loaded.<br/>Please try again later.</p>',
-				closeBtn : '<a title="Close" class="fancybox-item fancybox-close" href="javascript:;"></a>',
-				next     : '<a title="Next" class="fancybox-nav fancybox-next" href="javascript:;"><span></span></a>',
-				prev     : '<a title="Previous" class="fancybox-nav fancybox-prev" href="javascript:;"><span></span></a>'
-			},
-
-			// Properties for each animation type
-			// Opening fancyBox
-			openEffect  : 'fade', // 'elastic', 'fade' or 'none'
-			openSpeed   : 250,
-			openEasing  : 'swing',
-			openOpacity : true,
-			openMethod  : 'zoomIn',
-
-			// Closing fancyBox
-			closeEffect  : 'fade', // 'elastic', 'fade' or 'none'
-			closeSpeed   : 250,
-			closeEasing  : 'swing',
-			closeOpacity : true,
-			closeMethod  : 'zoomOut',
-
-			// Changing next gallery item
-			nextEffect : 'elastic', // 'elastic', 'fade' or 'none'
-			nextSpeed  : 250,
-			nextEasing : 'swing',
-			nextMethod : 'changeIn',
-
-			// Changing previous gallery item
-			prevEffect : 'elastic', // 'elastic', 'fade' or 'none'
-			prevSpeed  : 250,
-			prevEasing : 'swing',
-			prevMethod : 'changeOut',
-
-			// Enable default helpers
-			helpers : {
-				overlay : true,
-				title   : true
-			},
-
-			// Callbacks
-			onCancel     : $.noop, // If canceling
-			beforeLoad   : $.noop, // Before loading
-			afterLoad    : $.noop, // After loading
-			beforeShow   : $.noop, // Before changing in current item
-			afterShow    : $.noop, // After opening
-			beforeChange : $.noop, // Before changing gallery item
-			beforeClose  : $.noop, // Before closing
-			afterClose   : $.noop  // After closing
-		},
-
-		//Current state
-		group    : {}, // Selected group
-		opts     : {}, // Group options
-		previous : null,  // Previous element
-		coming   : null,  // Element being loaded
-		current  : null,  // Currently loaded element
-		isActive : false, // Is activated
-		isOpen   : false, // Is currently open
-		isOpened : false, // Have been fully opened at least once
-
-		wrap  : null,
-		skin  : null,
-		outer : null,
-		inner : null,
-
-		player : {
-			timer    : null,
-			isActive : false
-		},
-
-		// Loaders
-		ajaxLoad   : null,
-		imgPreload : null,
-
-		// Some collections
-		transitions : {},
-		helpers     : {},
-
-		/*
-		 *	Static methods
-		 */
-
-		open: function (group, opts) {
-			if (!group) {
-				return;
-			}
-
-			if (!$.isPlainObject(opts)) {
-				opts = {};
-			}
-
-			// Close if already active
-			if (false === F.close(true)) {
-				return;
-			}
-
-			// Normalize group
-			if (!$.isArray(group)) {
-				group = isQuery(group) ? $(group).get() : [group];
-			}
-
-			// Recheck if the type of each element is `object` and set content type (image, ajax, etc)
-			$.each(group, function(i, element) {
-				var obj = {},
-					href,
-					title,
-					content,
-					type,
-					rez,
-					hrefParts,
-					selector;
-
-				if ($.type(element) === "object") {
-					// Check if is DOM element
-					if (element.nodeType) {
-						element = $(element);
-					}
-
-					if (isQuery(element)) {
-						obj = {
-							href    : element.data('fancybox-href') || element.attr('href'),
-							title   : element.data('fancybox-title') || element.attr('title'),
-							isDom   : true,
-							element : element
-						};
-
-						if ($.metadata) {
-							$.extend(true, obj, element.metadata());
-						}
-
-					} else {
-						obj = element;
-					}
-				}
-
-				href  = opts.href  || obj.href || (isString(element) ? element : null);
-				title = opts.title !== undefined ? opts.title : obj.title || '';
-
-				content = opts.content || obj.content;
-				type    = content ? 'html' : (opts.type  || obj.type);
-
-				if (!type && obj.isDom) {
-					type = element.data('fancybox-type');
-
-					if (!type) {
-						rez  = element.prop('class').match(/fancybox\.(\w+)/);
-						type = rez ? rez[1] : null;
-					}
-				}
-
-				if (isString(href)) {
-					// Try to guess the content type
-					if (!type) {
-						if (F.isImage(href)) {
-							type = 'image';
-
-						} else if (F.isSWF(href)) {
-							type = 'swf';
-
-						} else if (href.charAt(0) === '#') {
-							type = 'inline';
-
-						} else if (isString(element)) {
-							type    = 'html';
-							content = element;
-						}
-					}
-
-					// Split url into two pieces with source url and content selector, e.g,
-					// "/mypage.html #my_id" will load "/mypage.html" and display element having id "my_id"
-					if (type === 'ajax') {
-						hrefParts = href.split(/\s+/, 2);
-						href      = hrefParts.shift();
-						selector  = hrefParts.shift();
-					}
-				}
-
-				if (!content) {
-					if (type === 'inline') {
-						if (href) {
-							content = $( isString(href) ? href.replace(/.*(?=#[^\s]+$)/, '') : href ); //strip for ie7
-
-						} else if (obj.isDom) {
-							content = element;
-						}
-
-					} else if (type === 'html') {
-						content = href;
-
-					} else if (!type && !href && obj.isDom) {
-						type    = 'inline';
-						content = element;
-					}
-				}
-
-				$.extend(obj, {
-					href     : href,
-					type     : type,
-					content  : content,
-					title    : title,
-					selector : selector
-				});
-
-				group[ i ] = obj;
-			});
-
-			// Extend the defaults
-			F.opts = $.extend(true, {}, F.defaults, opts);
-
-			// All options are merged recursive except keys
-			if (opts.keys !== undefined) {
-				F.opts.keys = opts.keys ? $.extend({}, F.defaults.keys, opts.keys) : false;
-			}
-
-			F.group = group;
-
-			return F._start(F.opts.index);
-		},
-
-		// Cancel image loading or abort ajax request
-		cancel: function () {
-			var coming = F.coming;
-
-			if (!coming || false === F.trigger('onCancel')) {
-				return;
-			}
-
-			F.hideLoading();
-
-			if (F.ajaxLoad) {
-				F.ajaxLoad.abort();
-			}
-
-			F.ajaxLoad = null;
-
-			if (F.imgPreload) {
-				F.imgPreload.onload = F.imgPreload.onerror = null;
-			}
-
-			if (coming.wrap) {
-				coming.wrap.stop(true, true).trigger('onReset').remove();
-			}
-
-			F.coming = null;
-
-			// If the first item has been canceled, then clear everything
-			if (!F.current) {
-				F._afterZoomOut( coming );
-			}
-		},
-
-		// Start closing animation if is open; remove immediately if opening/closing
-		close: function (event) {
-			F.cancel();
-
-			if (false === F.trigger('beforeClose')) {
-				return;
-			}
-
-			F.unbindEvents();
-
-			if (!F.isActive) {
-				return;
-			}
-
-			if (!F.isOpen || event === true) {
-				$('.fancybox-wrap').stop(true).trigger('onReset').remove();
-
-				F._afterZoomOut();
-
-			} else {
-				F.isOpen = F.isOpened = false;
-				F.isClosing = true;
-
-				$('.fancybox-item, .fancybox-nav').remove();
-
-				F.wrap.stop(true, true).removeClass('fancybox-opened');
-
-				F.transitions[ F.current.closeMethod ]();
-			}
-		},
-
-		// Manage slideshow:
-		//   $.fancybox.play(); - toggle slideshow
-		//   $.fancybox.play( true ); - start
-		//   $.fancybox.play( false ); - stop
-		play: function ( action ) {
-			var clear = function () {
-					clearTimeout(F.player.timer);
-				},
-				set = function () {
-					clear();
-
-					if (F.current && F.player.isActive) {
-						F.player.timer = setTimeout(F.next, F.current.playSpeed);
-					}
-				},
-				stop = function () {
-					clear();
-
-					D.unbind('.player');
-
-					F.player.isActive = false;
-
-					F.trigger('onPlayEnd');
-				},
-				start = function () {
-					if (F.current && (F.current.loop || F.current.index < F.group.length - 1)) {
-						F.player.isActive = true;
-
-						D.bind({
-							'onCancel.player beforeClose.player' : stop,
-							'onUpdate.player'   : set,
-							'beforeLoad.player' : clear
-						});
-
-						set();
-
-						F.trigger('onPlayStart');
-					}
-				};
-
-			if (action === true || (!F.player.isActive && action !== false)) {
-				start();
-			} else {
-				stop();
-			}
-		},
-
-		// Navigate to next gallery item
-		next: function ( direction ) {
-			var current = F.current;
-
-			if (current) {
-				if (!isString(direction)) {
-					direction = current.direction.next;
-				}
-
-				F.jumpto(current.index + 1, direction, 'next');
-			}
-		},
-
-		// Navigate to previous gallery item
-		prev: function ( direction ) {
-			var current = F.current;
-
-			if (current) {
-				if (!isString(direction)) {
-					direction = current.direction.prev;
-				}
-
-				F.jumpto(current.index - 1, direction, 'prev');
-			}
-		},
-
-		// Navigate to gallery item by index
-		jumpto: function ( index, direction, router ) {
-			var current = F.current;
-
-			if (!current) {
-				return;
-			}
-
-			index = getScalar(index);
-
-			F.direction = direction || current.direction[ (index >= current.index ? 'next' : 'prev') ];
-			F.router    = router || 'jumpto';
-
-			if (current.loop) {
-				if (index < 0) {
-					index = current.group.length + (index % current.group.length);
-				}
-
-				index = index % current.group.length;
-			}
-
-			if (current.group[ index ] !== undefined) {
-				F.cancel();
-
-				F._start(index);
-			}
-		},
-
-		// Center inside viewport and toggle position type to fixed or absolute if needed
-		reposition: function (e, onlyAbsolute) {
-			var current = F.current,
-				wrap    = current ? current.wrap : null,
-				pos;
-
-			if (wrap) {
-				pos = F._getPosition(onlyAbsolute);
-
-				if (e && e.type === 'scroll') {
-					delete pos.position;
-
-					wrap.stop(true, true).animate(pos, 200);
-
-				} else {
-					wrap.css(pos);
-
-					current.pos = $.extend({}, current.dim, pos);
-				}
-			}
-		},
-
-		update: function (e) {
-			var type = (e && e.type),
-				anyway = !type || type === 'orientationchange';
-
-			if (anyway) {
-				clearTimeout(didUpdate);
-
-				didUpdate = null;
-			}
-
-			if (!F.isOpen || didUpdate) {
-				return;
-			}
-
-			didUpdate = setTimeout(function() {
-				var current = F.current;
-
-				if (!current || F.isClosing) {
-					return;
-				}
-
-				F.wrap.removeClass('fancybox-tmp');
-
-				if (anyway || type === 'load' || (type === 'resize' && current.autoResize)) {
-					F._setDimension();
-				}
-
-				if (!(type === 'scroll' && current.canShrink)) {
-					F.reposition(e);
-				}
-
-				F.trigger('onUpdate');
-
-				didUpdate = null;
-
-			}, (anyway && !isTouch ? 0 : 300));
-		},
-
-		// Shrink content to fit inside viewport or restore if resized
-		toggle: function ( action ) {
-			if (F.isOpen) {
-				F.current.fitToView = $.type(action) === "boolean" ? action : !F.current.fitToView;
-
-				// Help browser to restore document dimensions
-				if (isTouch) {
-					F.wrap.removeAttr('style').addClass('fancybox-tmp');
-
-					F.trigger('onUpdate');
-				}
-
-				F.update();
-			}
-		},
-
-		hideLoading: function () {
-			D.unbind('.loading');
-
-			$('#fancybox-loading').remove();
-		},
-
-		showLoading: function () {
-			var el, viewport;
-
-			F.hideLoading();
-
-			el = $('<div id="fancybox-loading"><div></div></div>').click(F.cancel).appendTo('body');
-
-			// If user will press the escape-button, the request will be canceled
-			D.bind('keydown.loading', function(e) {
-				if ((e.which || e.keyCode) === 27) {
-					e.preventDefault();
-
-					F.cancel();
-				}
-			});
-
-			if (!F.defaults.fixed) {
-				viewport = F.getViewport();
-
-				el.css({
-					position : 'absolute',
-					top  : (viewport.h * 0.5) + viewport.y,
-					left : (viewport.w * 0.5) + viewport.x
-				});
-			}
-		},
-
-		getViewport: function () {
-			var locked = (F.current && F.current.locked) || false,
-				rez    = {
-					x: W.scrollLeft(),
-					y: W.scrollTop()
-				};
-
-			if (locked) {
-				rez.w = locked[0].clientWidth;
-				rez.h = locked[0].clientHeight;
-
-			} else {
-				// See http://bugs.jquery.com/ticket/6724
-				rez.w = isTouch && window.innerWidth  ? window.innerWidth  : W.width();
-				rez.h = isTouch && window.innerHeight ? window.innerHeight : W.height();
-			}
-
-			return rez;
-		},
-
-		// Unbind the keyboard / clicking actions
-		unbindEvents: function () {
-			if (F.wrap && isQuery(F.wrap)) {
-				F.wrap.unbind('.fb');
-			}
-
-			D.unbind('.fb');
-			W.unbind('.fb');
-		},
-
-		bindEvents: function () {
-			var current = F.current,
-				keys;
-
-			if (!current) {
-				return;
-			}
-
-			// Changing document height on iOS devices triggers a 'resize' event,
-			// that can change document height... repeating infinitely
-			W.bind('orientationchange.fb' + (isTouch ? '' : ' resize.fb') + (current.autoCenter && !current.locked ? ' scroll.fb' : ''), F.update);
-
-			keys = current.keys;
-
-			if (keys) {
-				D.bind('keydown.fb', function (e) {
-					var code   = e.which || e.keyCode,
-						target = e.target || e.srcElement;
-
-					// Skip esc key if loading, because showLoading will cancel preloading
-					if (code === 27 && F.coming) {
-						return false;
-					}
-
-					// Ignore key combinations and key events within form elements
-					if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey && !(target && (target.type || $(target).is('[contenteditable]')))) {
-						$.each(keys, function(i, val) {
-							if (current.group.length > 1 && val[ code ] !== undefined) {
-								F[ i ]( val[ code ] );
-
-								e.preventDefault();
-								return false;
-							}
-
-							if ($.inArray(code, val) > -1) {
-								F[ i ] ();
-
-								e.preventDefault();
-								return false;
-							}
-						});
-					}
-				});
-			}
-
-			if ($.fn.mousewheel && current.mouseWheel) {
-				F.wrap.bind('mousewheel.fb', function (e, delta, deltaX, deltaY) {
-					var target = e.target || null,
-						parent = $(target),
-						canScroll = false;
-
-					while (parent.length) {
-						if (canScroll || parent.is('.fancybox-skin') || parent.is('.fancybox-wrap')) {
-							break;
-						}
-
-						canScroll = isScrollable( parent[0] );
-						parent    = $(parent).parent();
-					}
-
-					if (delta !== 0 && !canScroll) {
-						if (F.group.length > 1 && !current.canShrink) {
-							if (deltaY > 0 || deltaX > 0) {
-								F.prev( deltaY > 0 ? 'down' : 'left' );
-
-							} else if (deltaY < 0 || deltaX < 0) {
-								F.next( deltaY < 0 ? 'up' : 'right' );
-							}
-
-							e.preventDefault();
-						}
-					}
-				});
-			}
-		},
-
-		trigger: function (event, o) {
-			var ret, obj = o || F.coming || F.current;
-
-			if (!obj) {
-				return;
-			}
-
-			if ($.isFunction( obj[event] )) {
-				ret = obj[event].apply(obj, Array.prototype.slice.call(arguments, 1));
-			}
-
-			if (ret === false) {
-				return false;
-			}
-
-			if (obj.helpers) {
-				$.each(obj.helpers, function (helper, opts) {
-					if (opts && F.helpers[helper] && $.isFunction(F.helpers[helper][event])) {
-						F.helpers[helper][event]($.extend(true, {}, F.helpers[helper].defaults, opts), obj);
-					}
-				});
-			}
-
-			D.trigger(event);
-		},
-
-		isImage: function (str) {
-			return isString(str) && str.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i);
-		},
-
-		isSWF: function (str) {
-			return isString(str) && str.match(/\.(swf)((\?|#).*)?$/i);
-		},
-
-		_start: function (index) {
-			var coming = {},
-				obj,
-				href,
-				type,
-				margin,
-				padding;
-
-			index = getScalar( index );
-			obj   = F.group[ index ] || null;
-
-			if (!obj) {
-				return false;
-			}
-
-			coming = $.extend(true, {}, F.opts, obj);
-
-			// Convert margin and padding properties to array - top, right, bottom, left
-			margin  = coming.margin;
-			padding = coming.padding;
-
-			if ($.type(margin) === 'number') {
-				coming.margin = [margin, margin, margin, margin];
-			}
-
-			if ($.type(padding) === 'number') {
-				coming.padding = [padding, padding, padding, padding];
-			}
-
-			// 'modal' propery is just a shortcut
-			if (coming.modal) {
-				$.extend(true, coming, {
-					closeBtn   : false,
-					closeClick : false,
-					nextClick  : false,
-					arrows     : false,
-					mouseWheel : false,
-					keys       : null,
-					helpers: {
-						overlay : {
-							closeClick : false
-						}
-					}
-				});
-			}
-
-			// 'autoSize' property is a shortcut, too
-			if (coming.autoSize) {
-				coming.autoWidth = coming.autoHeight = true;
-			}
-
-			if (coming.width === 'auto') {
-				coming.autoWidth = true;
-			}
-
-			if (coming.height === 'auto') {
-				coming.autoHeight = true;
-			}
-
-			/*
-			 * Add reference to the group, so it`s possible to access from callbacks, example:
-			 * afterLoad : function() {
-			 *     this.title = 'Image ' + (this.index + 1) + ' of ' + this.group.length + (this.title ? ' - ' + this.title : '');
-			 * }
-			 */
-
-			coming.group  = F.group;
-			coming.index  = index;
-
-			// Give a chance for callback or helpers to update coming item (type, title, etc)
-			F.coming = coming;
-
-			if (false === F.trigger('beforeLoad')) {
-				F.coming = null;
-
-				return;
-			}
-
-			type = coming.type;
-			href = coming.href;
-
-			if (!type) {
-				F.coming = null;
-
-				//If we can not determine content type then drop silently or display next/prev item if looping through gallery
-				if (F.current && F.router && F.router !== 'jumpto') {
-					F.current.index = index;
-
-					return F[ F.router ]( F.direction );
-				}
-
-				return false;
-			}
-
-			F.isActive = true;
-
-			if (type === 'image' || type === 'swf') {
-				coming.autoHeight = coming.autoWidth = false;
-				coming.scrolling  = 'visible';
-			}
-
-			if (type === 'image') {
-				coming.aspectRatio = true;
-			}
-
-			if (type === 'iframe' && isTouch) {
-				coming.scrolling = 'scroll';
-			}
-
-			// Build the neccessary markup
-			coming.wrap = $(coming.tpl.wrap).addClass('fancybox-' + (isTouch ? 'mobile' : 'desktop') + ' fancybox-type-' + type + ' fancybox-tmp ' + coming.wrapCSS).appendTo( coming.parent || 'body' );
-
-			$.extend(coming, {
-				skin  : $('.fancybox-skin',  coming.wrap),
-				outer : $('.fancybox-outer', coming.wrap),
-				inner : $('.fancybox-inner', coming.wrap)
-			});
-
-			$.each(["Top", "Right", "Bottom", "Left"], function(i, v) {
-				coming.skin.css('padding' + v, getValue(coming.padding[ i ]));
-			});
-
-			F.trigger('onReady');
-
-			// Check before try to load; 'inline' and 'html' types need content, others - href
-			if (type === 'inline' || type === 'html') {
-				if (!coming.content || !coming.content.length) {
-					return F._error( 'content' );
-				}
-
-			} else if (!href) {
-				return F._error( 'href' );
-			}
-
-			if (type === 'image') {
-				F._loadImage();
-
-			} else if (type === 'ajax') {
-				F._loadAjax();
-
-			} else if (type === 'iframe') {
-				F._loadIframe();
-
-			} else {
-				F._afterLoad();
-			}
-		},
-
-		_error: function ( type ) {
-			$.extend(F.coming, {
-				type       : 'html',
-				autoWidth  : true,
-				autoHeight : true,
-				minWidth   : 0,
-				minHeight  : 0,
-				scrolling  : 'no',
-				hasError   : type,
-				content    : F.coming.tpl.error
-			});
-
-			F._afterLoad();
-		},
-
-		_loadImage: function () {
-			// Reset preload image so it is later possible to check "complete" property
-			var img = F.imgPreload = new Image();
-
-			img.onload = function () {
-				this.onload = this.onerror = null;
-
-				F.coming.width  = this.width / F.opts.pixelRatio;
-				F.coming.height = this.height / F.opts.pixelRatio;
-
-				F._afterLoad();
-			};
-
-			img.onerror = function () {
-				this.onload = this.onerror = null;
-
-				F._error( 'image' );
-			};
-
-			img.src = F.coming.href;
-
-			if (img.complete !== true) {
-				F.showLoading();
-			}
-		},
-
-		_loadAjax: function () {
-			var coming = F.coming;
-
-			F.showLoading();
-
-			F.ajaxLoad = $.ajax($.extend({}, coming.ajax, {
-				url: coming.href,
-				error: function (jqXHR, textStatus) {
-					if (F.coming && textStatus !== 'abort') {
-						F._error( 'ajax', jqXHR );
-
-					} else {
-						F.hideLoading();
-					}
-				},
-				success: function (data, textStatus) {
-					if (textStatus === 'success') {
-						coming.content = data;
-
-						F._afterLoad();
-					}
-				}
-			}));
-		},
-
-		_loadIframe: function() {
-			var coming = F.coming,
-				iframe = $(coming.tpl.iframe.replace(/\{rnd\}/g, new Date().getTime()))
-					.attr('scrolling', isTouch ? 'auto' : coming.iframe.scrolling)
-					.attr('src', coming.href);
-
-			// This helps IE
-			$(coming.wrap).bind('onReset', function () {
-				try {
-					$(this).find('iframe').hide().attr('src', '//about:blank').end().empty();
-				} catch (e) {}
-			});
-
-			if (coming.iframe.preload) {
-				F.showLoading();
-
-				iframe.one('load', function() {
-					$(this).data('ready', 1);
-
-					// iOS will lose scrolling if we resize
-					if (!isTouch) {
-						$(this).bind('load.fb', F.update);
-					}
-
-					// Without this trick:
-					//   - iframe won't scroll on iOS devices
-					//   - IE7 sometimes displays empty iframe
-					$(this).parents('.fancybox-wrap').width('100%').removeClass('fancybox-tmp').show();
-
-					F._afterLoad();
-				});
-			}
-
-			coming.content = iframe.appendTo( coming.inner );
-
-			if (!coming.iframe.preload) {
-				F._afterLoad();
-			}
-		},
-
-		_preloadImages: function() {
-			var group   = F.group,
-				current = F.current,
-				len     = group.length,
-				cnt     = current.preload ? Math.min(current.preload, len - 1) : 0,
-				item,
-				i;
-
-			for (i = 1; i <= cnt; i += 1) {
-				item = group[ (current.index + i ) % len ];
-
-				if (item.type === 'image' && item.href) {
-					new Image().src = item.href;
-				}
-			}
-		},
-
-		_afterLoad: function () {
-			var coming   = F.coming,
-				previous = F.current,
-				placeholder = 'fancybox-placeholder',
-				current,
-				content,
-				type,
-				scrolling,
-				href,
-				embed;
-
-			F.hideLoading();
-
-			if (!coming || F.isActive === false) {
-				return;
-			}
-
-			if (false === F.trigger('afterLoad', coming, previous)) {
-				coming.wrap.stop(true).trigger('onReset').remove();
-
-				F.coming = null;
-
-				return;
-			}
-
-			if (previous) {
-				F.trigger('beforeChange', previous);
-
-				previous.wrap.stop(true).removeClass('fancybox-opened')
-					.find('.fancybox-item, .fancybox-nav')
-					.remove();
-			}
-
-			F.unbindEvents();
-
-			current   = coming;
-			content   = coming.content;
-			type      = coming.type;
-			scrolling = coming.scrolling;
-
-			$.extend(F, {
-				wrap  : current.wrap,
-				skin  : current.skin,
-				outer : current.outer,
-				inner : current.inner,
-				current  : current,
-				previous : previous
-			});
-
-			href = current.href;
-
-			switch (type) {
-				case 'inline':
-				case 'ajax':
-				case 'html':
-					if (current.selector) {
-						content = $('<div>').html(content).find(current.selector);
-
-					} else if (isQuery(content)) {
-						if (!content.data(placeholder)) {
-							content.data(placeholder, $('<div class="' + placeholder + '"></div>').insertAfter( content ).hide() );
-						}
-
-						content = content.show().detach();
-
-						current.wrap.bind('onReset', function () {
-							if ($(this).find(content).length) {
-								content.hide().replaceAll( content.data(placeholder) ).data(placeholder, false);
-							}
-						});
-					}
-				break;
-
-				case 'image':
-					content = current.tpl.image.replace('{href}', href);
-				break;
-
-				case 'swf':
-					content = '<object id="fancybox-swf" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%"><param name="movie" value="' + href + '"></param>';
-					embed   = '';
-
-					$.each(current.swf, function(name, val) {
-						content += '<param name="' + name + '" value="' + val + '"></param>';
-						embed   += ' ' + name + '="' + val + '"';
-					});
-
-					content += '<embed src="' + href + '" type="application/x-shockwave-flash" width="100%" height="100%"' + embed + '></embed></object>';
-				break;
-			}
-
-			if (!(isQuery(content) && content.parent().is(current.inner))) {
-				current.inner.append( content );
-			}
-
-			// Give a chance for helpers or callbacks to update elements
-			F.trigger('beforeShow');
-
-			// Set scrolling before calculating dimensions
-			current.inner.css('overflow', scrolling === 'yes' ? 'scroll' : (scrolling === 'no' ? 'hidden' : scrolling));
-
-			// Set initial dimensions and start position
-			F._setDimension();
-
-			F.reposition();
-
-			F.isOpen = false;
-			F.coming = null;
-
-			F.bindEvents();
-
-			if (!F.isOpened) {
-				$('.fancybox-wrap').not( current.wrap ).stop(true).trigger('onReset').remove();
-
-			} else if (previous.prevMethod) {
-				F.transitions[ previous.prevMethod ]();
-			}
-
-			F.transitions[ F.isOpened ? current.nextMethod : current.openMethod ]();
-
-			F._preloadImages();
-		},
-
-		_setDimension: function () {
-			var viewport   = F.getViewport(),
-				steps      = 0,
-				canShrink  = false,
-				canExpand  = false,
-				wrap       = F.wrap,
-				skin       = F.skin,
-				inner      = F.inner,
-				current    = F.current,
-				width      = current.width,
-				height     = current.height,
-				minWidth   = current.minWidth,
-				minHeight  = current.minHeight,
-				maxWidth   = current.maxWidth,
-				maxHeight  = current.maxHeight,
-				scrolling  = current.scrolling,
-				scrollOut  = current.scrollOutside ? current.scrollbarWidth : 0,
-				margin     = current.margin,
-				wMargin    = getScalar(margin[1] + margin[3]),
-				hMargin    = getScalar(margin[0] + margin[2]),
-				wPadding,
-				hPadding,
-				wSpace,
-				hSpace,
-				origWidth,
-				origHeight,
-				origMaxWidth,
-				origMaxHeight,
-				ratio,
-				width_,
-				height_,
-				maxWidth_,
-				maxHeight_,
-				iframe,
-				body;
-
-			// Reset dimensions so we could re-check actual size
-			wrap.add(skin).add(inner).width('auto').height('auto').removeClass('fancybox-tmp');
-
-			wPadding = getScalar(skin.outerWidth(true)  - skin.width());
-			hPadding = getScalar(skin.outerHeight(true) - skin.height());
-
-			// Any space between content and viewport (margin, padding, border, title)
-			wSpace = wMargin + wPadding;
-			hSpace = hMargin + hPadding;
-
-			origWidth  = isPercentage(width)  ? (viewport.w - wSpace) * getScalar(width)  / 100 : width;
-			origHeight = isPercentage(height) ? (viewport.h - hSpace) * getScalar(height) / 100 : height;
-
-			if (current.type === 'iframe') {
-				iframe = current.content;
-
-				if (current.autoHeight && iframe.data('ready') === 1) {
-					try {
-						if (iframe[0].contentWindow.document.location) {
-							inner.width( origWidth ).height(9999);
-
-							body = iframe.contents().find('body');
-
-							if (scrollOut) {
-								body.css('overflow-x', 'hidden');
-							}
-
-							origHeight = body.outerHeight(true);
-						}
-
-					} catch (e) {}
-				}
-
-			} else if (current.autoWidth || current.autoHeight) {
-				inner.addClass( 'fancybox-tmp' );
-
-				// Set width or height in case we need to calculate only one dimension
-				if (!current.autoWidth) {
-					inner.width( origWidth );
-				}
-
-				if (!current.autoHeight) {
-					inner.height( origHeight );
-				}
-
-				if (current.autoWidth) {
-					origWidth = inner.width();
-				}
-
-				if (current.autoHeight) {
-					origHeight = inner.height();
-				}
-
-				inner.removeClass( 'fancybox-tmp' );
-			}
-
-			width  = getScalar( origWidth );
-			height = getScalar( origHeight );
-
-			ratio  = origWidth / origHeight;
-
-			// Calculations for the content
-			minWidth  = getScalar(isPercentage(minWidth) ? getScalar(minWidth, 'w') - wSpace : minWidth);
-			maxWidth  = getScalar(isPercentage(maxWidth) ? getScalar(maxWidth, 'w') - wSpace : maxWidth);
-
-			minHeight = getScalar(isPercentage(minHeight) ? getScalar(minHeight, 'h') - hSpace : minHeight);
-			maxHeight = getScalar(isPercentage(maxHeight) ? getScalar(maxHeight, 'h') - hSpace : maxHeight);
-
-			// These will be used to determine if wrap can fit in the viewport
-			origMaxWidth  = maxWidth;
-			origMaxHeight = maxHeight;
-
-			if (current.fitToView) {
-				maxWidth  = Math.min(viewport.w - wSpace, maxWidth);
-				maxHeight = Math.min(viewport.h - hSpace, maxHeight);
-			}
-
-			maxWidth_  = viewport.w - wMargin;
-			maxHeight_ = viewport.h - hMargin;
-
-			if (current.aspectRatio) {
-				if (width > maxWidth) {
-					width  = maxWidth;
-					height = getScalar(width / ratio);
-				}
-
-				if (height > maxHeight) {
-					height = maxHeight;
-					width  = getScalar(height * ratio);
-				}
-
-				if (width < minWidth) {
-					width  = minWidth;
-					height = getScalar(width / ratio);
-				}
-
-				if (height < minHeight) {
-					height = minHeight;
-					width  = getScalar(height * ratio);
-				}
-
-			} else {
-				width = Math.max(minWidth, Math.min(width, maxWidth));
-
-				if (current.autoHeight && current.type !== 'iframe') {
-					inner.width( width );
-
-					height = inner.height();
-				}
-
-				height = Math.max(minHeight, Math.min(height, maxHeight));
-			}
-
-			// Try to fit inside viewport (including the title)
-			if (current.fitToView) {
-				inner.width( width ).height( height );
-
-				wrap.width( width + wPadding );
-
-				// Real wrap dimensions
-				width_  = wrap.width();
-				height_ = wrap.height();
-
-				if (current.aspectRatio) {
-					while ((width_ > maxWidth_ || height_ > maxHeight_) && width > minWidth && height > minHeight) {
-						if (steps++ > 19) {
-							break;
-						}
-
-						height = Math.max(minHeight, Math.min(maxHeight, height - 10));
-						width  = getScalar(height * ratio);
-
-						if (width < minWidth) {
-							width  = minWidth;
-							height = getScalar(width / ratio);
-						}
-
-						if (width > maxWidth) {
-							width  = maxWidth;
-							height = getScalar(width / ratio);
-						}
-
-						inner.width( width ).height( height );
-
-						wrap.width( width + wPadding );
-
-						width_  = wrap.width();
-						height_ = wrap.height();
-					}
-
-				} else {
-					width  = Math.max(minWidth,  Math.min(width,  width  - (width_  - maxWidth_)));
-					height = Math.max(minHeight, Math.min(height, height - (height_ - maxHeight_)));
-				}
-			}
-
-			if (scrollOut && scrolling === 'auto' && height < origHeight && (width + wPadding + scrollOut) < maxWidth_) {
-				width += scrollOut;
-			}
-
-			inner.width( width ).height( height );
-
-			wrap.width( width + wPadding );
-
-			width_  = wrap.width();
-			height_ = wrap.height();
-
-			canShrink = (width_ > maxWidth_ || height_ > maxHeight_) && width > minWidth && height > minHeight;
-			canExpand = current.aspectRatio ? (width < origMaxWidth && height < origMaxHeight && width < origWidth && height < origHeight) : ((width < origMaxWidth || height < origMaxHeight) && (width < origWidth || height < origHeight));
-
-			$.extend(current, {
-				dim : {
-					width	: getValue( width_ ),
-					height	: getValue( height_ )
-				},
-				origWidth  : origWidth,
-				origHeight : origHeight,
-				canShrink  : canShrink,
-				canExpand  : canExpand,
-				wPadding   : wPadding,
-				hPadding   : hPadding,
-				wrapSpace  : height_ - skin.outerHeight(true),
-				skinSpace  : skin.height() - height
-			});
-
-			if (!iframe && current.autoHeight && height > minHeight && height < maxHeight && !canExpand) {
-				inner.height('auto');
-			}
-		},
-
-		_getPosition: function (onlyAbsolute) {
-			var current  = F.current,
-				viewport = F.getViewport(),
-				margin   = current.margin,
-				width    = F.wrap.width()  + margin[1] + margin[3],
-				height   = F.wrap.height() + margin[0] + margin[2],
-				rez      = {
-					position: 'absolute',
-					top  : margin[0],
-					left : margin[3]
-				};
-
-			if (current.autoCenter && current.fixed && !onlyAbsolute && height <= viewport.h && width <= viewport.w) {
-				rez.position = 'fixed';
-
-			} else if (!current.locked) {
-				rez.top  += viewport.y;
-				rez.left += viewport.x;
-			}
-
-			rez.top  = getValue(Math.max(rez.top,  rez.top  + ((viewport.h - height) * current.topRatio)));
-			rez.left = getValue(Math.max(rez.left, rez.left + ((viewport.w - width)  * current.leftRatio)));
-
-			return rez;
-		},
-
-		_afterZoomIn: function () {
-			var current = F.current;
-
-			if (!current) {
-				return;
-			}
-
-			F.isOpen = F.isOpened = true;
-
-			F.wrap.css('overflow', 'visible').addClass('fancybox-opened');
-
-			F.update();
-
-			// Assign a click event
-			if ( current.closeClick || (current.nextClick && F.group.length > 1) ) {
-				F.inner.css('cursor', 'pointer').bind('click.fb', function(e) {
-					if (!$(e.target).is('a') && !$(e.target).parent().is('a')) {
-						e.preventDefault();
-
-						F[ current.closeClick ? 'close' : 'next' ]();
-					}
-				});
-			}
-
-			// Create a close button
-			if (current.closeBtn) {
-				$(current.tpl.closeBtn).appendTo(F.skin).bind('click.fb', function(e) {
-					e.preventDefault();
-
-					F.close();
-				});
-			}
-
-			// Create navigation arrows
-			if (current.arrows && F.group.length > 1) {
-				if (current.loop || current.index > 0) {
-					$(current.tpl.prev).appendTo(F.outer).bind('click.fb', F.prev);
-				}
-
-				if (current.loop || current.index < F.group.length - 1) {
-					$(current.tpl.next).appendTo(F.outer).bind('click.fb', F.next);
-				}
-			}
-
-			F.trigger('afterShow');
-
-			// Stop the slideshow if this is the last item
-			if (!current.loop && current.index === current.group.length - 1) {
-				F.play( false );
-
-			} else if (F.opts.autoPlay && !F.player.isActive) {
-				F.opts.autoPlay = false;
-
-				F.play();
-			}
-		},
-
-		_afterZoomOut: function ( obj ) {
-			obj = obj || F.current;
-
-			$('.fancybox-wrap').trigger('onReset').remove();
-
-			$.extend(F, {
-				group  : {},
-				opts   : {},
-				router : false,
-				current   : null,
-				isActive  : false,
-				isOpened  : false,
-				isOpen    : false,
-				isClosing : false,
-				wrap   : null,
-				skin   : null,
-				outer  : null,
-				inner  : null
-			});
-
-			F.trigger('afterClose', obj);
-		}
-	});
-
-	/*
-	 *	Default transitions
-	 */
-
-	F.transitions = {
-		getOrigPosition: function () {
-			var current  = F.current,
-				element  = current.element,
-				orig     = current.orig,
-				pos      = {},
-				width    = 50,
-				height   = 50,
-				hPadding = current.hPadding,
-				wPadding = current.wPadding,
-				viewport = F.getViewport();
-
-			if (!orig && current.isDom && element.is(':visible')) {
-				orig = element.find('img:first');
-
-				if (!orig.length) {
-					orig = element;
-				}
-			}
-
-			if (isQuery(orig)) {
-				pos = orig.offset();
-
-				if (orig.is('img')) {
-					width  = orig.outerWidth();
-					height = orig.outerHeight();
-				}
-
-			} else {
-				pos.top  = viewport.y + (viewport.h - height) * current.topRatio;
-				pos.left = viewport.x + (viewport.w - width)  * current.leftRatio;
-			}
-
-			if (F.wrap.css('position') === 'fixed' || current.locked) {
-				pos.top  -= viewport.y;
-				pos.left -= viewport.x;
-			}
-
-			pos = {
-				top     : getValue(pos.top  - hPadding * current.topRatio),
-				left    : getValue(pos.left - wPadding * current.leftRatio),
-				width   : getValue(width  + wPadding),
-				height  : getValue(height + hPadding)
-			};
-
-			return pos;
-		},
-
-		step: function (now, fx) {
-			var ratio,
-				padding,
-				value,
-				prop       = fx.prop,
-				current    = F.current,
-				wrapSpace  = current.wrapSpace,
-				skinSpace  = current.skinSpace;
-
-			if (prop === 'width' || prop === 'height') {
-				ratio = fx.end === fx.start ? 1 : (now - fx.start) / (fx.end - fx.start);
-
-				if (F.isClosing) {
-					ratio = 1 - ratio;
-				}
-
-				padding = prop === 'width' ? current.wPadding : current.hPadding;
-				value   = now - padding;
-
-				F.skin[ prop ](  getScalar( prop === 'width' ?  value : value - (wrapSpace * ratio) ) );
-				F.inner[ prop ]( getScalar( prop === 'width' ?  value : value - (wrapSpace * ratio) - (skinSpace * ratio) ) );
-			}
-		},
-
-		zoomIn: function () {
-			var current  = F.current,
-				startPos = current.pos,
-				effect   = current.openEffect,
-				elastic  = effect === 'elastic',
-				endPos   = $.extend({opacity : 1}, startPos);
-
-			// Remove "position" property that breaks older IE
-			delete endPos.position;
-
-			if (elastic) {
-				startPos = this.getOrigPosition();
-
-				if (current.openOpacity) {
-					startPos.opacity = 0.1;
-				}
-
-			} else if (effect === 'fade') {
-				startPos.opacity = 0.1;
-			}
-
-			F.wrap.css(startPos).animate(endPos, {
-				duration : effect === 'none' ? 0 : current.openSpeed,
-				easing   : current.openEasing,
-				step     : elastic ? this.step : null,
-				complete : F._afterZoomIn
-			});
-		},
-
-		zoomOut: function () {
-			var current  = F.current,
-				effect   = current.closeEffect,
-				elastic  = effect === 'elastic',
-				endPos   = {opacity : 0.1};
-
-			if (elastic) {
-				endPos = this.getOrigPosition();
-
-				if (current.closeOpacity) {
-					endPos.opacity = 0.1;
-				}
-			}
-
-			F.wrap.animate(endPos, {
-				duration : effect === 'none' ? 0 : current.closeSpeed,
-				easing   : current.closeEasing,
-				step     : elastic ? this.step : null,
-				complete : F._afterZoomOut
-			});
-		},
-
-		changeIn: function () {
-			var current   = F.current,
-				effect    = current.nextEffect,
-				startPos  = current.pos,
-				endPos    = { opacity : 1 },
-				direction = F.direction,
-				distance  = 200,
-				field;
-
-			startPos.opacity = 0.1;
-
-			if (effect === 'elastic') {
-				field = direction === 'down' || direction === 'up' ? 'top' : 'left';
-
-				if (direction === 'down' || direction === 'right') {
-					startPos[ field ] = getValue(getScalar(startPos[ field ]) - distance);
-					endPos[ field ]   = '+=' + distance + 'px';
-
-				} else {
-					startPos[ field ] = getValue(getScalar(startPos[ field ]) + distance);
-					endPos[ field ]   = '-=' + distance + 'px';
-				}
-			}
-
-			// Workaround for http://bugs.jquery.com/ticket/12273
-			if (effect === 'none') {
-				F._afterZoomIn();
-
-			} else {
-				F.wrap.css(startPos).animate(endPos, {
-					duration : current.nextSpeed,
-					easing   : current.nextEasing,
-					complete : F._afterZoomIn
-				});
-			}
-		},
-
-		changeOut: function () {
-			var previous  = F.previous,
-				effect    = previous.prevEffect,
-				endPos    = { opacity : 0.1 },
-				direction = F.direction,
-				distance  = 200;
-
-			if (effect === 'elastic') {
-				endPos[ direction === 'down' || direction === 'up' ? 'top' : 'left' ] = ( direction === 'up' || direction === 'left' ? '-' : '+' ) + '=' + distance + 'px';
-			}
-
-			previous.wrap.animate(endPos, {
-				duration : effect === 'none' ? 0 : previous.prevSpeed,
-				easing   : previous.prevEasing,
-				complete : function () {
-					$(this).trigger('onReset').remove();
-				}
-			});
-		}
-	};
-
-	/*
-	 *	Overlay helper
-	 */
-
-	F.helpers.overlay = {
-		defaults : {
-			closeClick : true,      // if true, fancyBox will be closed when user clicks on the overlay
-			speedOut   : 200,       // duration of fadeOut animation
-			showEarly  : true,      // indicates if should be opened immediately or wait until the content is ready
-			css        : {},        // custom CSS properties
-			locked     : !isTouch,  // if true, the content will be locked into overlay
-			fixed      : true       // if false, the overlay CSS position property will not be set to "fixed"
-		},
-
-		overlay : null,      // current handle
-		fixed   : false,     // indicates if the overlay has position "fixed"
-		el      : $('html'), // element that contains "the lock"
-
-		// Public methods
-		create : function(opts) {
-			opts = $.extend({}, this.defaults, opts);
-
-			if (this.overlay) {
-				this.close();
-			}
-
-			this.overlay = $('<div class="fancybox-overlay"></div>').appendTo( F.coming ? F.coming.parent : opts.parent );
-			this.fixed   = false;
-
-			if (opts.fixed && F.defaults.fixed) {
-				this.overlay.addClass('fancybox-overlay-fixed');
-
-				this.fixed = true;
-			}
-		},
-
-		open : function(opts) {
-			var that = this;
-
-			opts = $.extend({}, this.defaults, opts);
-
-			if (this.overlay) {
-				this.overlay.unbind('.overlay').width('auto').height('auto');
-
-			} else {
-				this.create(opts);
-			}
-
-			if (!this.fixed) {
-				W.bind('resize.overlay', $.proxy( this.update, this) );
-
-				this.update();
-			}
-
-			if (opts.closeClick) {
-				this.overlay.bind('click.overlay', function(e) {
-					if ($(e.target).hasClass('fancybox-overlay')) {
-						if (F.isActive) {
-							F.close();
-						} else {
-							that.close();
-						}
-
-						return false;
-					}
-				});
-			}
-
-			this.overlay.css( opts.css ).show();
-		},
-
-		close : function() {
-			var scrollV, scrollH;
-
-			W.unbind('resize.overlay');
-
-			if (this.el.hasClass('fancybox-lock')) {
-				$('.fancybox-margin').removeClass('fancybox-margin');
-
-				scrollV = W.scrollTop();
-				scrollH = W.scrollLeft();
-
-				this.el.removeClass('fancybox-lock');
-
-				W.scrollTop( scrollV ).scrollLeft( scrollH );
-			}
-
-			$('.fancybox-overlay').remove().hide();
-
-			$.extend(this, {
-				overlay : null,
-				fixed   : false
-			});
-		},
-
-		// Private, callbacks
-
-		update : function () {
-			var width = '100%', offsetWidth;
-
-			// Reset width/height so it will not mess
-			this.overlay.width(width).height('100%');
-
-			// jQuery does not return reliable result for IE
-			if (IE) {
-				offsetWidth = Math.max(document.documentElement.offsetWidth, document.body.offsetWidth);
-
-				if (D.width() > offsetWidth) {
-					width = D.width();
-				}
-
-			} else if (D.width() > W.width()) {
-				width = D.width();
-			}
-
-			this.overlay.width(width).height(D.height());
-		},
-
-		// This is where we can manipulate DOM, because later it would cause iframes to reload
-		onReady : function (opts, obj) {
-			var overlay = this.overlay;
-
-			$('.fancybox-overlay').stop(true, true);
-
-			if (!overlay) {
-				this.create(opts);
-			}
-
-			if (opts.locked && this.fixed && obj.fixed) {
-				if (!overlay) {
-					this.margin = D.height() > W.height() ? $('html').css('margin-right').replace("px", "") : false;
-				}
-
-				obj.locked = this.overlay.append( obj.wrap );
-				obj.fixed  = false;
-			}
-
-			if (opts.showEarly === true) {
-				this.beforeShow.apply(this, arguments);
-			}
-		},
-
-		beforeShow : function(opts, obj) {
-			var scrollV, scrollH;
-
-			if (obj.locked) {
-				if (this.margin !== false) {
-					$('*').filter(function(){
-						return ($(this).css('position') === 'fixed' && !$(this).hasClass("fancybox-overlay") && !$(this).hasClass("fancybox-wrap") );
-					}).addClass('fancybox-margin');
-
-					this.el.addClass('fancybox-margin');
-				}
-
-				scrollV = W.scrollTop();
-				scrollH = W.scrollLeft();
-
-				this.el.addClass('fancybox-lock');
-
-				W.scrollTop( scrollV ).scrollLeft( scrollH );
-			}
-
-			this.open(opts);
-		},
-
-		onUpdate : function() {
-			if (!this.fixed) {
-				this.update();
-			}
-		},
-
-		afterClose: function (opts) {
-			// Remove overlay if exists and fancyBox is not opening
-			// (e.g., it is not being open using afterClose callback)
-			//if (this.overlay && !F.isActive) {
-			if (this.overlay && !F.coming) {
-				this.overlay.fadeOut(opts.speedOut, $.proxy( this.close, this ));
-			}
-		}
-	};
-
-	/*
-	 *	Title helper
-	 */
-
-	F.helpers.title = {
-		defaults : {
-			type     : 'float', // 'float', 'inside', 'outside' or 'over',
-			position : 'bottom' // 'top' or 'bottom'
-		},
-
-		beforeShow: function (opts) {
-			var current = F.current,
-				text    = current.title,
-				type    = opts.type,
-				title,
-				target;
-
-			if ($.isFunction(text)) {
-				text = text.call(current.element, current);
-			}
-
-			if (!isString(text) || $.trim(text) === '') {
-				return;
-			}
-
-			title = $('<div class="fancybox-title fancybox-title-' + type + '-wrap">' + text + '</div>');
-
-			switch (type) {
-				case 'inside':
-					target = F.skin;
-				break;
-
-				case 'outside':
-					target = F.wrap;
-				break;
-
-				case 'over':
-					target = F.inner;
-				break;
-
-				default: // 'float'
-					target = F.skin;
-
-					title.appendTo('body');
-
-					if (IE) {
-						title.width( title.width() );
-					}
-
-					title.wrapInner('<span class="child"></span>');
-
-					//Increase bottom margin so this title will also fit into viewport
-					F.current.margin[2] += Math.abs( getScalar(title.css('margin-bottom')) );
-				break;
-			}
-
-			title[ (opts.position === 'top' ? 'prependTo'  : 'appendTo') ](target);
-		}
-	};
-
-	// jQuery plugin initialization
-	$.fn.fancybox = function (options) {
-		var index,
-			that     = $(this),
-			selector = this.selector || '',
-			run      = function(e) {
-				var what = $(this).blur(), idx = index, relType, relVal;
-
-				if (!(e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) && !what.is('.fancybox-wrap')) {
-					relType = options.groupAttr || 'data-fancybox-group';
-					relVal  = what.attr(relType);
-
-					if (!relVal) {
-						relType = 'rel';
-						relVal  = what.get(0)[ relType ];
-					}
-
-					if (relVal && relVal !== '' && relVal !== 'nofollow') {
-						what = selector.length ? $(selector) : that;
-						what = what.filter('[' + relType + '="' + relVal + '"]');
-						idx  = what.index(this);
-					}
-
-					options.index = idx;
-
-					// Stop an event from bubbling if everything is fine
-					if (F.open(what, options) !== false) {
-						e.preventDefault();
-					}
-				}
-			};
-
-		options = options || {};
-		index   = options.index || 0;
-
-		if (!selector || options.live === false) {
-			that.unbind('click.fb-start').bind('click.fb-start', run);
-
-		} else {
-			D.undelegate(selector, 'click.fb-start').delegate(selector + ":not('.fancybox-item, .fancybox-nav')", 'click.fb-start', run);
-		}
-
-		this.filter('[data-fancybox-start=1]').trigger('click');
-
-		return this;
-	};
-
-	// Tests that need a body at doc ready
-	D.ready(function() {
-		var w1, w2;
-
-		if ( $.scrollbarWidth === undefined ) {
-			// http://benalman.com/projects/jquery-misc-plugins/#scrollbarwidth
-			$.scrollbarWidth = function() {
-				var parent = $('<div style="width:50px;height:50px;overflow:auto"><div/></div>').appendTo('body'),
-					child  = parent.children(),
-					width  = child.innerWidth() - child.height( 99 ).innerWidth();
-
-				parent.remove();
-
-				return width;
-			};
-		}
-
-		if ( $.support.fixedPosition === undefined ) {
-			$.support.fixedPosition = (function() {
-				var elem  = $('<div style="position:fixed;top:20px;"></div>').appendTo('body'),
-					fixed = ( elem[0].offsetTop === 20 || elem[0].offsetTop === 15 );
-
-				elem.remove();
-
-				return fixed;
-			}());
-		}
-
-		$.extend(F.defaults, {
-			scrollbarWidth : $.scrollbarWidth(),
-			fixed  : $.support.fixedPosition,
-			parent : $('body')
-		});
-
-		//Get real width of page scroll-bar
-		w1 = $(window).width();
-
-		H.addClass('fancybox-lock-test');
-
-		w2 = $(window).width();
-
-		H.removeClass('fancybox-lock-test');
-
-		$("<style type='text/css'>.fancybox-margin{margin-right:" + (w2 - w1) + "px;}</style>").appendTo("head");
-	});
-
-}(window, document, jQuery));
-
-/*!
- * Media helper for fancyBox
- * version: 1.0.6 (Fri, 14 Jun 2013)
- * @requires fancyBox v2.0 or later
- *
- * Usage:
- *     $(".fancybox").fancybox({
- *         helpers : {
- *             media: true
- *         }
- *     });
- *
- * Set custom URL parameters:
- *     $(".fancybox").fancybox({
- *         helpers : {
- *             media: {
- *                 youtube : {
- *                     params : {
- *                         autoplay : 0
- *                     }
- *                 }
- *             }
- *         }
- *     });
- *
- * Or:
- *     $(".fancybox").fancybox({,
- *         helpers : {
- *             media: true
- *         },
- *         youtube : {
- *             autoplay: 0
- *         }
- *     });
- *
- *  Supports:
- *
- *      Youtube
- *          http://www.youtube.com/watch?v=opj24KnzrWo
- *          http://www.youtube.com/embed/opj24KnzrWo
- *          http://youtu.be/opj24KnzrWo
- *			http://www.youtube-nocookie.com/embed/opj24KnzrWo
- *      Vimeo
- *          http://vimeo.com/40648169
- *          http://vimeo.com/channels/staffpicks/38843628
- *          http://vimeo.com/groups/surrealism/videos/36516384
- *          http://player.vimeo.com/video/45074303
- *      Metacafe
- *          http://www.metacafe.com/watch/7635964/dr_seuss_the_lorax_movie_trailer/
- *          http://www.metacafe.com/watch/7635964/
- *      Dailymotion
- *          http://www.dailymotion.com/video/xoytqh_dr-seuss-the-lorax-premiere_people
- *      Twitvid
- *          http://twitvid.com/QY7MD
- *      Twitpic
- *          http://twitpic.com/7p93st
- *      Instagram
- *          http://instagr.am/p/IejkuUGxQn/
- *          http://instagram.com/p/IejkuUGxQn/
- *      Google maps
- *          http://maps.google.com/maps?q=Eiffel+Tower,+Avenue+Gustave+Eiffel,+Paris,+France&t=h&z=17
- *          http://maps.google.com/?ll=48.857995,2.294297&spn=0.007666,0.021136&t=m&z=16
- *          http://maps.google.com/?ll=48.859463,2.292626&spn=0.000965,0.002642&t=m&z=19&layer=c&cbll=48.859524,2.292532&panoid=YJ0lq28OOy3VT2IqIuVY0g&cbp=12,151.58,,0,-15.56
- */
-(function ($) {
-	"use strict";
-
-	//Shortcut for fancyBox object
-	var F = $.fancybox,
-		format = function( url, rez, params ) {
-			params = params || '';
-
-			if ( $.type( params ) === "object" ) {
-				params = $.param(params, true);
-			}
-
-			$.each(rez, function(key, value) {
-				url = url.replace( '$' + key, value || '' );
-			});
-
-			if (params.length) {
-				url += ( url.indexOf('?') > 0 ? '&' : '?' ) + params;
-			}
-
-			return url;
-		};
-
-	//Add helper object
-	F.helpers.media = {
-		defaults : {
-			youtube : {
-				matcher : /(youtube\.com|youtu\.be|youtube-nocookie\.com)\/(watch\?v=|v\/|u\/|embed\/?)?(videoseries\?list=(.*)|[\w-]{11}|\?listType=(.*)&list=(.*)).*/i,
-				params  : {
-					autoplay    : 1,
-					autohide    : 1,
-					fs          : 1,
-					rel         : 0,
-					hd          : 1,
-					wmode       : 'opaque',
-					enablejsapi : 1
-				},
-				type : 'iframe',
-				url  : '//www.youtube.com/embed/$3'
-			},
-			vimeo : {
-				matcher : /(?:vimeo(?:pro)?.com)\/(?:[^\d]+)?(\d+)(?:.*)/,
-				params  : {
-					autoplay      : 1,
-					hd            : 1,
-					show_title    : 1,
-					show_byline   : 1,
-					show_portrait : 0,
-					fullscreen    : 1
-				},
-				type : 'iframe',
-				url  : '//player.vimeo.com/video/$1'
-			},
-			metacafe : {
-				matcher : /metacafe.com\/(?:watch|fplayer)\/([\w\-]{1,10})/,
-				params  : {
-					autoPlay : 'yes'
-				},
-				type : 'swf',
-				url  : function( rez, params, obj ) {
-					obj.swf.flashVars = 'playerVars=' + $.param( params, true );
-
-					return '//www.metacafe.com/fplayer/' + rez[1] + '/.swf';
-				}
-			},
-			dailymotion : {
-				matcher : /dailymotion.com\/video\/(.*)\/?(.*)/,
-				params  : {
-					additionalInfos : 0,
-					autoStart : 1
-				},
-				type : 'swf',
-				url  : '//www.dailymotion.com/swf/video/$1'
-			},
-			twitvid : {
-				matcher : /twitvid\.com\/([a-zA-Z0-9_\-\?\=]+)/i,
-				params  : {
-					autoplay : 0
-				},
-				type : 'iframe',
-				url  : '//www.twitvid.com/embed.php?guid=$1'
-			},
-			twitpic : {
-				matcher : /twitpic\.com\/(?!(?:place|photos|events)\/)([a-zA-Z0-9\?\=\-]+)/i,
-				type : 'image',
-				url  : '//twitpic.com/show/full/$1/'
-			},
-			instagram : {
-				matcher : /(instagr\.am|instagram\.com)\/p\/([a-zA-Z0-9_\-]+)\/?/i,
-				type : 'image',
-				url  : '//$1/p/$2/media/?size=l'
-			},
-			google_maps : {
-				matcher : /maps\.google\.([a-z]{2,3}(\.[a-z]{2})?)\/(\?ll=|maps\?)(.*)/i,
-				type : 'iframe',
-				url  : function( rez ) {
-					return '//maps.google.' + rez[1] + '/' + rez[3] + '' + rez[4] + '&output=' + (rez[4].indexOf('layer=c') > 0 ? 'svembed' : 'embed');
-				}
-			}
-		},
-
-		beforeLoad : function(opts, obj) {
-			var url   = obj.href || '',
-				type  = false,
-				what,
-				item,
-				rez,
-				params;
-
-			for (what in opts) {
-				if (opts.hasOwnProperty(what)) {
-					item = opts[ what ];
-					rez  = url.match( item.matcher );
-
-					if (rez) {
-						type   = item.type;
-						params = $.extend(true, {}, item.params, obj[ what ] || ($.isPlainObject(opts[ what ]) ? opts[ what ].params : null));
-
-						url = $.type( item.url ) === "function" ? item.url.call( this, rez, params, obj ) : format( item.url, rez, params );
-
-						break;
-					}
-				}
-			}
-
-			if (type) {
-				obj.href = url;
-				obj.type = type;
-
-				obj.autoHeight = false;
-			}
-		}
-	};
-
-}(jQuery));
-
-/**
- * jQuery Unveil
- * A very lightweight jQuery plugin to lazy load images
- * http://luis-almeida.github.com/unveil
- *
- * Licensed under the MIT license.
- * Copyright 2013 Luís Almeida
- * https://github.com/luis-almeida
- */
-
-;(function($) {
-
-  $.fn.unveil = function(threshold, callback) {
-
-    var $w = $(window),
-        th = threshold || 0,
-        retina = window.devicePixelRatio > 1,
-        attrib = retina? "data-src-retina" : "data-src",
-        images = this,
-        loaded;
-
-    this.one("unveil", function() {
-      var source = this.getAttribute(attrib);
-      source = source || this.getAttribute("data-src");
-      if (source) {
-        this.setAttribute("src", source);
-        if (typeof callback === "function") callback.call(this);
-      }
-    });
-
-    function unveil() {
-      var inview = images.filter(function() {
-        var $e = $(this);
-        if ($e.is(":hidden")) return;
-
-        var wt = $w.scrollTop(),
-            wb = wt + $w.height(),
-            et = $e.offset().top,
-            eb = et + $e.height();
-
-        return eb >= wt - th && et <= wb + th;
-      });
-
-      loaded = inview.trigger("unveil");
-      images = images.not(loaded);
-    }
-
-    $w.scroll(unveil);
-    $w.resize(unveil);
-
-    unveil();
-
-    return this;
-
-  };
-
-})(window.jQuery || window.Zepto);
-
-
+//= ../../../bower_components/fancybox/source/jquery.fancybox.js
+//= ../../../bower_components/fancybox/source/helpers/jquery.fancybox-media.js
+//= ../../../bower_components/unveil/jquery.unveil.js
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
@@ -23894,67 +21696,89 @@ return jQuery;
 
 
 
-//     var check_submit = false;
-//     var this_form = $('#donation_form');
-//     var donation_amount = $('#donation-amount').val();
-//     var handler = StripeCheckout.configure({
-//         key: $('meta[name="stripe-key"]').attr('content'),
-//         image: '/img/ag-logo-stripe.png',
-//         token: function(token, args) {
+//= require https://checkout.stripe.com/checkout.js
 
-//             check_submit = true;
-
-//             $('#donation_submit').text('Proccessing').prop('disabled', true);
-
-//             // Use the token to create the charge with a server-side script.
-//             $('<input>', {
-//                 type: 'hidden',
-//                 name: 'email',
-//                 value: token.card.name
-//             }).appendTo(this_form);
-
-//             $('<input>', {
-//                 type: 'hidden',
-//                 name: 'stripe_token',
-//                 value: token.id
-//             }).appendTo(this_form);
-
-//             $('<input>', {
-//                 type: 'hidden',
-//                 name: 'stripe_data',
-//                 value: token.card.type+','+token.card.last4+','+token.card.exp_month+','+token.card.exp_year
-//             }).appendTo(this_form);
-
-//             this_form.submit();
-
-//         },
-//         opened: function() {
-//             $('#donation_submit').text('Proccessing').prop('disabled', true);
-//         },
-//         closed: function() {
-//             if(check_submit === false) $('#donation_submit').text('Make Donation').prop('disabled', false);
-//         }
-//     });
-
-//     (function() {
-//       document.getElementById('donation_submit').addEventListener('click', function(e) {
-
-//         // Open Checkout with further options
-//         handler.open({
-//           name: 'Alternitive Gaming Australia',
-//           description: 'Donation',
-//           amount: donation_amount * 100,
-//           currency: 'AUD',
-//           panelLabel: 'Donate',
-//         });
-//         e.preventDefault();
-//       });
-//     })();
-
-// var steam_id_valid = false;
-
-$( "#steam_id" ).blur(function() 
+var mapDroplist = function(url)
 {
+	$('.map-filter').on('change', function(e)
+	{
+		var loc = '';
+
+		if ($(this).val().length > 0) 
+			loc = '?type=' + $(this).val();
+
+		window.location.href = url + loc;
+	});
+};
+
+
+
+function donationPayment() {
+
+  var check_submit 		= false;
+  var this_form 			= $('#donation_form');
+  var donation_amount = $('#donation-amount').val();
+  var handler 				= StripeCheckout.configure({
+
+    key: $('meta[name="stripe-key"]').attr('content'),
+    image: '/img/ag-logo-stripe.png',
+    token: function(token, args) {
+
+        check_submit = true;
+
+        $('#donation_submit').text('Proccessing').prop('disabled', true);
+
+        // Use the token to create the charge with a server-side script.
+        $('<input>', {
+            type: 'hidden',
+            name: 'email',
+            value: token.card.name
+        }).appendTo(this_form);
+
+        $('<input>', {
+            type: 'hidden',
+            name: 'stripe_token',
+            value: token.id
+        }).appendTo(this_form);
+
+        $('<input>', {
+            type: 'hidden',
+            name: 'stripe_data',
+            value: token.card.type+','+token.card.last4+','+token.card.exp_month+','+token.card.exp_year
+        }).appendTo(this_form);
+
+        this_form.submit();
+
+    },
+    opened: function() {
+       $('#donation_submit').text('Proccessing').prop('disabled', true);
+    },
+    closed: function() {
+      if(check_submit === false) {
+      	$('#donation_submit').text('Make Donation').prop('disabled', false);
+      }
+    }
+  });
+
+  (function() {
+  	$('donation_submit').on('click', function(e){
+  		// Open Checkout with further options
+      handler.open({
+        name: 'Alternitive Gaming Australia',
+        description: 'Donation',
+        amount: donation_amount * 100,
+        currency: 'AUD',
+        panelLabel: 'Donate',
+      });
+      e.preventDefault();
+  	});
+
+  })();
+
+	var steam_id_valid = false;
+
+	$( "#steam_id" ).blur(function() {
+
     var this_form = $('#donation_form');
 
     if(steam_id_valid) return false;
@@ -23964,41 +21788,48 @@ $( "#steam_id" ).blur(function()
 
     $.getJSON( "/check-steamid/"+$(this).val(), function( json ) {
 
-        if(typeof(json.steam_url) != "undefined")
-        {
-            steam_id_valid = true;
-            steam_input.css('background-color', 'green');
+      if(typeof(json.steam_url) !== "undefined")
+      {
+        steam_id_valid = true;
+        steam_input.css('background-color', 'green');
 
-            $( "#steam_id_valid" ).append( '<img src="'+ json.steam_image +'"><strong>'+ json.steam_nickname +'</strong><br>' + json.steam_id  );
+        $( "#steam_id_valid" ).append( '<img src="'+ json.steam_image +'"><strong>'+ json.steam_nickname +'</strong><br>' + json.steam_id  );
 
-            $('<input>', { type: 'hidden', name: 'steam_image', value: json.steam_image }).appendTo(this_form);
-            $('<input>', { type: 'hidden', name: 'steam_nickname', value: json.steam_nickname }).appendTo(this_form);
-            $('<input>', { type: 'hidden', name: 'steam_id', value: json.steam_id }).appendTo(this_form);
-            $('<input>', { type: 'hidden', name: 'steam_64id', value: json.steam_64id }).appendTo(this_form);
-            $('<input>', { type: 'hidden', name: 'steam_url', value: json.steam_url }).appendTo(this_form);
-        }
-        else
-        {
-            steam_input.css('background-color', 'yellow');
-        }
+        $('<input>', { type: 'hidden', name: 'steam_image', value: json.steam_image }).appendTo(this_form);
+        $('<input>', { type: 'hidden', name: 'steam_nickname', value: json.steam_nickname }).appendTo(this_form);
+        $('<input>', { type: 'hidden', name: 'steam_id', value: json.steam_id }).appendTo(this_form);
+        $('<input>', { type: 'hidden', name: 'steam_64id', value: json.steam_64id }).appendTo(this_form);
+        $('<input>', { type: 'hidden', name: 'steam_url', value: json.steam_url }).appendTo(this_form);
+      }
+      else
+      {
+         steam_input.css('background-color', 'yellow');
+      }
     });
-});
+	});
+}
 
 $(document).ready(function() {
-	$(".fancybox").fancybox({
-		width: 1280,
-		height: 720,
-		helpers : {
-			media: true,
-			overlay: {
-				locked: false
-			}
-		},
-		youtube : {
-			autoplay: 1
-		}
-	});
+	// $(".fancybox").fancybox({
+	// 	width: 1280,
+	// 	height: 720,
+	// 	helpers : {
+	// 		media: true,
+	// 		overlay: {
+	// 			locked: false
+	// 		}
+	// 	},
+	// 	youtube : {
+	// 		autoplay: 1
+	// 	}
+	// });
 
-	$("img.unveil").unveil(100);
+	//$("img.unveil").unveil(100);
+
+   mapDroplist('/maps');
+
+   if($('#donation_form').length) {
+   	donationPayment();
+   }
 });
 

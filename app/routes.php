@@ -82,11 +82,13 @@ Route::get('players', function()
 	//var_dump($players);
 });
 
-Route::get('get-bans', 'BanController@pull_bans');
+Route::get('bans', 'BansController@index_public');
+
+Route::get('get-bans', 'BansController@pull_bans');
 
 Route::get('update-quarter', 'DonationController@update_quarter');
 
-Route::get('check-steamid/{id}', 'ServerController@getID');
+Route::get('check-steamid/{id}', 'PlayersController@validateIdAjax');
 
 Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
 
@@ -105,6 +107,7 @@ Route::get('/', ['as' => 'home', function()
 //Route::resource('sessions', 'SessionsController');
 
 Route::get('news', 'PostController@index_public');
+Route::get('news/json/{id}', 'PostController@comments_plugin');
 Route::get('news/{slug}', 'PostController@show');
 
 Route::get('maps', 'MapController@index_public');
@@ -135,6 +138,8 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 		return View::make('admin.index');
 	});
 
+	Route::post('store-player', 'PlayersController@store');
+
 	Route::get('donations','DonationController@index');
 
 	Route::get( 'user/create','UserController@create');
@@ -147,6 +152,8 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	Route::resource('maps/configs', 'MapConfigController');
 	Route::resource('maps', 'MapController');
 	Route::resource('map-files', 'MapFileController');
+	Route::resource('players', 'PlayersController');
+	Route::resource('bans', 'BansController');
 
 
 

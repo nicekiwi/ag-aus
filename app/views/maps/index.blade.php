@@ -10,7 +10,7 @@
 </ul>
 
 
-	<select class="form-control">
+	<select class="form-control map-filter">
 		<option value="all">All ({{ $map_total }})</option>
 		@foreach($map_types as $type)
 		@if($type->maps->count() > 0)

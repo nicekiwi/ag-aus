@@ -109,7 +109,7 @@ return array(
 
         // Custom
 		'Aws\Laravel\AwsServiceProvider',
-		'Acme\Providers\DonationsServiceProvider',
+		'Quelle\Providers\DonationsServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'VTalbot\Markdown\MarkdownServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',

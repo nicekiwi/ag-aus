@@ -1,6 +1,8 @@
 <?php
 
-class DonationController extends BaseController {
+class DonationController extends BaseController 
+{
+
 
 	/*
 	|--------------------------------------------------------------------------
@@ -183,7 +185,7 @@ class DonationController extends BaseController {
 
 	public function charge_card()
 	{
-		$donations = App::make('Acme\Donations\DonationsInterface');
+		$donations = App::make('Quelle\Donations\DonationsInterface');
 	
 		try 
 		{
@@ -222,64 +224,119 @@ class DonationController extends BaseController {
 	public function saveDonation()
 	{
 		$input = Input::all();
-		$cc_info = explode(',', $input['stripe_data']);
+		$credit_card = explode(',', $input['stripe_data']);
 
-		// Use Validation to check if donator has dontated before
-		$validator = Validator::make($input, ['email' => 'required|email|unique:donators']);
-
-		// If donator already exists, get their ID
-		if ( $validator->fails() )
-		{
-			$id = Donator::where('email', $input['email'])->pluck('id');
-		}
-		else
-		{
-			// Save new donator to donators table and get their ID
-			$donator = new Donator;
-
-			if(Input::has('steam_id'))
-				$donator->steam_id = $input['steam_id'];
-
-			if(Input::has('steam_64id'))
-				$donator->steam_64id = $input['steam_64id'];
-
-			if(Input::has('steam_url'))
-				$donator->steam_url = $input['steam_url'];
-
-			if(Input::has('steam_nickname'))
-				$donator->steam_nickname = $input['steam_nickname'];
-
-			if(Input::has('steam_image'))
-				$donator->steam_image = $input['steam_image'];
-
-			$donator->email = $input['email'];
-			$donator->card_token = $input['stripe_token'];
-			$donator->card_type = $cc_info[0];
-			$donator->card_last4 = $cc_info[1];
-			$donator->card_month = $cc_info[2];
-			$donator->card_year = $cc_info[3];
-			$donator->save();
-
-			$id = $donator->id;
-		}
-
-		// Save donation details to donnations table with donator's ID.
+		// Save donation details to donnations table with player's ID.
 		$donation = new Donation;
-		$donation->donator_id = $id;
 		$donation->amount = $input['amount'];
+		$donation->currency = 'AUD';
+
+		$donation->email = $input['email'];
+		$donation->card_token = $input['stripe_token'];
+		$donation->card_type = $credit_card[0];
+		$donation->card_last4 = $credit_card[1];
+		$donation->card_month = $credit_card[2];
+		$donation->card_year = $credit_card[3];
 
 		// Get latest quter Object
 		$quarter = DonationQuarter::orderBy('id','desc')->first();
 		$donation->quarter_id = $quarter->id;
 
+		if(Input::has('steam_id'))
+		{
+			// Use Validation to check if player has dontated before
+			$validator = Validator::make($input, ['steam_id' => 'required|unique:players']);
+
+			// If player already exists, get their ID
+			if ( $validator->fails() )
+			{
+				$existing_player = Player::where('steam_id', $input['steam_id'])->first();
+				$donation->player_id = $existing_player->id;
+
+				// Update the nickname if different from previously saved one.
+				if(Input::has('steam_nickname') && $input['steam_nickname'] !== $existing_player->steam_nickname)
+				{
+					$existing_player->steam_nickname = $input['steam_nickname'];
+					$existing_player->save();
+				}
+			}
+			else
+			{
+				// Save new player to players table and get their ID
+				$player = new Player;
+
+				$player->steam_id = $input['steam_id'];
+
+				if(Input::has('steam_64id'))
+					$player->steam_64id = $input['steam_64id'];
+
+				if(Input::has('steam_url'))
+					$player->steam_url = $input['steam_url'];
+
+				if(Input::has('steam_nickname'))
+					$player->steam_nickname = $input['steam_nickname'];
+
+				if(Input::has('steam_image'))
+					$player->steam_image = $input['steam_image'];
+
+				$player->save();
+				$donation->player_id = $player->id;
+			}
+		}
+
+		// Save donation
 		$donation->save();
 
+		// Update quarter
 		$this->update_quarter();
 
-		$message = 'Charge of $' . $input['amount'] . 'AUD to **** **** **** ' . $cc_info[1] . ', Exp ' . $cc_info[2] . '/' . $cc_info[3] . ' was successful, ';
+		// Write Donations to the server.
+		$this->writeDonators();
 
-		return View::make('donate.public')->with('success_message', $message);
+		//$message = 'Charge of $' . $donation->amount . 'AUD to **** **** **** ' . $donation->card_last4 . ', Exp ' . $donation->card_month . '/' . $donation->card_year . ' was successful, ';
 
-		//return 'Charge of $' . $input['amount'] . 'AUD to **** **** **** ' . $cc_info[1] . ', Exp ' . $cc_info[2] . '/' . $cc_info[3] . ' was successful, ';
+		$message = '<b>Donation Successful</b>, thanks for the support! You have been emailed a confirmation and if you donated more than $12 your ingame perks will take effect next time the map chnages on the server.';
+
+		return Redirect::to('/donate')->with('success_message', $message);
+	}
+
+	private function writeDonators()
+	{
+		$donators = Player::where('donation_expires','>', strtotime('today'))->get();
+
+		if($donators->count() > 0)
+		{
+			// New Line Break
+			$n 	= "\n";
+			// New Tab space
+			$t 	= "\t";
+
+			// Start content as empty
+			$sprite = '';
+			$admins = '';
+			
+			foreach ($donators as $donator)
+			{
+				$admins .= '{' . $n;
+				$admins .= $t . '// ' . $donator->steam_nickname . $n;
+				$admins .= $t . '// Expires ' . date('d/m/Y', strtotime($donator->donation_expires)) . $n;
+				$admins .= $t . $donator->steam_id . $n;
+				$admins .= '}' . $n . $n;
+
+				$sprite .= '//' . $donator->steam_nickname . $n;
+				$sprite .= '// Expires ' . date('d/m/Y', strtotime($donator->donation_expires)) . $n;
+				$sprite .= $donator->steam_id . $n;
+			}
+
+			// Setup file paths
+			$filePath = 'quelle/remote-configs/donators/';
+			$spritePath = 'donators.txt';
+			$adminsPath = 'admins.txt';
+
+			// Write contents
+			$contents = SSH::into('pantheon')->getString($remotePath);
+
+			return;
+		}
 	}
 }

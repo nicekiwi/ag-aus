@@ -50,6 +50,11 @@ class UsersTableSeeder extends Seeder {
 		$manageUsers->display_name = 'Manage Users';
 		$manageUsers->save();
 
+		$runJukebox = new Permission;
+		$runJukebox->name = 'run_jukebox';
+		$runJukebox->display_name = 'Run Jukebox';
+		$runJukebox->save();
+
 		$readVariables = new Permission;
 		$readVariables->name = 'read_config_variable';
 		$readVariables->display_name = 'Read Config Variables';
@@ -62,6 +67,7 @@ class UsersTableSeeder extends Seeder {
 
 		// Add Permissions to Roles
 		$owner->perms()->sync([
+			$runJukebox->id,
 			$manageConfigs->id,
 			$manageUsers->id,
 			$manageMaps->id,
@@ -73,6 +79,7 @@ class UsersTableSeeder extends Seeder {
 		]);
 
 		$admin->perms()->sync([
+			$runJukebox->id,
 			$manageConfigs->id,
 			$manageMaps->id,
 			$managePosts->id,
@@ -82,6 +89,7 @@ class UsersTableSeeder extends Seeder {
 		]);
 
 		$mod->perms()->sync([
+			$runJukebox->id,
 			$manageConfigs->id,
 			$manageMaps->id,
 			$manageBans->id,

@@ -7,21 +7,10 @@ class Donation extends Eloquent
 	 *
 	 * @var string
 	 */
-	protected $table = 'donations';
 
-	public function donator()
+	public function player()
     {
-        return $this->belongsTo('Donator');
+        return $this->belongsTo('Player');
     }
-
-	public function getDonations()
-	{
-		return DB::table('donations')->get();
-	}
-
-	public function saveDonator()
-	{
-
-	}
 
 }

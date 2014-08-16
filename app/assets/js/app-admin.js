@@ -10,6 +10,22 @@
 //= include ../../../bower_components/blueimp-file-upload/js/jquery.fileupload.js
 //= include ../../../bower_components/datatables/media/js/jquery.dataTables.js
 
+//= include ../../../bower_components/jquery-sortable/source/js/jquery-sortable-min.js
+
+//= include ./shared.js
+
+
 $(document).ready(function() {
-	//meow	
+	mapDroplist('/admin/maps');	
+
+	$( "#map-config-form" ).on( "submit", function( event ) {
+		event.preventDefault();
+
+		$( '#map-config-list' ).filter('li').each(function(index)
+		{
+			console.log($(this).prop('data-id') + index);
+		});
+
+		//console.log( $( this ).serializeArray() );
+	});
 });

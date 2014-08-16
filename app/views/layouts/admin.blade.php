@@ -46,6 +46,9 @@
               @if(Auth::user()->can("manage_posts"))
               <li><a href="/admin/posts">Posts</a></li>
               @endif
+              @if(Auth::user()->can("run_jukebox"))
+              <li><a href="/admin/jukebox">Jukebox</a></li>
+              @endif
               @if(Auth::user()->can("manage_bans"))
               <li><a href="/admin/bans">Bans</a></li>
               @endif

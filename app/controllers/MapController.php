@@ -99,7 +99,7 @@ class MapController extends BaseController {
 
         //dd($response['Contents']);
 
-        foreach ($response['Contents'] as $map) 
+        foreach ($map_list as $map) 
         {
         	// Make sure Object is a valid file (Objects of size 0 are folders)
         	if($map['Size'] > 0)

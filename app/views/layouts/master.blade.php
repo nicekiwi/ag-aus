@@ -71,6 +71,7 @@
       </section>
       
     </div>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="/js/app.js"></script>
     @yield('footer')
   </body>

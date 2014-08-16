@@ -37,6 +37,14 @@ class PostController extends BaseController {
         return View::make('posts.create')->with('map_list',$map_list);
 	}
 
+	public function comments_plugin($id)
+	{//
+		//if(Request::ajax())
+		//{
+			return Post::find($id)->toJson();
+		//}
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *

@@ -23,7 +23,9 @@ class MapConfigController extends \BaseController {
 	 */
 	public function create()
 	{
-		//
+		$maps = Map::all();
+
+		return View::make('map-configs.create')->with(compact('maps'));
 	}
 
 	/**

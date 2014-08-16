@@ -29,6 +29,14 @@ class UserController extends BaseController {
         return View::make('users.create')->with(['roles'=>$roles]);//Config::get('confide::signup_form'));
     }
 
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::all()->lists('name','id');
+
+        return View::make('users.create')->with(['roles'=>$roles,'user'=>$user,'edit'=>1]);//Config::get('confide::signup_form'));
+    }
+
     /**
      * Stores new account
      *
@@ -36,6 +44,45 @@ class UserController extends BaseController {
     public function store()
     {
         $user = new User;
+
+        $user->username = Input::get( 'username' );
+        $user->email = Input::get( 'email' );
+        $user->password = Input::get( 'password' );
+
+        // The password confirmation will be removed from model
+        // before saving. This field will be used in Ardent's
+        // auto validation.
+        $user->password_confirmation = Input::get( 'password_confirmation' );
+
+        // Save if valid. Password field will be hashed before save
+        $user->save();
+
+        if ( $user->id )
+        {
+            $notice = Lang::get('confide::confide.alerts.account_created') . ' ' . Lang::get('confide::confide.alerts.instructions_sent'); 
+                    
+            // Redirect with success message, You may replace "Lang::get(..." for your custom message.
+            return Redirect::action('UserController@login')
+                ->with( 'success_message', $notice );
+        }
+        else
+        {
+            // Get validation errors (see Ardent package)
+            $error = $user->errors()->all(':message');
+
+            return Redirect::action('UserController@create')
+                ->withInput(Input::except('password'))
+                ->with( 'error_message', $error );
+        }
+    }
+
+    /**
+     * Stores new account
+     *
+     */
+    public function update($id)
+    {
+        $user = User::findOrFail($id);
 
         $user->username = Input::get( 'username' );
         $user->email = Input::get( 'email' );
@@ -233,6 +280,29 @@ class UserController extends BaseController {
         Confide::logout();
         
         return Redirect::to('/login');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        //Users should not be able to delete themselves
+        if(Auth::user()->id === $id){
+            Session::flash('error_message', 'You cannot delete youself.');
+            return Redirect::to('admin/users');
+        }
+
+        // If user is the last owner, they cannot be deleted
+        if($user->hasRole('Owner') && Role::find(1)->users()->count() === 1){
+            Session::flash('error_message', 'There must always be one Owner user.');
+            return Redirect::to('admin/users');
+        }
+
+        $user->delete();
+
+        // redirect
+        Session::flash('success_message', 'Successfully deleted the post!');
+        return Redirect::to('admin/users');
     }
 
 }

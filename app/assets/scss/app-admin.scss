@@ -39,3 +39,51 @@
     height: 100%;
   }
 }
+
+.available-maps-list {
+  padding: 0; margin: 15px 0 0 0;
+  list-style: none;
+  height: 400px;
+  overflow: auto;
+  box-shadow: 0 0 3px #ccc;
+}
+
+.available-maps-list li {
+  padding: 5px 15px;
+}
+
+.map-config-list {
+  padding: 0;
+  list-style: none;
+}
+
+.map-config-list li {
+  padding: 5px 15px;
+  background-color: #ccc;
+  min-height: 30px;
+}
+
+.map-config-list-header span {
+  width: 20%;
+  display: block;
+  float: left;
+  text-align: center;
+}
+
+.map-config-list-header span:nth-child(1) {
+  width: 40%;
+  text-align: left;
+}
+
+.map-config-list li span {
+  width: 40%;
+  display: block;
+  float: left;
+}
+
+.map-config-list li input {
+  width: 20%;
+  display: block;
+  float: left;
+  margin: 0 auto;
+}

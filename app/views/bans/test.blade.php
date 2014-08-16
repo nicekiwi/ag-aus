@@ -22,10 +22,18 @@ $(document).ready(function()
     {
         var banLine = $(this);
 
-        $.getJSON( "/check-steamid/"+banLine.text(), function( json ) 
-        {
-            banLine.append( '<img src="'+ json.steam_image +'"><strong>'+ json.steam_nickname +'</strong><br>' + json.steam_64id  );
+        $.ajax({
+          type: "POST",
+          url: '/admin/store-player',
+          data: {
+            id: banLine.text()
+          }
         });
+
+        // $.getJSON( "/admin/store-player/"+banLine.text(), function( json ) 
+        // {
+        //     //banLine.append( '<img src="'+ json.steam_image +'"><strong>'+ json.steam_nickname +'</strong><br>' + json.steam_64id  );
+        // });
     });
 });
     

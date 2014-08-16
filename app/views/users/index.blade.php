@@ -2,6 +2,11 @@
 
 @section('content')
 
+<ol class="breadcrumb">
+  <li><a href="/admin">Admin</a></li>
+  <li class="active">Users</li>
+</ol>
+
 <div class="row">
 	<div class="small-12 columns">
 
@@ -22,7 +27,7 @@
 			<tbody>
 				@foreach($users as $user)
 				<tr>
-					<td>{{ $user->role->name }}</td>
+					<td>{{ $user->roles->first()->name }}</td>
 					<td>{{ $user->username }}</td>
 					<td><a href="/admin/users/{{ $user->id }}/edit">{{ $user->email }}</a></td>
 					<td>

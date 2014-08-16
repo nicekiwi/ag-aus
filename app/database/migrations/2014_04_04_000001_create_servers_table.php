@@ -23,6 +23,7 @@ class CreateServersTable extends Migration {
 			$table->text('vanilla_name');
 			$table->string('ip');
 			$table->string('port');
+			$table->string('rcon_password');
 			$table->integer('order');
 
 			$table->integer('maxPlayers');

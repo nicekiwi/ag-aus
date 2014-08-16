@@ -4,7 +4,7 @@
 
 <h2>Alternative Gaming Donation Receipt</h2>
 
-<p>You donated: {{ $data->amount }}</p>
+<p>You donated: ${{ $data->amount }} {{ $data->currency }}.</p>
 
 <p>Hey,</p>
 <p>Cheers for your donation, from this creditcard:</p>

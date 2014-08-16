@@ -69,7 +69,7 @@ return [
      */
 
     'imagemagick' => [
-        'path' => '/usr/local/bin',
+        'path' => '/usr/bin',
         'bin'  => 'convert',
     ],
 

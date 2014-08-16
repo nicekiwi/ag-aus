@@ -4,17 +4,19 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.1.*",
+		"laravel/framework": "4.2.*",
 		"koraktor/steam-condenser": "dev-psr-0",
 		"aws/aws-sdk-php-laravel": "1.*",
 		"stripe/stripe-php": "v1.9.0",
 		"way/generators": "dev-master",
 		"vtalbot/markdown": "1.*",
 		"thomaswelton/laravel-gravatar": "dev-master",
-		"zizaco/entrust": "dev-master",
-		"zizaco/confide": "3.2.x",
+		"zizaco/entrust": "1.2.x",
+		"zizaco/confide": "4.0.0-rc.2",
 		"laravelbook/ardent": "dev-master",
-		"thapp/jitimage": "dev-master"
+		"thapp/jitimage": "dev-master",
+		"jyc/rcon": "dev-default",
+		"pda/pheanstalk": "3.0.*"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "v1.2.0"
@@ -29,7 +31,7 @@
 			"app/tests/TestCase.php"
 		],
 		"psr-0": {
-			"Acme": "app/"
+			"Quelle": "app/"
 		}
 	},
 

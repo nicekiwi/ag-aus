@@ -36,7 +36,7 @@ class CreateDonationsTable extends Migration {
 			$table->integer('quarter_id')->unsigned()->index();
 			$table->foreign('quarter_id')->references('id')->on('donation_quarters');
 
-			$table->integer('player_id')->unsigned()->index();
+			$table->integer('player_id')->unsigned()->index()->nullable();
 			$table->foreign('player_id')->references('id')->on('players');
 
 			$table->string('email');

@@ -61,7 +61,7 @@
     <div class="col-sm-12">
         
         @foreach($donations as $donation)
-        <div class="col-md-3"><img src="/images/avatar/{{ urlencode($donation->donator->steam_image) }}"> {{ $donation->donator->steam_nickname }}</div>
+        <div class="col-md-3"><img src="/images/avatar/{{ urlencode($donation->player->steam_image) }}"> {{ $donation->player->steam_nickname }}</div>
         @endforeach
 
     </div>
@@ -73,13 +73,5 @@
 @stop
 
 @section('footer')
-
-<script src="https://checkout.stripe.com/checkout.js"></script>
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-<script>
-
-
-    
-</script>
 
 @stop
