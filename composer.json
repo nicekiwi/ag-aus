@@ -8,7 +8,7 @@
 		"koraktor/steam-condenser": "dev-psr-0",
 		"aws/aws-sdk-php-laravel": "1.*",
 		"stripe/stripe-php": "v1.9.0",
-		"way/generators": "dev-master",
+		"way/generators": "3",
 		"vtalbot/markdown": "1.*",
 		"thomaswelton/laravel-gravatar": "dev-master",
 		"zizaco/entrust": "1.2.x",

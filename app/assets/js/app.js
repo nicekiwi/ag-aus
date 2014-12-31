@@ -13,6 +13,7 @@
 //= require https://checkout.stripe.com/checkout.js
 
 //= include ./shared.js
+//
 
 
 function donationPayment() {
