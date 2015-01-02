@@ -1,0 +1,29 @@
+@include declare-font-face('AllerRegular', 'aller_rg-webfont');
+@include declare-font-face('TF2Build', 'tf2build-webfont');
+@include declare-font-face('TF2Secondary', 'tf2secondary-webfont');
+
+body {
+
+	background: transparent url('/img/splash-gran-house.jpg') no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+
+}
+
+h1, h2, h3 {
+	margin-top: 0;
+}
+
+.content-shade {
+
+	color: #fff;
+	background-color: rgba(0,0,0,0.7);
+	padding: 20px;
+	border: 1px solid rgba(0,0,0,0.7);
+	border-radius: 4px;
+	float: left;
+
+}
+

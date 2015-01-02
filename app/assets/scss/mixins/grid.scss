@@ -1,0 +1,23 @@
+// Grid system
+//
+// Generate semantic grid columns with these mixins.
+
+// Generate the small columns
+@mixin make-column($columns, $gutter: $grid-gutter-width) {
+  position: relative;
+  min-height: 1px;
+  padding-left:  ($gutter / 2);
+  padding-right: ($gutter / 2);
+
+  float: left;
+  width: percentage(($columns / $grid-columns));
+}
+@mixin make-col-offset($columns) {
+  margin-left: percentage(($columns / $grid-columns));
+}
+@mixin make-col-push($columns) {
+  left: percentage(($columns / $grid-columns));
+}
+@mixin make-col-pull($columns) {
+  right: percentage(($columns / $grid-columns));
+}

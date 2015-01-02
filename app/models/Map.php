@@ -58,5 +58,25 @@ class Map extends Ardent
         return $this->belongsTo('User', 'created_by');
     }
 
+    public function feedback()
+    {
+    	return $this->hasMany('MapFeedback');
+    }
+
+    // public function voteUp()
+    // {
+    // 	$this->where()
+    // }
+
+    // public function voteDown()
+    // {
+    	
+    // }
+
+    // public function voteBroken()
+    // {
+    	
+    // }
+
 
 }

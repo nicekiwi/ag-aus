@@ -1,0 +1,11 @@
+body.homepage {
+
+	section.welcome {
+		@include make-xs-column(12);
+	}
+
+	section.about-us {
+		@include make-xs-column(12);
+	}
+
+}

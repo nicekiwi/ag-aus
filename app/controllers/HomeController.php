@@ -2,6 +2,8 @@
 
 class HomeController extends BaseController {
 
+	protected $layout = 'layouts.master';
+
 	/*
 	|--------------------------------------------------------------------------
 	| Default Home Controller
@@ -15,9 +17,11 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
+	public function index_public()
 	{
-		return View::make('hello');
+		// Return donate with quarter data
+		$this->layout->bodyClass = 'homepage';
+		$this->layout->content = View::make('index');
 	}
 
 }

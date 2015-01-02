@@ -1,0 +1,31 @@
+body.donations-page {
+
+
+	
+	.donor {
+		min-height: 40px;
+		float: left;
+		padding: 15px;
+		@include font-size(1.2);
+	}
+
+	.donor-perks {
+
+		//list-style-type: none;
+		padding-left: 15px;
+
+		li {
+
+			margin-bottom: 5px;
+
+			small {
+				color: yellow;
+				margin-left: 5px;
+			}
+		}
+
+	}
+
+
+
+}

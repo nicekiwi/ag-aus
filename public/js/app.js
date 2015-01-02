@@ -21809,6 +21809,8 @@ function donationPayment() {
 }
 
 $(document).ready(function() {
+
+  var bod = $( document.body );
 	// $(".fancybox").fancybox({
 	// 	width: 1280,
 	// 	height: 720,
@@ -21827,8 +21829,7 @@ $(document).ready(function() {
 
    mapDroplist('/maps');
 
-   if($('#donation_form').length) {
+   if(bod.hasClass('donations-page')) {
    	donationPayment();
    }
 });
-

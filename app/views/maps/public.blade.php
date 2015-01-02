@@ -2,40 +2,61 @@
 
 @section('content')
 
+<section class="content-shade">
+
 <h1>Maps</h1>
 
-<ul style="list-style:none;">
+@if(Session::has('public-auth-true') && Session::has('player'))
+
+	<p><img src="/images/avatar/{{ (Session::get('player')->steam_image ? urlencode(Session::get('player')->steam_image) : urlencode('http://ag-aus.app/img/anonnymous.jpg') ) }}"> {{ Session::get('player')->steam_nickname }}</p>
+
+	<p>Yay you're logged in. <a href="/maps/logout">Logout</a></p>
+@else
+	<p><a href="{{ SteamLogin::url(Config::get('steam.login')) }}">Login via Steam!</a></p>
+@endif
+
+
+
+<ul class="maps-list">
 @if(count($maps) > 0)
 @foreach($maps as $map)
 	<li class="col-sm-4">
-		<img style="width:100%;max-height:189px;" src="/img/mapthumbs/{{ substr($map->filename,0,-8) }}.jpg" />
-		<h4>{{ $map->name }} <small>{{ $map->revision }}</small></h4>
-		<!-- <td><a href="/maps/{{ $map->slug }}">{{ $map->name }} {{ $map->revision }}</a></td> -->
-		<td>
-			{{ $map->filename }}
-			@if($map->mapFiles->count() > 0)
-			@foreach($map->mapFiles as $file)
-			<span class="label label-primary" style="text-transform:uppercase;">{{ $file->filetype }}</span>
-			@endforeach
-			@endif
-		</td>
 
-		<!-- <td><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i></td> -->
-
-		@if ($map->filesize >= 1048576)
-	        <td>{{ number_format($map->filesize / 1048576, 2) . ' MB' }}</td>
-	    @elseif ($map->filesize >= 1024)
-	        <td>{{ number_format($map->filesize / 1024, 2) . ' KB' }}</td>
-	    @endif
+		<div class="map-thumbnail">
+			<a target="_blank" href="https://s3-ap-southeast-2.amazonaws.com/alternative-gaming/{{ $map->s3_path }}">
+				<span class="download-link"><i class="fa fa-cloud-download"></i><br>Download</span>
+				@if($map->images)
+					<img src="/images/mapthumbnail/{{ $map->images }}" />
+				@else
+					<img src="/images/mapthumbnail/{{ urlencode(url('/img/no-thumb.png')) }}" />
+				@endif
+				
+			</a>
+		</div>
 		
-		<!-- <td>{{ $map->created_at->diffForHumans() }}</td> -->
-		<td><a target="_blank" href="https://s3-ap-southeast-2.amazonaws.com/alternative-gaming/{{ $map->s3_path }}"><i class="fa fa-cloud-download fa-lg"></i> Download</a></td>
+		<div class="map-desc">
+
+			@if ($map->filesize >= 1048576)
+		        <p>{{ substr($map->filename, 0, -8) }}<br><small>{{ number_format($map->filesize / 1048576, 2) . ' MB' }}</small></p>
+		    @elseif ($map->filesize >= 1024)
+		        <p>{{ substr($map->filename, 0, -8) }}<br><small>{{ number_format($map->filesize / 1024, 2) . ' KB' }}</small></p>
+		    @endif
+
+		    <p>
+		    	<a class="vote-up" href="/maps/{{ $map->id }}/feedback/vote-up">{{ $map->feedback->sum('vote_up') }} <i class="fa fa-thumbs-up"></i></a>
+		    	<a class="vote-down" href="/maps/{{ $map->id }}/feedback/vote-down">{{ $map->feedback->sum('vote_down') }} <i class="fa fa-thumbs-down"></i></a>
+		    	<a class="vote-broken" href="/maps/{{ $map->id }}/feedback/broken">{{ $map->feedback->sum('vote_broken') }} Broken?</a>
+		    </p>
+
+		</div>
 	</li>
 @endforeach
 @else
 	<li>No maps found.</li>
 @endif
 </ul>
+
+</section>
 
 @stop
 

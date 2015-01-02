@@ -4,18 +4,22 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateDatabase extends Migration {
 
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-		$dbname = "`".Config::get('database.connections.mysql.database')."`";
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+		// $driver   = Config::get('database.connections.default');
+    // $database = Config::get('database.connections.{$driver}.database');
+    // $username = Config::get('database.connections.{$driver}.username');
+    // $password = Config::get('database.connections.{$driver}.password');
+    //
+    // $connection = new PDO("{$driver}:user={$username} password={$password}");
+    // $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // $connection->query("CREATE DATABASE IF NOT EXISTS " . $database);
 
-		$pdo = new PDO("mysql:host=localhost", Config::get('database.connections.mysql.username'), Config::get('database.connections.mysql.password'));
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$pdo->query("CREATE DATABASE IF NOT EXISTS $dbname");
 	}
 
 	public function down()

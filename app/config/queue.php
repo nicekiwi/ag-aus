@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'default' => 'beanstalkd',
+	'default' => 'iron',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -50,9 +50,9 @@ return array(
 
 		'iron' => array(
 			'driver'  => 'iron',
-			'project' => 'your-project-id',
-			'token'   => 'your-token',
-			'queue'   => 'your-queue-name',
+			'project' => Config::get('keys.laravel.iron-queue.project'),
+			'token'   => Config::get('keys.laravel.iron-queue.token'),
+			'queue'   => 'laravel',
 		),
 
 	),

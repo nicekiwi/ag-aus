@@ -1,0 +1,19 @@
+@mixin filter ( $var ) {
+	-webkit-filter: $var;
+	-moz-filter: $var;
+	-ms-filter: $var;
+	-o-filter: $var;
+	filter: $var;
+}
+
+@mixin sprite-only($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+}
+
+@mixin sprite-retina($sprite, $width, $height: $width) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  width: #{$width}px;
+  height: #{$height}px;
+}

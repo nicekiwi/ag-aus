@@ -20,22 +20,34 @@ class CreatePlayersTable extends Migration {
 			$table->string('steam_64id')->unique()->nullable();
 			$table->text('steam_image')->nullable();
 			$table->text('steam_url')->nullable();
-			
-			$table->string('donation_expires')->nullable();
+
+			$table->timestamp('donation_expires')->nullable();
 
 			$table->softDeletes();
 			$table->timestamps();
 		});
 
 		// Creates the assigned_roles (Many-to-Many relation) table
-        Schema::create('player_roles', function($table)
-        {
-            $table->increments('id')->unsigned();
-            $table->integer('player_id')->unsigned();
-            $table->integer('role_id')->unsigned();
-            $table->foreign('player_id')->references('id')->on('players'); // assumes a users table
-            $table->foreign('role_id')->references('id')->on('roles');
-        });
+	    // Schema::create('player_roles', function($table)
+	    // {
+	    //     $table->increments('id')->unsigned();
+	    //     $table->integer('player_id')->unsigned();
+	    //     $table->integer('role_id')->unsigned();
+	    //     $table->foreign('player_id')->references('id')->on('players');
+	    //     $table->foreign('role_id')->references('id')->on('roles');
+	    // });
+
+	    Schema::table('users', function($table) 
+	    {
+	    	$table->foreign('player_id')->references('id')->on('players'); // assumes a users table
+	    });
+
+	    Schema::table('map_feedback', function($table) 
+	    {
+	    	$table->foreign('player_id')->references('id')->on('players');
+	    	$table->foreign('map_id')->references('id')->on('maps');
+	    });
+	    
 	}
 
 	/**
@@ -45,7 +57,7 @@ class CreatePlayersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('player_roles');
+		//Schema::drop('player_roles');
 		Schema::drop('players');
 	}
 

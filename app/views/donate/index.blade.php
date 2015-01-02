@@ -3,26 +3,51 @@
 @section('content')
 
 
-    <h1>Donations <small>{{ $quarter->title }}</small></h1>
+    
 
-    <p>Quarter Goal: ${{ $quarter->goal_amount }}, Donated so far: ${{ $quarter->total_amount }}</p>
+    @foreach($quarters as $quarter)
+        
+    <h1>{{ $quarter->year }},  Q{{ $quarter->quarter }}</h1>
 
-    <div class="progress progress{{ ($quarter->goal_percentage >= 100) ?: '-striped active' }}">
-      <div class="progress-bar progress-bar-{{ ($quarter->goal_percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $pquarter->goal_percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($quarter->goal_percentage >= 100) ? '100' : $quarter->goal_percentage }}%">
-        {{ $quarter->goal_percentage }}%
+    <p>Goal: ${{ $quarter->goal }}, Total: ${{ $quarter->total }}</p>
+
+    <div class="progress progress{{ ($quarter->percentage >= 100) ?: '-striped active' }}">
+      <div class="progress-bar progress-bar-{{ ($quarter->percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $pquarter->percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($quarter->percentage >= 100) ? '100' : $quarter->percentage }}%">
+        {{ $quarter->percentage }}%
       </div>
     </div>
 
     <div class="col-sm-12">
+
+   
         
-        @foreach($donations as $donation)
-        <div class="col-md-3"><img src="/images/avatar/{{ urlencode($donation->donator->steam_image) }}"> {{ $donation->player->steam_nickname }}</div>
-        @endforeach
+        
+        <!-- <div class="col-md-3"><img src="/images/avatar/{{ urlencode($donation->donator->steam_image) }}"> {{ $donation->player->steam_nickname }}</div> -->
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <td>Amount</td>
+                    <td>Email</td>
+                    <td>Date</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach($quarter->donations as $donation)
+                <tr>
+                    <td>{{ $donation->amount }}</td>
+                    <td>{{ $donation->email }}</td>
+                    <td>{{ $donation->created_at }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        
 
     </div>
 
-@stop
-
-@section('footer')
+    @endforeach
 
 @stop

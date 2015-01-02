@@ -16,7 +16,9 @@
 		"laravelbook/ardent": "dev-master",
 		"thapp/jitimage": "dev-master",
 		"jyc/rcon": "dev-default",
-		"pda/pheanstalk": "3.0.*"
+		"iron-io/iron_mq": "1.5.*",
+		"indatus/dispatcher": "~1.4",
+		"ehesp/steam-login": "~1.0.1"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "v1.2.0"

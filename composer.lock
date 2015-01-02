@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "801c7580086b34f6aef75c1e3dae579e",
+    "hash": "de3712bf930e32fbbb14c5384322607d",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -208,6 +208,48 @@
             "time": "2014-01-17 12:21:18"
         },
         {
+            "name": "ehesp/steam-login",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ehesp/Steam-Login.git",
+                "reference": "5c8f42ae1a1c47fecfc4e10fcd7fd161d66040cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ehesp/Steam-Login/zipball/5c8f42ae1a1c47fecfc4e10fcd7fd161d66040cc",
+                "reference": "5c8f42ae1a1c47fecfc4e10fcd7fd161d66040cc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "suggest": {
+                "koraktor/steam-condenser": "Library for querying the Steam Community, Source and GoldSrc game servers as well as the Steam master servers."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Ehesp\\SteamLogin": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Elliot Hesp",
+                    "email": "elliot.hesp@gmail.com"
+                }
+            ],
+            "description": "A simple PHP Steam login and validation package",
+            "keywords": [
+                "steam"
+            ],
+            "time": "2014-10-27 22:33:42"
+        },
+        {
             "name": "filp/whoops",
             "version": "1.1.3",
             "source": {
@@ -358,6 +400,59 @@
             "time": "2014-08-11 04:32:36"
         },
         {
+            "name": "indatus/dispatcher",
+            "version": "v1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Indatus/dispatcher.git",
+                "reference": "42c32027e947718873af2784af5f7567e2d246f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Indatus/dispatcher/zipball/42c32027e947718873af2784af5f7567e2d246f9",
+                "reference": "42c32027e947718873af2784af5f7567e2d246f9",
+                "shasum": ""
+            },
+            "require": {
+                "mtdowling/cron-expression": "~1.0.3",
+                "php": ">=5.3.2",
+                "wp-cli/php-cli-tools": "v0.9.4-patch46"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "orchestra/testbench": "~2.1.1",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "tests/TestCase.php"
+                ],
+                "psr-0": {
+                    "Indatus\\Dispatcher\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Kuhl",
+                    "email": "bkuhl@indatus.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Schedule your artisan commands within your application",
+            "keywords": [
+                "artisan",
+                "dispatcher",
+                "laravel",
+                "schedule"
+            ],
+            "time": "2014-09-22 17:06:36"
+        },
+        {
             "name": "ircmaxell/password-compat",
             "version": "v1.0.4",
             "source": {
@@ -398,6 +493,100 @@
                 "password"
             ],
             "time": "2014-11-20 16:49:30"
+        },
+        {
+            "name": "iron-io/iron_core",
+            "version": "0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iron-io/iron_core_php.git",
+                "reference": "bf399c13a42a78079b3fe56d0e2e1791290521c4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iron-io/iron_core_php/zipball/bf399c13a42a78079b3fe56d0e2e1791290521c4",
+                "reference": "bf399c13a42a78079b3fe56d0e2e1791290521c4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "IronCore.class.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander S",
+                    "email": "alexander@iron.io",
+                    "homepage": "http://iron.io",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Iron.io",
+                    "email": "support@iron.io",
+                    "homepage": "http://iron.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Collection of common functions for all iron.io client libraries",
+            "homepage": "http://github.com/iron-io/iron_core_php",
+            "keywords": [
+                "iron",
+                "iron_core"
+            ],
+            "time": "2014-08-05 13:53:05"
+        },
+        {
+            "name": "iron-io/iron_mq",
+            "version": "1.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iron-io/iron_mq_php.git",
+                "reference": "d9e64a662d6ddcd4ba535c67467f0eee221804fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iron-io/iron_mq_php/zipball/d9e64a662d6ddcd4ba535c67467f0eee221804fb",
+                "reference": "d9e64a662d6ddcd4ba535c67467f0eee221804fb",
+                "shasum": ""
+            },
+            "require": {
+                "iron-io/iron_core": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "IronMQ.class.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander S",
+                    "email": "alexander@iron.io",
+                    "homepage": "http://iron.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Client binding for IronMQ (hosted message queue)",
+            "homepage": "http://github.com/iron-io/iron_mq_php",
+            "keywords": [
+                "MQ",
+                "iron",
+                "iron_mq"
+            ],
+            "time": "2014-10-16 18:40:13"
         },
         {
             "name": "jeremeamia/SuperClosure",
@@ -830,6 +1019,47 @@
             "time": "2013-11-14 19:48:31"
         },
         {
+            "name": "mtdowling/cron-expression",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mtdowling/cron-expression.git",
+                "reference": "a47ac8d5ec15049013792401af5a4d13e3dbe7f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mtdowling/cron-expression/zipball/a47ac8d5ec15049013792401af5a4d13e3dbe7f6",
+                "reference": "a47ac8d5ec15049013792401af5a4d13e3dbe7f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Cron": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "CRON for PHP: Calculate the next or previous run date and determine if a CRON expression is due",
+            "keywords": [
+                "cron",
+                "schedule"
+            ],
+            "time": "2013-11-23 19:48:39"
+        },
+        {
             "name": "nesbot/carbon",
             "version": "1.13.0",
             "source": {
@@ -975,56 +1205,6 @@
                 "utf8"
             ],
             "time": "2014-11-08 10:13:25"
-        },
-        {
-            "name": "pda/pheanstalk",
-            "version": "v3.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pda/pheanstalk.git",
-                "reference": "2078587884faf43fc00976b152b2dde0b5e3830e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pda/pheanstalk/zipball/2078587884faf43fc00976b152b2dde0b5e3830e",
-                "reference": "2078587884faf43fc00976b152b2dde0b5e3830e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Pheanstalk\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Paul Annesley",
-                    "email": "paul@annesley.cc",
-                    "homepage": "http://paul.annesley.cc/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP client for beanstalkd queue",
-            "homepage": "https://github.com/pda/pheanstalk",
-            "keywords": [
-                "beanstalkd"
-            ],
-            "time": "2014-11-08 20:00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2391,6 +2571,51 @@
             ],
             "description": "Rapidly generate resources, migrations, models, and much more.",
             "time": "2014-09-01 19:24:09"
+        },
+        {
+            "name": "wp-cli/php-cli-tools",
+            "version": "v0.9.4-patch46",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wp-cli/php-cli-tools.git",
+                "reference": "02d5ed4cdbab911df91bf06062c8b2705fb0919a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/02d5ed4cdbab911df91bf06062c8b2705fb0919a",
+                "reference": "02d5ed4cdbab911df91bf06062c8b2705fb0919a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "cli": "lib/"
+                },
+                "files": [
+                    "lib/cli/cli.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Logsdon",
+                    "email": "jlogsdon@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Console utilities for PHP",
+            "homepage": "http://github.com/jlogsdon/php-cli-tools",
+            "keywords": [
+                "cli",
+                "console"
+            ],
+            "time": "2014-02-01 23:11:00"
         },
         {
             "name": "zizaco/confide",

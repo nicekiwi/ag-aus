@@ -14,23 +14,38 @@ class CreateMapsTable extends Migration {
 	{
 		Schema::create('maps', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->increments('id')->unsigned();
 			$table->integer('map_type_id');
-			$table->integer('game_id');
+			//$table->integer('game_id');
 			$table->string('filename')->unique();
 			$table->string('filesize');
 			$table->string('filetype');
 			$table->string('name');
-			$table->string('slug');
-			$table->text('notes');
-			$table->string('revision');
-			$table->text('more_info_url');
+			//$table->string('slug');
+			//$table->text('notes');
+			//$table->string('revision');
+			//$table->text('more_info_url');
 			$table->text('s3_path');
 			$table->integer('public');
 			$table->text('images');
-			$table->text('video');
-			$table->string('developer');
-			$table->text('developer_url');
+			//$table->text('video');
+			//$table->string('developer');
+			//$table->text('developer_url');
+
+			$table->softDeletes();
+			$table->integer('updated_by')->nullable();
+			$table->integer('created_by')->nullable();
+			$table->timestamps();
+		});
+
+		Schema::create('map_feedback', function(Blueprint $table)
+		{
+			$table->increments('id')->unsigned();
+			$table->integer('map_id')->unsigned();
+			$table->integer('player_id')->unsigned()->nullable();
+			$table->integer('vote_up');
+			$table->integer('vote_down');
+			$table->integer('vote_broken');
 
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();
@@ -46,6 +61,7 @@ class CreateMapsTable extends Migration {
 	 */
 	public function down()
 	{
+		Schema::drop('map_feedback');
 		Schema::drop('maps');
 	}
 

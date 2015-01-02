@@ -13,4 +13,9 @@ class Donation extends Eloquent
         return $this->belongsTo('Player');
     }
 
+    public function quarter()
+    {
+        return $this->belongsTo('DonationQuarter');
+    }
+
 }

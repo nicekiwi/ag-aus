@@ -40,7 +40,7 @@
 				<a href="/admin/maps/{{ $map->id }}/edit">{{ $map->name }} - {{ $map->revision }}</a> 
 			</td>-->
 			<td>
-				{{ $map->filename }}
+				<a href="/admin/maps/{{ $map->id }}/edit">{{ $map->filename }}</a>
 				@if($map->mapFiles->count() > 0)
 				@foreach($map->mapFiles as $file)
 				<span class="label label-primary" style="text-transform:uppercase;">{{ $file->filetype }}</span>

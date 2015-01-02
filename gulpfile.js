@@ -41,8 +41,8 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('fonts', function () {
-    gulp.src('app/bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap/*')
-        .pipe(gulp.dest('dist/bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap'));
+    gulp.src('./bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap/*')
+        .pipe(gulp.dest('./public/fonts'));
 });
 
 // compile CSS
@@ -52,7 +52,7 @@ gulp.task('sass', function() {
             './app/assets/scss/app.scss', 
             './app/assets/scss/app-admin.scss'
         ])
-        .pipe(importcss())
+        
         .pipe(sass({
             includePaths: [
                 './bower_components/bootstrap-sass-official/vendor/assets/stylesheets', 
@@ -63,7 +63,10 @@ gulp.task('sass', function() {
 
         .pipe(autoprefix('last 2 versions'))
         .pipe(gulp.dest(targets.css))
-        .pipe(minifyCSS())
+        .pipe(minifyCSS({
+            relativeTo: './bower_components',
+            processImport: true
+        }))
         .pipe(rename(function (path) { path.basename += '.min'; }))
         .pipe(gulp.dest(targets.css));
 });

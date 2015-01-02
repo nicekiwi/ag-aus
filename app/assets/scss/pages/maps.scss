@@ -1,0 +1,104 @@
+body.maps-page {
+	
+	.maps-list {
+		list-style-type: none;
+		margin: 0; padding:0;
+
+		li {
+			margin-bottom: 15px;
+		}
+
+		a:hover {
+			text-decoration: none;
+		}
+
+		.map-desc {
+			background-color: #444444;
+			padding: 5px 10px;
+			color: #d9d9d9;
+
+			float: left;
+			width: 100%;
+
+			a:link {
+				color: #d9d9d9;
+				@include font-size(1.2);
+				border-radius: 3px;
+				padding: 2px 4px;
+			} 
+
+			.vote-up {
+				background-color: #629319;
+
+				&:hover {
+					background-color: #7ca721;
+				}
+			}
+
+			.vote-down {
+				background-color: #752501;
+
+				&:hover {
+					background-color: #8e2200;
+				}
+			}
+
+			.vote-broken {
+				background-color: #989898;
+				float: right;
+
+				&:hover {
+					background-color: #929292;
+				}
+
+			}
+		}
+
+		.map-thumbnail {
+
+			float: left;
+			width: 100%;
+			position: relative;
+			background-color: black;
+
+			a:visited {
+				color: white;
+				text-decoration: none;
+			}
+
+			&:hover img {
+				opacity: 0.4;
+			}
+
+			&:hover span.download-link {
+				opacity: 1;
+			}
+
+			//a:link {
+			span.download-link {
+
+				i {
+					@include font-size(2.8);
+				}
+				
+				position: absolute;
+				height: 40px;
+				width: 100%;
+				display: block;
+  				text-align: center;
+				top: 50%;
+				margin-top: -20px;
+				opacity: 0;
+				color: white;
+				z-index: 5;
+
+			}
+
+			img {
+				width: 100%;
+				max-height: 289px;
+			}
+		}
+	}
+
+}

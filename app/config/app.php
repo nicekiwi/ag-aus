@@ -116,6 +116,8 @@ return array(
 		'Zizaco\Entrust\EntrustServiceProvider',
 		'Zizaco\Confide\ConfideServiceProvider',
 		'Thapp\JitImage\JitImageServiceProvider',
+		'Indatus\Dispatcher\ServiceProvider',
+		'Ehesp\SteamLogin\Laravel\SteamLoginServiceProvider',
 	),
 
 	/*
@@ -189,6 +191,7 @@ return array(
 		'Entrust'    	  => 'Zizaco\Entrust\EntrustFacade',
 		'Confide'    	  => 'Zizaco\Confide\ConfideFacade',
 		'JitImage' 		  => 'Thapp\JitImage\Facades\JitImage',
+		'SteamLogin' 	  => 'Ehesp\SteamLogin\Laravel\Facades\SteamLogin',
 	),
 
 );

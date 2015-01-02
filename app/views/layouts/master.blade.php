@@ -8,15 +8,15 @@
       <meta name="stripe-key" content="{{ Config::get('stripe.publishable_key') }}">
       @yield('meta')
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-      <title></title>
+      <title>{{ $title or '' }}</title>
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width">
 
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
-      <link rel="stylesheet" href="/css/app.css">
+      <link rel="stylesheet" href="/css/app.min.css">
 
   </head>
-  <body>
+  <body class="{{ $bodyClass or '' }}">
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
@@ -69,7 +69,7 @@
           </p>
         </footer>
       </section>
-      
+
     </div>
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="/js/app.js"></script>

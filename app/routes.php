@@ -11,6 +11,11 @@
 |
 */
 
+Route::post('queue/receive', function()
+{
+    return Queue::marshal();
+});
+
 Route::get('test', function()
 {
 	//$photo = new Photo;
@@ -42,6 +47,9 @@ Route::get('test', function()
 	// echo $contents;
 	// echo '</pre>';
 
+	//dd(Options::first());
+	//
+	//echo 
 
 
 });
@@ -77,7 +85,7 @@ Route::get('players', function()
 	foreach($players as $player){
 	    echo '<tr><td>' . $player->getName() . '</td><td>' . $player->getSteamId() . '</td></tr>';
 	}
-	echo '</table';
+	echo '</table>';
 
 	//var_dump($players);
 });
@@ -86,7 +94,7 @@ Route::get('bans', 'BansController@index_public');
 
 Route::get('get-bans', 'BansController@pull_bans');
 
-Route::get('update-quarter', 'DonationController@update_quarter');
+//Route::get('update-quarter', 'DonationController@update_quarter');
 
 Route::get('check-steamid/{id}', 'PlayersController@validateIdAjax');
 
@@ -95,10 +103,7 @@ Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
 Route::get('donate', 'DonationController@public_index');
 Route::post('donate', 'DonationController@validate_donation');
 
-Route::get('/', ['as' => 'home', function()
-{
-	return View::make('index');
-}]);
+Route::get('/', 'HomeController@index_public');
 
 //Route::get('admin', ['as' => 'admin', 'before' => 'auth', 'uses' => 'AdminController@index']);
 
@@ -110,8 +115,13 @@ Route::get('news', 'PostController@index_public');
 Route::get('news/json/{id}', 'PostController@comments_plugin');
 Route::get('news/{slug}', 'PostController@show');
 
+Route::get('maps/login', 'MapController@steamAuth');
+Route::get('maps/logout', 'MapController@steamAuthLogout');
+
 Route::get('maps', 'MapController@index_public');
 Route::get('maps/{slug}', 'MapController@show');
+
+
 
 
 
@@ -141,6 +151,8 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	Route::post('store-player', 'PlayersController@store');
 
 	Route::get('donations','DonationController@index');
+	Route::get('donations/players','DonationController@expiry');
+	Route::get('donations/confirm/{code}','DonationController@confirmDonation');
 
 	Route::get( 'user/create','UserController@create');
 	Route::post('user','UserController@store');

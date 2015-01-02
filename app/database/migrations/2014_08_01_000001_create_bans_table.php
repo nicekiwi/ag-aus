@@ -19,12 +19,10 @@ class CreateBansTable extends Migration {
 			$table->integer('player_id')->unsigned()->index();
 			$table->foreign('player_id')->references('id')->on('players');
 
-			$table->integer('banned_by')->unsigned()->index();
-			$table->foreign('banned_by')->references('id')->on('players');
-
+			$table->text('banned_by');
 			$table->text('banned_for');
 
-			$table->timestamp('banned_until');
+			$table->timestamp('expiry');
 			$table->timestamps();
 		});
 	}

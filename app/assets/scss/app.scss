@@ -1,18 +1,52 @@
-@import url(https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.min.css);
-@import url(https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css);
+/* app.scss x- All imported files will be compiled. */
 
-@import "variable-override.scss";
-@import "bootstrap-override.scss";
+// Custom Bootstrap attributes
+@import 'config';
 
-@import "shared.scss";
+// Specific Bootstrap Modules
+@import 'bootstrap-custom';
 
-input[type="radio"]:checked+label { 
+// Mixins
+@import 'mixins/custom';
+@import 'mixins/grid';
+@import 'mixins/images';
+
+// Custom Libraries
+@import 'datatables/media/css/jquery.dataTables.css';
+@import 'fancybox/source/jquery.fancybox.css';
+
+// Layout
+@import 'layout/global';
+@import 'layout/header';
+@import 'layout/footer';
+
+// Pages
+@import 'pages/homepage';
+@import 'pages/donations';
+@import 'pages/maps';
+
+// Mobile-Max styles, $max-xs-width
+@import 'breaks/mobile';
+
+// Tablet styles, $min-sm-width + $max-sm-width
+@import 'breaks/tablet';
+
+// Desktop styles, $min-md-width + $max-md-width
+@import 'breaks/desktop';
+
+// Desktop Wide styles, $min-lg-width
+@import 'breaks/desktop-wide';
+
+
+input[type="radio"]:checked+label {
 	@extend .active;
 }
 
 .donation-options input {
 	display: none;
 }
+
+
 
 #maps-list tr td:nth-child(1),
 #maps-list tr td:nth-child(4),
@@ -24,4 +58,3 @@ input[type="radio"]:checked+label {
 .container {
 	max-width: 900px;
 }
-

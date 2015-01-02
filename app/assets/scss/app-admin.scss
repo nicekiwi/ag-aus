@@ -1,12 +1,28 @@
-@import url(https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.min.css);
-@import url(https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css);
+/* Styles.scss x- All imported files will be compiled. */
 
-@import "blueimp-file-upload/css/jquery.fileupload.css";
+// Custom Bootstrap attributes
+@import 'config';
 
-@import "variable-override.scss";
-@import "bootstrap-override.scss";
+// Specific Bootstrap Modules
+@import 'bootstrap-custom';
 
-@import "shared.scss";
+// Custom Libraries
+@import 'datatables/media/css/jquery.dataTables.css';
+@import 'fancybox/source/jquery.fancybox.css';
+@import 'blueimp-file-upload/css/jquery.fileupload.css';
+
+// Mixins
+@import 'mixins/custom';
+@import 'mixins/grid';
+@import 'mixins/images';
+
+// Layout
+@import 'layout/global-admin';
+@import 'layout/header-admin';
+@import 'layout/footer-admin';
+
+// Pages
+@import 'pages/donations-admin';
 
 
 .fileinput-button {

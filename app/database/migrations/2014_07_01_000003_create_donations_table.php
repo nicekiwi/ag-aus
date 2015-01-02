@@ -11,21 +11,22 @@ class CreateDonationsTable extends Migration {
 	 * @return void
 	 */
 	public function up()
-	{
+	{	
 		Schema::create('donation_quarters', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
 
-			$table->string('title')->unique();
-			$table->integer('quarter');
 			$table->integer('year');
+			$table->integer('quarter');
+			$table->string('name');
 
-			$table->integer('goal_percentage');
-			$table->decimal('goal_amount',7,2);
-			$table->decimal('total_amount',7,2);
+			$table->integer('total');
+			$table->integer('goal');
+			$table->integer('percentage');
 
-			$table->timestamp('start_at');
-			$table->timestamp('end_at');
+			$table->softDeletes();
+			$table->timestamp('startDate');
+			$table->timestamp('endDate');
 			$table->timestamps();
 		});
 
@@ -33,7 +34,7 @@ class CreateDonationsTable extends Migration {
 		{
 			$table->increments('id')->unsigned();
 
-			$table->integer('quarter_id')->unsigned()->index();
+			$table->integer('quarter_id')->unsigned()->index()->nullable();
 			$table->foreign('quarter_id')->references('id')->on('donation_quarters');
 
 			$table->integer('player_id')->unsigned()->index()->nullable();
@@ -52,9 +53,16 @@ class CreateDonationsTable extends Migration {
 			$table->string('card_month', 3);
 			$table->string('card_year', 6);
 
+			$table->string('confirm_code');
+			$table->integer('confirmed');
+			$table->integer('confirmed_by')->unsigned()->index()->nullable();
+			$table->foreign('confirmed_by')->references('id')->on('users');
+
 			$table->softDeletes();
 			$table->timestamps();
 		});
+
+		
 	}
 
 	/**
@@ -66,6 +74,7 @@ class CreateDonationsTable extends Migration {
 	{
 		Schema::drop('donations');
 		Schema::drop('donation_quarters');
+		
 	}
 
 }

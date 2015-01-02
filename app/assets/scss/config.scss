@@ -1,6 +1,22 @@
-//== Navbar
-//
-//##
+// This file will override specified values in Bootstraps default caption-side: 
+
+$body-bg: #fff;
+
+$font-size-base: 14px !default;
+$font-family-sans-serif: 'AllerRegular', Helvetica, Arial, sans-serif;
+
+$input-height-base: 36px;
+
+// Media break points
+$screen-sm-min: 768px; // Tablet
+$screen-md-min: 1170px; // Desktop
+$screen-lg-min: 1600px; // Desktop Wide
+
+// Images base path
+$img-base-path: '/img';
+// Custom Font Path
+$custom-font-path: '/fonts';
+
 
 
 $gray-darker:            lighten(#000, 13.5%) !default; // #222
@@ -13,7 +29,7 @@ $gray-lighter:           lighten(#000, 93.5%) !default; // #eee
 // Inverted navbar
 // Reset inverted navbar basics
 $navbar-inverse-color:                      $gray-lighter !default;
-$navbar-inverse-bg:                         #444 !default;
+$navbar-inverse-bg:                         rgba(0,0,0,0.5) !default;
 $navbar-inverse-border:                     darken($navbar-inverse-bg, 10%) !default;
 
 // Inverted navbar links
