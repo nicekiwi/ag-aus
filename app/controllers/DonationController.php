@@ -14,7 +14,7 @@ class DonationController extends BaseController
 		$this->thisYear = date('Y');
 
 		// Get timestamp of today
-		$this->today = new \Carbon\Carbon('now');
+		$this->today = new \Carbon\Carbon('today');
 
 		// Get quater dates
 		$this->firstQuarter = [
@@ -308,61 +308,61 @@ class DonationController extends BaseController
 	}
 
 	// let the donator know their donor status has been applied to the game servers
-	public function confirmDonation($code) {
-		$donation = Donation::where('confirm_code', $code)->where('confirmed',0)->first();
+	// public function confirmDonation($code) {
+	// 	$donation = Donation::where('confirm_code', $code)->where('confirmed',0)->first();
 
-		if($donation) {
+	// 	if($donation) {
 
-			Mail::queue('emails.donations.confirm-donor', ['data' => $donation], function($message) use ($donation)
-			{
-				$message->to($donation->email)->subject('AG/DOP Donator Status Confirmed.');
-			});
+	// 		Mail::queue('emails.donations.confirm-donor', ['data' => $donation], function($message) use ($donation)
+	// 		{
+	// 			$message->to($donation->email)->subject('AG/DOP Donator Status Confirmed.');
+	// 		});
 
-			$donation->confirmed = 1;
-			$donation->confirmed_by = Auth::user()->id;
-			$donation->save();
+	// 		$donation->confirmed = 1;
+	// 		$donation->confirmed_by = Auth::user()->id;
+	// 		$donation->save();
 
-			return Redirect::to('/admin/donations')
-					->with('success_message', 'Donation confirmed, a confirmation email has been sent to the donor.');
+	// 		return Redirect::to('/admin/donations')
+	// 				->with('success_message', 'Donation confirmed, a confirmation email has been sent to the donor.');
 
-		}
-		else {
+	// 	}
+	// 	else {
 
-			return Redirect::to('/admin/donations')
-					->with('error_message', 'Donation is already confirmed or the code is invalid.');
-		}
-	}
+	// 		return Redirect::to('/admin/donations')
+	// 				->with('error_message', 'Donation is already confirmed or the code is invalid.');
+	// 	}
+	// }
 
 	// notify the donor their payment was successful, and wait for a confirmation email
-	public function notifyDonator($donationID)
+	public function notifyDonor($donation)
 	{
-		Mail::queue('emails.donations.notify-donor', $data, function($message)
+		Mail::queue('emails.donations.nofity-donor', ['data' => $donation], function($message) use ($donation)
 		{
-			$message->to('foo@example.com', 'John Smith')->subject('Welcome!');
+			$message->to($donation->email)->subject('AG/DOP Donator Status Confirmed.');
 		});
 	}
 
-	public function notifyAdmin($playerID, $donationAmount, $confirmCode)
-	{
-		$options = Options::first();
-		$player = Player::find($playerID);
-		$snippets = $this->getConfigSnippet($playerID);
+	// public function notifyAdmin($playerID, $donationAmount, $confirmCode)
+	// {
+	// 	$options = Options::first();
+	// 	$player = Player::find($playerID);
+	// 	$snippets = $this->getConfigSnippet($playerID);
 
-		//dd($options);
+	// 	//dd($options);
 
-		$data = new StdClass;
-		$data->admin = $snippets[0];
-		$data->sprite = $snippets[1];
-		$data->amount = $donationAmount;
-		$data->nickname = $player->steam_nickname;
-		$data->expiry = $player->donation_expiry;
-		$data->code = $confirmCode;
+	// 	$data = new StdClass;
+	// 	$data->admin = $snippets[0];
+	// 	$data->sprite = $snippets[1];
+	// 	$data->amount = $donationAmount;
+	// 	$data->nickname = $player->steam_nickname;
+	// 	$data->expiry = $player->donation_expiry;
+	// 	$data->code = $confirmCode;
 
-		Mail::queue('emails.donations.notify-admin', ['data' => $data], function($message) use ($options)
-		{
-			$message->to($options->donation_admin_email1)->subject('New Donation to AG/DOP');
-		});
-	}
+	// 	Mail::queue('emails.donations.notify-admin', ['data' => $data], function($message) use ($options)
+	// 	{
+	// 		$message->to($options->donation_admin_email1)->subject('New Donation to AG/DOP');
+	// 	});
+	// }
 
 	public function saveDonation()
 	{
@@ -404,7 +404,7 @@ class DonationController extends BaseController
 				$expiry = $expiry->addMonths(round($donation->amount / 7));
 			}
 
-			$donation->confirm_code = md5($donation->email . $expiry);
+			//$donation->confirm_code = md5($donation->email . $expiry);
 
 			// Use Validation to check if player has dontated before
 			$validator = Validator::make($input, ['steam_id' => 'required|unique:players']);
@@ -431,25 +431,34 @@ class DonationController extends BaseController
 
 				$player->steam_id = $input['steam_id'];
 
-				if(Input::has('steam_64id'))
+				if(Input::has('steam_64id')){
 					$player->steam_64id = $input['steam_64id'];
+				}
 
-				if(Input::has('steam_url'))
+				if(Input::has('steam_url')){
 					$player->steam_url = $input['steam_url'];
+				}
 
-				if(Input::has('steam_nickname'))
+				if(Input::has('steam_nickname')){
 					$player->steam_nickname = $input['steam_nickname'];
+				}
 
-				if(Input::has('steam_image'))
+				if(Input::has('steam_image')){
 					$player->steam_image = $input['steam_image'];
+				}
 
 				$player->donation_expires = $expiry or null;
 				$player->save();
 				$donation->player_id = $player->id;
 			}
 
-			$this->notifyAdmin($donation->player_id, $donation->amount, $donation->confirm_code);
-			$this->notifyDonator($donation->player_id);
+			//$this->notifyAdmin($donation->player_id, $donation->amount, $donation->confirm_code);
+			$this->notifyDonor($donation);
+
+			Queue::push(function()
+			{
+				$this->writeDonators();
+			});
 
 			// Mail::queue('emails.donations.notify-admin', null, function($message)
 			// {
@@ -495,6 +504,64 @@ class DonationController extends BaseController
 			$sprite .= $player->steam_id;
 
 			return [$admin,$sprite];
+		}
+	}
+
+	public function notifyDonorExpires($donation)
+	{
+		Mail::queue('emails.donations.notify-donor-expires', ['data' => $donation], function($message) use ($donation)
+		{
+			$message->to($donation->email)->subject('Your AG/DOP Donator Status expires soon.');
+		});
+	}
+
+	public function checkDonatorExpiry()
+	{
+		$donators = Player::where('donation_expires', $this->today->addDays(5))->get();
+
+		if($donators) 
+		{
+			foreach ($donators as $donator) 
+			{
+				$this->notifyDonorExpires($donator->donations->first());
+			}
+		}
+
+		$this->writeDonators();
+	}
+
+	public function writeDonators()
+	{
+		$donators = Player::where('donation_expires','>', strtotime('today'))->get();
+
+		if($donators->count() > 0)
+		{
+			// New Line Break
+			$n 	= "\n";
+			// New Tab space
+			$t 	= "\t";
+
+			// Start content with new lines
+			$admins = $n . $n;
+			
+			foreach ($donators as $donator)
+			{
+				$admins .= $n . '\"' . $donator->steam_nickname . '\"' . $n;
+				$admins .= '{' . $n;
+				$admins .= $t . '// Expires ' . date('d/m/Y', strtotime($donator->donation_expires)) . $n;
+				$admins .= $t . '\"auth\"' . $t . $t . '\"steam\"' . $n;
+				$admins .= $t . '\"identity\"' . $t . '\"' . $donator->steam_id . '\"' . $n;
+				$admins .= $t . '\"group\"' . $t . $t . '\"Donator\"' . $n;
+				$admins .= '}' . $n . $n;
+			}
+
+			// Write contents to Pantheon
+		    SSH::into('pantheon')->run(array(
+				'echo "' . $admins . '" > ~/quelle/users/donators.txt',
+			    '~/quelle/scripts/generate-admins.sh',
+			));
+
+			return;
 		}
 	}
 }

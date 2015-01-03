@@ -11,7 +11,7 @@
 |
 */
 
-Form::macro('delete',function($url, $button_label = 'Delete', $button_icon = 'fa-times-circle', $form_parameters = []){
+Form::macro('delete',function($url, $button_label = 'Delete', $button_icon = 'fa-trash', $form_parameters = []){
 
     if(empty($form_parameters)){
         $form_parameters = array(

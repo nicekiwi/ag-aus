@@ -12,6 +12,59 @@ class Map extends Ardent
 	// 	'password' => 'required|alpha_num|between:4,8|confirmed',
 	// 	'password_confirmation' => 'required|alpha_num|between:4,8'
 	// ];
+    public function filesizeHuman()
+    {
+        
+
+        $filesize = $this->filesize;
+
+        //dd($filesize);
+
+        if ($filesize >= 1048576) {
+
+            return number_format($filesize / 1048576, 2) . ' MB';
+        }
+        else if ($filesize >= 1024) {
+
+            return number_format($filesize / 1024, 2) . ' KB';
+        }
+
+    }
+
+    public function mapThumbnail()
+    {
+        $url = $this->images;
+
+        if($url) {
+            return $url;
+        } 
+        else {
+            return urlencode(url('/img/no-thumb.png'));
+        }
+    }
+    
+
+    // public function getMaps()
+    // {
+    //     if(Input::has('type')) {
+
+    //         $maps = $this::orderBy('name','asc')->whereHas('maptype', function($q)
+    //         {
+    //             $q->where('type', Input::get('type'));
+
+    //         })->get();
+    //     } 
+    //     else {
+    //         $maps = $this::all();
+    //     }
+
+    //     return $maps;
+    // }
+
+    public function search($name)
+    {
+        return Map::Where('filename', 'LIKE', '%' . $name . '%')->pageinate(15);
+    } 
 
 	function getMapList()
 	{

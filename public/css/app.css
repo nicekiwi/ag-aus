@@ -4239,7 +4239,8 @@ body.donations-page .donor-perks {
 body.maps-page .maps-list {
   list-style-type: none;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  width: 100%; }
   body.maps-page .maps-list li {
     margin-bottom: 15px; }
   body.maps-page .maps-list a:hover {
@@ -4256,6 +4257,8 @@ body.maps-page .maps-list {
       font-size: 1.2rem;
       border-radius: 3px;
       padding: 2px 4px; }
+    body.maps-page .maps-list .map-desc a:visited {
+      color: #d9d9d9; }
     body.maps-page .maps-list .map-desc .vote-up {
       background-color: #629319; }
       body.maps-page .maps-list .map-desc .vote-up:hover {

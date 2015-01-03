@@ -44,12 +44,20 @@
   </div>
 </div>
 
+<!-- Text input-->
+<div class="form-group">
+  {{ Form::label('image-preview', 'Image Preview', ['class'=>'col-md-4 control-label'])}}
+  <div class="col-md-4">
+    <img class="image-preview" name="image-preview" src="/images/mapthumbnail/{{ ($map->images ? $map->images : urlencode('/img/no-thumb.png')) }}" />
+  </div>
+</div>
+
 <!-- File Button --> 
 <div class="form-group">
   <label class="col-md-4 control-label" for="images">Image</label>
   <div class="col-md-4">
   	<div class="input-group">
-    {{ Form::text('images', null, ['class'=>'form-control input-md','required'=>'true', 'id'=>'images']) }}
+    {{ Form::text('images', null, ['class'=>'form-control input-md', 'id'=>'images']) }}
     <span class="input-group-btn">
     <span class="btn btn-primary btn-file">
         <i class="fa fa-plus"></i><input id="imageupload" type="file" name="file" accept="image/jpg, image/jpeg, image/png, image/gif">
@@ -129,7 +137,7 @@
       var reader = new FileReader();
       reader.onload = function(e) {
         var data = e.target.result.substr(e.target.result.indexOf(",") + 1, e.target.result.length);
-        //$("#image_preview").attr("src", e.target.result);
+        //$(".image-preview").prop("src", '/images/mapthumbnail/' + e.target.result);
         $('.btn-file > i').removeClass('fa-plus').addClass('fa-cog fa-spin');
         $.ajax({
             url: 'https://api.imgur.com/3/image',
@@ -144,6 +152,7 @@
             success: function(response) {
                 $("#images").attr("value", response.data.link);
                 $('.btn-file > i').addClass('fa-plus').removeClass('fa-spinner fa-spin');
+                $(".image-preview").prop("src", '/images/mapthumbnail/' + response.data.link);
             }, error: function() {
                 alert("Error while uploading...");
             }

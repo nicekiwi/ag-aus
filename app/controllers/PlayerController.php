@@ -1,6 +1,6 @@
 <?php
 
-class PlayersController extends \BaseController {
+class PlayerController extends \BaseController {
 
 	private $steam = "\SteamCondenser\Community\SteamId";
 

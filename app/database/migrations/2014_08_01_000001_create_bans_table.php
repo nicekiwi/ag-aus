@@ -17,7 +17,7 @@ class CreateBansTable extends Migration {
 			$table->increments('id');
 
 			$table->integer('player_id')->unsigned()->index();
-			$table->foreign('player_id')->references('id')->on('players');
+			$table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
 
 			$table->text('banned_by');
 			$table->text('banned_for');

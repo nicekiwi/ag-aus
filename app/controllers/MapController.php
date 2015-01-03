@@ -34,9 +34,9 @@ class MapController extends BaseController {
 
 	public function index()
 	{
-		$maps = $this->get_maps();
-		$map_total = Map::count();
-		$map_files = MapFile::where('map_id',null)->get();
+		$maps = Map::where('map_type_id', '>', 0)->get();
+		$map_total = $maps->count();
+		$map_files = Map::where('map_type_id', 0)->get();
 		$map_types = MapType::orderBy('name','asc')->get();
 
 		//dd($map_total);
@@ -52,40 +52,22 @@ class MapController extends BaseController {
 
 	public function index_public()
 	{
-		$maps = $this->get_maps();
-		$map_total = Map::count();
+		$maps = Map::where('map_type_id', '>', 0)->get();
+		$map_total = $maps->count();
 		$map_types = MapType::orderBy('name','asc')->get();
 
         $this->layout->bodyClass = 'maps-page';
 		$this->layout->content = View::make('maps.public')->with([
-        	'maps'=>$maps,
-        	'map_types'=>$map_types,
+        	'maps'	=>$maps,
+        	'map_types'	=>$map_types,
         	'map_total' => $map_total
         ]);
 	}
 
-	public function get_maps()
-	{
-		if(Input::has('type')) 
-			//$maps = Map::orderBy('name','asc')->has('type',Input::get('type'))/*->where('type',Input::get('type'))->where('public',1)*/->get();
-			$maps = Map::orderBy('name','asc')->whereHas('maptype', function($q)
-			{
-			    $q->where('type', Input::get('type'));
-
-			})->get();
-		else 
-			$maps = Map::all();
-
-		return $maps;
-	}
-
-	public function search($name)
-	{
-		$results = Map::where('name', 'LIKE', '%'.$name.'%')->orWhere('filename', 'LIKE', '%'.$name.'%')->pageinate(15);
-	}
+	
 
 	/**
-	 * Show the form for creating a new resource.
+	 * pull all maps from amazon and import them
 	 *
 	 * @return Response
 	 */
@@ -127,43 +109,58 @@ class MapController extends BaseController {
         		// Get Special MapType ID
         		$special = MapType::where('type','special')->first();
 
-        		// Check if filetype is TF2 Map or not
+        		// Get old record and update if found
+        		$new_map = Map::where('filename', $name)->first();
+
+        		// if existing record is not found, make new one
+        		if(!$new_map) 
+        		{
+        			$new_map = new Map;
+        		}
+
+				$new_map->filesize = $map['Size'];
+				$new_map->filename = $name;
+				$new_map->filetype = $ext;
+				$new_map->s3_path = $map['Key'];
+
+				// Check if filetype is TF2 Map or not
         		if($ext == 'bz2')
         		{
-        			if(Map::where('filename',$name)->count() < 1)
-		    		{
-			        	$new_map = new Map;
-						$new_map->filesize = $map['Size'];
-						$new_map->filename = $name;
-						$new_map->filetype = $ext;
-						$new_map->s3_path = $map['Key'];
+					// Pass MapType ID to Map Row
+					if($checkType->id) 
+					{
+						$new_map->map_type_id = $checkType->id;
+					}
+					else 
+					{
+						$new_map->map_type_id = $special->id;
+					}
+				}
+				else 
+				{
+					$new_map->map_type_id = 0;
+				}
 
-						// Pass MapType ID to Map Row
-						if($checkType->id)
-							$new_map->map_type_id = $checkType->id;
-						else
-							$new_map->map_type_id = $special->id;
+				$new_map->created_by = Auth::user()->id;
+				$new_map->updated_by = Auth::user()->id;
+				$new_map->save();
 
-						$new_map->created_by = Auth::user()->id;
-						$new_map->updated_by = Auth::user()->id;
-						$new_map->save();
+				$sync_count++;
 
-						$sync_count++;
-		    		}
-        		}
-        		else
-        		{
-        			if(MapFile::where('filename',$name)->count() < 1)
-		    		{
-			        	$new_file = new MapFile;
-						$new_file->filesize = $map['Size'];
-						$new_file->filename = $name;
-						$new_file->filetype = $ext;
-						$new_file->s3_path = $map['Key'];
-						$new_file->save();
+        		
+      //   		else
+      //   		{
+      //   			if(MapFile::where('filename',$name)->count() < 1)
+		    // 		{
+			   //      	$new_file = new MapFile;
+						// $new_file->filesize = $map['Size'];
+						// $new_file->filename = $name;
+						// $new_file->filetype = $ext;
+						// $new_file->s3_path = $map['Key'];
+						// $new_file->save();
 
-						$sync_count++;
-		    		}
+						// $sync_count++;
+		    // 		}
 		    		// else
 		    		// {
 		    		// 	// If there is no map accociated with the file, add it.
@@ -175,9 +172,9 @@ class MapController extends BaseController {
 		    		// 	$map = MapFile::where('filename',$name)->first();
 		    		// 	$file = Map::where('id',$map->id);
 		    		// }
-        		}
+        		//}
 
-        		$this->linkMapFiles();
+        		//$this->linkMapFiles();
 
         	}
     	}
@@ -193,79 +190,79 @@ class MapController extends BaseController {
 	}
 
 	// Link MapFiles with Maps with the same filename.
-	public function linkMapFiles()
-	{
-		// Get all files without maps assigned to them
-		$files = MapFile::where('map_id', null)->get();
+	// public function linkMapFiles()
+	// {
+	// 	// Get all files without maps assigned to them
+	// 	$files = MapFile::where('map_id', null)->get();
 
-		// Go through each file 
-		foreach ($files as $file) 
-		{
-			// Get file name
-			$name = explode('.', $file->filename);
-        	$name = $name[0];
+	// 	// Go through each file 
+	// 	foreach ($files as $file) 
+	// 	{
+	// 		// Get file name
+	// 		$name = explode('.', $file->filename);
+ //        	$name = $name[0];
 
-        	// Check if a map with the same name exists
-        	$map = Map::where('filename',$name.'.bsp.bz2')->first();
+ //        	// Check if a map with the same name exists
+ //        	$map = Map::where('filename',$name.'.bsp.bz2')->first();
 
-        	// If the map exists
-        	if($map->id != null)
-        	{
-        		// Save the Map ID to the file
-        		$file->map_id = $map->id;
-        		$file->save();
-        	}
-		}
-	}
+ //        	// If the map exists
+ //        	if($map->id != null)
+ //        	{
+ //        		// Save the Map ID to the file
+ //        		$file->map_id = $map->id;
+ //        		$file->save();
+ //        	}
+	// 	}
+	// }
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
 	 */
-	public function store()
-	{
-		if(Input::hasFile('map_file')) 
-		{
-			$file = Input::file('map_file');
+	// public function store()
+	// {
+	// 	if(Input::hasFile('map_file')) 
+	// 	{
+	// 		$file = Input::file('map_file');
 
-			$file_name = $file->getClientOriginalName();
-			$file_ext = $file->getClientOriginalExtension();
+	// 		$file_name = $file->getClientOriginalName();
+	// 		$file_ext = $file->getClientOriginalExtension();
 
-			$s3 = App::make('aws')->get('s3');
-			$s3->putObject(array(
-			  'Bucket' 		=> 'ag-maps',
-			  'Key'        	=> $file_name,
-			  'SourceFile' 	=> $file->getRealPath(),
-			  'ACL'			=> 'public-read',
-			  'ContentType'	=> 'application/x-bzip2',
-			));
+	// 		$s3 = App::make('aws')->get('s3');
+	// 		$s3->putObject(array(
+	// 		  'Bucket' 		=> 'ag-maps',
+	// 		  'Key'        	=> $file_name,
+	// 		  'SourceFile' 	=> $file->getRealPath(),
+	// 		  'ACL'			=> 'public-read',
+	// 		  'ContentType'	=> 'application/x-bzip2',
+	// 		));
 
-			$html_desc = Markdown::string(Input::get('desc_md'));
+	// 		$html_desc = Markdown::string(Input::get('desc_md'));
 
-			$map = new Map;
-			$map->filesize = $file->getSize();
-			$map->filename = $file_name;
-			$map->s3_path = 'https://s3-ap-southeast-2.amazonaws.com/ag-maps/' . $file_name;
-			$map->map_type_id = Input::get('type');
-			$map->name = Input::get('name');
-			//$map->revision = Input::get('revision');
-			//$map->more_info_url = Input::get('more_info_url');
-			$map->images = Input::get('images');
-			//$map->desc_md = Input::get('desc_md');
-			//$map->desc = $html_desc;
-			//$map->slug = Str::slug(Input::get('name'));
-			//$map->developer = Input::get('developer');
-			//$map->developer_url = Input::get('developer_url');
-			$map->save();
+	// 		$map = new Map;
+	// 		$map->filesize = $file->getSize();
+	// 		$map->filename = $file_name;
+	// 		$map->s3_path = 'https://s3-ap-southeast-2.amazonaws.com/ag-maps/' . $file_name;
+	// 		$map->map_type_id = Input::get('type');
+	// 		$map->name = Input::get('name');
+	// 		//$map->revision = Input::get('revision');
+	// 		//$map->more_info_url = Input::get('more_info_url');
+	// 		$map->images = Input::get('images');
+	// 		//$map->desc_md = Input::get('desc_md');
+	// 		//$map->desc = $html_desc;
+	// 		//$map->slug = Str::slug(Input::get('name'));
+	// 		//$map->developer = Input::get('developer');
+	// 		//$map->developer_url = Input::get('developer_url');
+	// 		$map->save();
 
-			Session::flash('success_message', 'Successfully created map!');
-			return Redirect::to('maps');
-		}
+	// 		Session::flash('success_message', 'Successfully created map!');
+	// 		return Redirect::to('maps');
+	// 	}
 
-		Session::flash('error_message', 'Error');
-        return Redirect::to('admin/maps');
-	}
+	// 	Session::flash('error_message', 'Error');
+ //        return Redirect::to('admin/maps');
+	// }
 
 	/**
 	 * Display the specified resource.
@@ -273,12 +270,12 @@ class MapController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($slug)
-	{
-		$map = Map::where('slug',$slug)->with('maptype')->first();
+	// public function show($slug)
+	// {
+	// 	$map = Map::where('slug',$slug)->with('maptype')->first();
 
-        return View::make('maps.show')->with('map',$map);
-	}
+ //        return View::make('maps.show')->with('map',$map);
+	// }
 
 	/**
 	 * Show the form for editing the specified resource.
@@ -329,11 +326,23 @@ class MapController extends BaseController {
 	{
 		// delete
 		$map = Map::findOrFail($id);
+		
+
+		$s3 = AWS::get('s3');
+
+		$response = $s3->deleteObject([
+			'Bucket' => 'alternative-gaming',
+			'Key' => 'games/team-fortress-2/maps/' . $map->filename
+		]);
+
 		$map->delete();
 
 		// redirect
 		Session::flash('success_message', $map->filename . ' deleted.');
-		return Redirect::to('admin/posts');
+
+
+
+		return Redirect::to('admin/maps');
 	}
 
 
@@ -383,5 +392,34 @@ class MapController extends BaseController {
 		Session::forget('player');
 
 		return Redirect::to('/maps')->with('success_message', 'I saw nothing! NOOOTHING!');
+	}
+
+	public function mapVote()
+	{
+		if(!Session::has('public-auth-true')) {
+			return false;
+		}
+
+		$input = Input::all();
+		$player = Session::get('player');
+
+		$feedback = MapFeedback::where('map_id', $input['map_id'])
+							   ->where('player_id', $player->id)
+							   ->first();
+
+		if(!$feedback) {
+			$feedback = new MapFeedback;
+			$feedback->map_id = $input['map_id'];
+			$feedback->player_id = $player->id;
+
+		}
+
+		$feedback->vote_up = ($input['action'] === 'up' ? 1 : 0);
+		$feedback->vote_down = ($input['action'] === 'down' ? 1 : 0);
+		$feedback->vote_broken = ($input['action'] === 'broken' ? 1 : 0);
+		$feedback->save();
+
+		return '1';
+
 	}
 }

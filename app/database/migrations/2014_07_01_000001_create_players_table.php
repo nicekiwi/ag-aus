@@ -39,13 +39,13 @@ class CreatePlayersTable extends Migration {
 
 	    Schema::table('users', function($table) 
 	    {
-	    	$table->foreign('player_id')->references('id')->on('players'); // assumes a users table
+	    	$table->foreign('player_id')->references('id')->on('players')->onDelete('set null'); // assumes a users table
 	    });
 
 	    Schema::table('map_feedback', function($table) 
 	    {
-	    	$table->foreign('player_id')->references('id')->on('players');
-	    	$table->foreign('map_id')->references('id')->on('maps');
+	    	$table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
+	    	$table->foreign('map_id')->references('id')->on('maps')->onDelete('cascade');
 	    });
 	    
 	}

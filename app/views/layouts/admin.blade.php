@@ -12,8 +12,8 @@
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width">
 
-      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
-      <link rel="stylesheet" href="/css/app-admin.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="/css/app-admin.min.css">
 
   </head>
   <body>

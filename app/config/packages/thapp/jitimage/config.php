@@ -52,7 +52,7 @@ return [
      * cache processed images only in this environments
      * ------------------------------------------------
      */
-        'environments' => ['foo']
+        'environments' => ['local','production']
     ],
 
     /* ------------------------------------------------

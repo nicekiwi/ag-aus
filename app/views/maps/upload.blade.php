@@ -11,7 +11,7 @@
     <i class="fa fa-plus"></i>
     <span>Select or Drag 'n Drop files here..<br><small>Only .bz2 and .nav files are accepted. No max filesize.</small></span>
     <!-- The file input field used as target for the file upload widget -->
-    <input id="fileupload" type="file" name="file" accept="application/bzip2, application/nav, text/nav, image/jpg, image/jpeg" multiple>
+    <input id="fileupload" type="file" name="file" accept="application/x-bzip2, application/nav, text/nav, image/jpg, image/jpeg" multiple>
 </div>
 <!-- The global progress bar -->
 <div id="progress" class="progress progress-striped">

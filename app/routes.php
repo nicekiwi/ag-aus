@@ -16,8 +16,10 @@ Route::post('queue/receive', function()
     return Queue::marshal();
 });
 
-Route::get('test', function()
-{
+Route::get('tester', 'DonationController@checkDonatorExpiry');
+
+// Route::get('test', function()
+// {
 	//$photo = new Photo;
 
 	//return $photo->import_photos();
@@ -50,15 +52,18 @@ Route::get('test', function()
 	//dd(Options::first());
 	//
 	//echo 
+	//writeDonators();
 
-
-});
+// });
 
 Route::get('donators', function()
 {
-	$gen = new Generator;
+	// $gen = new Generator;
 
-	return $gen->donators();
+	// return $gen->donators();
+	// 
+	//checkDonatorExpiry();
+	return new \Carbon\Carbon('today');
 
 });
 
@@ -96,7 +101,7 @@ Route::get('get-bans', 'BansController@pull_bans');
 
 //Route::get('update-quarter', 'DonationController@update_quarter');
 
-Route::get('check-steamid/{id}', 'PlayersController@validateIdAjax');
+Route::get('check-steamid/{id}', 'PlayerController@validateIdAjax');
 
 Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
 
@@ -117,6 +122,7 @@ Route::get('news/{slug}', 'PostController@show');
 
 Route::get('maps/login', 'MapController@steamAuth');
 Route::get('maps/logout', 'MapController@steamAuthLogout');
+Route::post('maps/feedback', 'MapController@MapVote');
 
 Route::get('maps', 'MapController@index_public');
 Route::get('maps/{slug}', 'MapController@show');
@@ -148,7 +154,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 		return View::make('admin.index');
 	});
 
-	Route::post('store-player', 'PlayersController@store');
+	Route::post('store-player', 'PlayerController@store');
 
 	Route::get('donations','DonationController@index');
 	Route::get('donations/players','DonationController@expiry');
@@ -164,7 +170,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	Route::resource('maps/configs', 'MapConfigController');
 	Route::resource('maps', 'MapController');
 	Route::resource('map-files', 'MapFileController');
-	Route::resource('players', 'PlayersController');
+	Route::resource('players', 'PlayerController');
 	Route::resource('bans', 'BansController');
 
 
