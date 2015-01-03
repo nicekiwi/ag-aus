@@ -1,5 +1,5 @@
 /app/config/keys.php
-/app/storeage/*
+/app/storage/*
 /app/database/*.sqlite
 /app/assets/build/*
 /bootstrap/compiled.php
