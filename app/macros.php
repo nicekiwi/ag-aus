@@ -25,6 +25,6 @@ Form::macro('delete',function($url, $button_label = 'Delete', $button_icon = 'fa
     };
 
     return Form::open($form_parameters)
-            . '<i class="fa fa-lg ' . $button_icon . '"></i><button type="submit" class="btn btn-link">' . $button_label . '</button>'
+            . '<i class="fa fa-lg ' . $button_icon . '"></i><button type="button" class="btn btn-link btn-delete-confirm">' . $button_label . '</button>'
             . Form::close();
 });
