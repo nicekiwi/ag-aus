@@ -326,23 +326,28 @@ class MapController extends BaseController {
 	{
 		// delete
 		$map = Map::findOrFail($id);
+		$filename = $map->filename;
 		
-
-		$s3 = AWS::get('s3');
-
-		$response = $s3->deleteObject([
-			'Bucket' => 'alternative-gaming',
-			'Key' => 'games/team-fortress-2/maps/' . $map->filename
-		]);
+		Queue::push(function() use ($filename)
+		{
+			App::make('MapController')->deleteMapFromAmazon($filename);
+		});
 
 		$map->delete();
 
 		// redirect
-		Session::flash('success_message', $map->filename . ' deleted.');
-
-
-
+		Session::flash('success_message', $filename . ' deleted.');
 		return Redirect::to('admin/maps');
+	}
+
+	public function deleteMapFromAmazon($filename)
+	{
+		$s3 = AWS::get('s3');
+
+		$response = $s3->deleteObject([
+			'Bucket' => 'alternative-gaming',
+			'Key' => 'games/team-fortress-2/maps/' . $filename
+		]);
 	}
 
 
@@ -359,7 +364,7 @@ class MapController extends BaseController {
 			if ( !$player )
 			{
 				// Get player data from Steam
-				$data = App::make('PlayersController')->getPlayerInfo($steam_64id);
+				$data = App::make('PlayerController')->getPlayerInfo($steam_64id);
 
 				// Save new player to players table and get their ID
 				$player = new Player;
