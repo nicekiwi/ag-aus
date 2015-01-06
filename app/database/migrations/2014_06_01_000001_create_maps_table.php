@@ -20,17 +20,18 @@ class CreateMapsTable extends Migration {
 			$table->string('filename')->unique();
 			$table->string('filesize');
 			$table->string('filetype');
-			$table->string('name');
+			//$table->string('name');
 			//$table->string('slug');
 			//$table->text('notes');
 			//$table->string('revision');
 			//$table->text('more_info_url');
 			$table->text('s3_path');
-			$table->integer('public');
+			//$table->integer('public');
 			$table->text('images');
 			//$table->text('video');
 			//$table->string('developer');
 			//$table->text('developer_url');
+			$table->integer('remote');
 
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();

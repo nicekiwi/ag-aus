@@ -37,7 +37,23 @@ class MapController extends BaseController {
 		$maps = Map::where('map_type_id', '>', 0)->get();
 		$map_total = $maps->count();
 		$map_files = Map::where('map_type_id', 0)->get();
-		$map_types = MapType::orderBy('name','asc')->get();
+
+		$s3 = AWS::get('s3');
+
+		$postObject = new \Aws\S3\Model\PostObject($s3, 'alternative-gaming', [
+			'acl' => 'public-read',
+		]);
+
+		$form = $postObject->prepareData()->getFormInputs();
+
+		$options = new stdClass;
+		$options->policy = $form['policy'];
+		$options->signature = $form['signature'];
+		$options->uid = uniqid();
+		$options->accessKey = $form['AWSAccessKeyId'];
+		$options->bucket = 'alternative-gaming';
+		$options->key = 'games/team-fortress-2/maps';//$form['key'];
+		$options->acl = $form['acl'];
 
 		//dd($map_total);
 
@@ -45,8 +61,8 @@ class MapController extends BaseController {
 		return View::make('maps.index')->with([
         	'maps' => $maps,
         	'map_files' => $map_files,
-        	'map_types' => $map_types,
-        	'map_total' => $map_total
+        	'map_total' => $map_total,
+        	'options' => $options
         ]);
 	}
 
@@ -286,6 +302,13 @@ class MapController extends BaseController {
 	public function edit($id)
 	{
         $map = Map::findOrFail($id);
+        
+        if($map->map_type_id === 0)
+        {
+        	Session::flash('error_message', $map->filename . ' is not a map, it can not be edited.');
+			return Redirect::to('admin/maps');
+        }
+
         $map_types = MapType::orderBy('name','asc')->lists('name','id');
 
         return View::make('maps.edit')->with([ 'map' => $map, 'map_types' => $map_types ]);
@@ -364,7 +387,7 @@ class MapController extends BaseController {
 			if ( !$player )
 			{
 				// Get player data from Steam
-				$data = App::make('PlayerController')->getPlayerInfo($steam_64id);
+				$data = App::make('PlayerController')->getPlayerData($steam_64id);
 
 				// Save new player to players table and get their ID
 				$player = new Player;
@@ -416,7 +439,6 @@ class MapController extends BaseController {
 			$feedback = new MapFeedback;
 			$feedback->map_id = $input['map_id'];
 			$feedback->player_id = $player->id;
-
 		}
 
 		$feedback->vote_up = ($input['action'] === 'up' ? 1 : 0);
@@ -426,5 +448,44 @@ class MapController extends BaseController {
 
 		return '1';
 
+	}
+
+	private $ssh_response;
+
+	public function initiateRemoteActionAjax()
+	{
+		return $this->initiateRemoteAction(Input::get('filename'),Input::get('filetype'),Input::get('action'));
+	}
+
+	public function initiateRemoteAction($filename, $filetype = 'bz2', $cID = 0)
+	{
+		$commands = [
+			'~/quelle/scripts/download-map.sh ' . $filename . ' ' . $filetype,
+			'~/quelle/scripts/remove-map.sh ' . $filename . ' ' . $filetype,
+		];
+
+		$this->ssh_response = null;
+
+		// Write contents to Pantheon
+	    SSH::into('pantheon')->run( $commands[$cID] , function($line) use ($filename)
+	    {
+	    	$this->ssh_response = (int)$line;
+
+	    	// if the file is downloaded = 1, if not = 0
+	    	// remove-map will always return 0
+	    	$this->saveRemoteState($filename, $this->ssh_response);
+		});
+
+		return $this->ssh_response;
+	}
+
+	public function saveRemoteState($filename, $state)
+	{
+	    $map = Map::where('filename', $filename)->first();
+
+	    if($map) {
+	    	$map->remote = $state;
+	    	$map->save();
+	    }
 	}
 }

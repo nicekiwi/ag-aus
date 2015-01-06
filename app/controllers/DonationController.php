@@ -457,7 +457,7 @@ class DonationController extends BaseController
 
 			Queue::push(function()
 			{
-				$this->writeDonators();
+				App::make('DonationController')->writeDonators();
 			});
 
 			// Mail::queue('emails.donations.notify-admin', null, function($message)

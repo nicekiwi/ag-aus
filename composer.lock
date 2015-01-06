@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "de3712bf930e32fbbb14c5384322607d",
+    "hash": "9c2e9de05c09cff9468c9e00e1cac1fa",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -679,24 +679,25 @@
         },
         {
             "name": "koraktor/steam-condenser",
-            "version": "dev-psr-0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koraktor/steam-condenser-php.git",
-                "reference": "1625240938aaf36b1cdaa7feb643c42968a59027"
+                "reference": "e71516d13314342f9595e6013266b3f8c85bb626"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koraktor/steam-condenser-php/zipball/1625240938aaf36b1cdaa7feb643c42968a59027",
-                "reference": "1625240938aaf36b1cdaa7feb643c42968a59027",
+                "url": "https://api.github.com/repos/koraktor/steam-condenser-php/zipball/e71516d13314342f9595e6013266b3f8c85bb626",
+                "reference": "e71516d13314342f9595e6013266b3f8c85bb626",
                 "shasum": ""
             },
             "require": {
-                "monolog/monolog": "~1.7.0",
+                "monolog/monolog": "~1.10",
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~3.7.0"
+                "phpdocumentor/phpdocumentor": "~2.6.1",
+                "phpunit/phpunit": "~4.1.3"
             },
             "type": "library",
             "autoload": {
@@ -724,7 +725,7 @@
                 "steam",
                 "webapi"
             ],
-            "time": "2014-02-23 21:31:20"
+            "time": "2014-07-25 09:40:43"
         },
         {
             "name": "laravel/framework",
@@ -953,48 +954,54 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.7.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "6225b22de9dcf36546be3a0b2fa8e3d986153f57"
+                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/6225b22de9dcf36546be3a0b2fa8e3d986153f57",
-                "reference": "6225b22de9dcf36546be3a0b2fa8e3d986153f57",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
+                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
                 "psr/log": "~1.0"
             },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
             "require-dev": {
-                "aws/aws-sdk-php": "~2.4.8",
-                "doctrine/couchdb": "dev-master",
-                "mlehner/gelf-php": "1.0.*",
-                "phpunit/phpunit": "~3.7.0",
-                "raven/raven": "0.5.*",
-                "ruflin/elastica": "0.90.*"
+                "aws/aws-sdk-php": "~2.4, >2.4.8",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
+                "phpunit/phpunit": "~4.0",
+                "raven/raven": "~0.5",
+                "ruflin/elastica": "0.90.*",
+                "videlalvaro/php-amqplib": "~2.4"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
                 "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "raven/raven": "Allow sending log messages to a Sentry server",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "videlalvaro/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7.x-dev"
+                    "dev-master": "1.12.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Monolog": "src/"
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1005,8 +1012,7 @@
                 {
                     "name": "Jordi Boggiano",
                     "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be",
-                    "role": "Developer"
+                    "homepage": "http://seld.be"
                 }
             ],
             "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
@@ -1016,7 +1022,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2013-11-14 19:48:31"
+            "time": "2014-12-29 21:29:35"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -2320,6 +2326,53 @@
             "time": "2014-12-02 20:15:53"
         },
         {
+            "name": "syntax/steam-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/syntaxerrors/Steam.git",
+                "reference": "77336d42dc3141bffe0d81671e2c5add85b25235"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/syntaxerrors/Steam/zipball/77336d42dc3141bffe0d81671e2c5add85b25235",
+                "reference": "77336d42dc3141bffe0d81671e2c5add85b25235",
+                "shasum": ""
+            },
+            "require": {
+                "guzzle/guzzle": "3.9.2",
+                "illuminate/support": "4.2.*",
+                "laravel/framework": "4.2.*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/models"
+                ],
+                "psr-0": {
+                    "Syntax\\SteamApi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stygian",
+                    "email": "stygian.warlock.v2@gmail.com"
+                }
+            ],
+            "description": "A steam-api client for Laravel 4.",
+            "time": "2014-12-16 22:15:38"
+        },
+        {
             "name": "thapp/jitimage",
             "version": "dev-master",
             "source": {
@@ -2793,7 +2846,8 @@
         "thomaswelton/laravel-gravatar": 20,
         "laravelbook/ardent": 20,
         "thapp/jitimage": 20,
-        "jyc/rcon": 20
+        "jyc/rcon": 20,
+        "syntax/steam-api": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

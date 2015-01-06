@@ -89,6 +89,8 @@ function donationPayment() {
 
     $.getJSON( "/check-steamid/"+$(this).val(), function( json ) {
 
+      json = json.players[0];
+
       if(typeof(json.steam_url) !== "undefined")
       {
         steam_id_valid = true;

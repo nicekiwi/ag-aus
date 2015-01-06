@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"koraktor/steam-condenser": "dev-psr-0",
+		"koraktor/steam-condenser": "dev-master",
 		"aws/aws-sdk-php-laravel": "1.*",
 		"stripe/stripe-php": "v1.9.0",
 		"way/generators": "3",
@@ -18,7 +18,8 @@
 		"jyc/rcon": "dev-default",
 		"iron-io/iron_mq": "1.5.*",
 		"indatus/dispatcher": "~1.4",
-		"ehesp/steam-login": "~1.0.1"
+		"ehesp/steam-login": "~1.0.1",
+		"syntax/steam-api": "dev-master"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "v1.2.0"
@@ -34,7 +35,10 @@
 		],
 		"psr-0": {
 			"Quelle": "app/"
-		}
+		},
+		"files": [
+	        "vendor/koraktor/steam-condenser/lib/SteamCondenser/SteamCondenser.php"
+	    ]
 	},
 
 	"scripts": {

@@ -110,6 +110,7 @@ return array(
         // Custom
 		'Aws\Laravel\AwsServiceProvider',
 		'Quelle\Providers\DonationsServiceProvider',
+		'Quelle\Providers\SteamDataServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'VTalbot\Markdown\MarkdownServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
@@ -118,6 +119,7 @@ return array(
 		'Thapp\JitImage\JitImageServiceProvider',
 		'Indatus\Dispatcher\ServiceProvider',
 		'Ehesp\SteamLogin\Laravel\SteamLoginServiceProvider',
+		'Syntax\SteamApi\SteamApiServiceProvider',
 	),
 
 	/*

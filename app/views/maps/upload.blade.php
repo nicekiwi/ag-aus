@@ -9,7 +9,7 @@
 <!-- The fileinput-button span is used to style the file input field as button -->
 <div class="jumbotron fileinput-button">
     <i class="fa fa-plus"></i>
-    <span>Select or Drag 'n Drop files here..<br><small>Only .bz2 and .nav files are accepted. No max filesize.</small></span>
+    <span>Click or Drag 'n Drop files here..<br><small>Only .bz2 and .nav files are accepted. No max filesize.</small></span>
     <!-- The file input field used as target for the file upload widget -->
     <input id="fileupload" type="file" name="file" accept="application/x-bzip2, application/nav, text/nav, image/jpg, image/jpeg" multiple>
 </div>

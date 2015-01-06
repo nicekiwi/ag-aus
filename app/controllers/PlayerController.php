@@ -2,7 +2,6 @@
 
 class PlayerController extends \BaseController {
 
-	private $steam = "\SteamCondenser\Community\SteamId";
 
 	/**
 	 * Display a listing of the resource.
@@ -21,36 +20,59 @@ class PlayerController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store($steam_id)
 	{
-		$steam = $this->steam;
+		$player = Player::where('steam_id', $steam_id)->first();
 
-		if(Input::has('id'))
-			$id = Input::get('id');
-		else
-			return;
-
-		if(Player::where('steam_id', $id)->get()->count() < 1)
+		if(!$player)
 		{
-			$data = $this->getPlayerInfo($id);
+			$data = $this->getPlayerData($steam_id);
 
-			if($data->message) 
-			{
-				return;
-			}
-			else
+			if($data) 
 			{
 				$player = new Player;
-				$player->steam_url = $data->steam_url;
-				$player->steam_64id = $data->steam_64id;
-				$player->steam_nickname = $data->steam_nickname;
-				$player->steam_image = $data->steam_image;
-				$player->steam_id = $data->steam_id;
+				$player->steam_url = $data->profileUrl;
+				$player->steam_64id = $data->steamId;
+				$player->steam_nickname = $data->personaName;
+				$player->steam_image = $data->avatarFullUrl;
+				$player->steam_id = $steam_id;
 
 				$player->save();
 			}
 		}
+
+		return $player;
 	}
+	// public function store()
+	// {
+	// 	$steam = $this->steam;
+
+	// 	if(Input::has('id'))
+	// 		$id = Input::get('id');
+	// 	else
+	// 		return;
+
+	// 	if(Player::where('steam_id', $id)->get()->count() < 1)
+	// 	{
+	// 		$data = $this->getPlayerInfo($id);
+
+	// 		if($data->message) 
+	// 		{
+	// 			return;
+	// 		}
+	// 		else
+	// 		{
+	// 			$player = new Player;
+	// 			$player->steam_url = $data->steam_url;
+	// 			$player->steam_64id = $data->steam_64id;
+	// 			$player->steam_nickname = $data->steam_nickname;
+	// 			$player->steam_image = $data->steam_image;
+	// 			$player->steam_id = $data->steam_id;
+
+	// 			$player->save();
+	// 		}
+	// 	}
+	// }
 
 	/**
 	 * Display the specified resource.
@@ -100,36 +122,14 @@ class PlayerController extends \BaseController {
 		//
 	}
 
-	public function validateIdAjax($id)
+	public function getPlayerDataJson($id)
 	{
-		return json_encode($this->getPlayerInfo($id));
+		return json_encode($this->getPlayerData($id));
 	}
 
-	public function getPlayerInfo($id)
+	public function getPlayerData($ids)
 	{
-		$steam = $this->steam;
-
-		if(strpos($id, 'STEAM') !== false)
-			$id = $steam::convertSteamIdToCommunityId($id);
-
-		$data = new StdClass;
-
-		try
-		{
-			$steamID = $steam::create($id);
-
-			$data->steam_url = $steamID->getCustomUrl();
-			$data->steam_64id = $steamID->getSteamId64();
-			$data->steam_nickname = $steamID->getNickname();
-			$data->steam_image = $steamID->getFullAvatarUrl();
-			$data->steam_id = $steamID->convertCommunityIdToSteamId($id);
-		}
-		catch (Exception $e)
-		{
-			$data->message = $e->getMessage(); //'Profile does not exist or it set to Private.';
-		}
-
-		return $data;
+		return App::make('Quelle\SteamData\SteamDataInterface')->getPlayerData($ids);
 	}
 
 }

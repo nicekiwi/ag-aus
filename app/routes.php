@@ -63,9 +63,25 @@ Route::get('donators', function()
 	// return $gen->donators();
 	// 
 	//checkDonatorExpiry();
-	return new \Carbon\Carbon('today');
+	//return new \Carbon\Carbon('today');
+	//
+	//
+	//$user = Steam::user(76561198006940234)->GetPlayerSummaries();
+
+	//dd($user);
+	// STEAM_0:1:6587177
+	// 76561197973440083
+	//$a = (string) (6587177 * 2) + 76561197960265728 + 1;
+
+	return App::make('MapController')->initiateRemoteAction('wacky_races_v2.bsp.bz2','bz2',1);
+
+	//return substr('STEAM_0:1:6587177', -7);
+
+	///dd($a);
 
 });
+
+
 
 Route::get('server-info', function()
 {
@@ -101,7 +117,7 @@ Route::get('get-bans', 'BansController@pull_bans');
 
 //Route::get('update-quarter', 'DonationController@update_quarter');
 
-Route::get('check-steamid/{id}', 'PlayerController@validateIdAjax');
+Route::get('check-steamid/{id}', 'PlayerController@getPlayerDataJson');
 
 Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
 
@@ -122,10 +138,14 @@ Route::get('news/{slug}', 'PostController@show');
 
 Route::get('maps/login', 'MapController@steamAuth');
 Route::get('maps/logout', 'MapController@steamAuthLogout');
+
 Route::post('maps/feedback', 'MapController@MapVote');
 
+Route::post('maps/verify-remote-removal', 'MapController@verifyRemoteRemoval');
+Route::post('maps/verify-remote-download', 'MapController@verifyRemoteDownload');
+
 Route::get('maps', 'MapController@index_public');
-Route::get('maps/{slug}', 'MapController@show');
+//Route::get('maps/{slug}', 'MapController@show');
 
 
 
@@ -158,18 +178,21 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 
 	Route::get('donations','DonationController@index');
 	Route::get('donations/players','DonationController@expiry');
-	Route::get('donations/confirm/{code}','DonationController@confirmDonation');
+	//Route::get('donations/confirm/{code}','DonationController@confirmDonation');
 
 	Route::get( 'user/create','UserController@create');
 	Route::post('user','UserController@store');
 
-	Route::get('maps/upload', 'MapController@upload');
+	//Route::get('maps/upload', 'MapController@upload');
+	//
+	//
+	Route::post('maps/remote-action-ajax', 'MapController@initiateRemoteActionAjax');
 
 	Route::resource('users', 'UserController');
 	Route::resource('posts', 'PostController');
-	Route::resource('maps/configs', 'MapConfigController');
+	//Route::resource('maps/configs', 'MapConfigController');
 	Route::resource('maps', 'MapController');
-	Route::resource('map-files', 'MapFileController');
+	//Route::resource('map-files', 'MapFileController');
 	Route::resource('players', 'PlayerController');
 	Route::resource('bans', 'BansController');
 
