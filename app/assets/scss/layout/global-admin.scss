@@ -25,3 +25,17 @@
     cursor: inherit;
     display: block;
 }
+
+table.table thead .sorting:after,
+table.table thead .sorting_asc:after,
+table.table thead .sorting_desc:after,
+table.table thead .sorting_asc_disabled:after,
+table.table thead .sorting_desc_disabled:after {
+	font-family: 'FontAwesome';
+}
+
+table.table thead .sorting:after { content: '\f0dc'; opacity: 0.2; }
+table.table thead .sorting_asc:after { content: '\f0de'; }
+table.table thead .sorting_desc:after { content: '\f0dd'; }
+table.table thead .sorting_asc_disabled:after { content: '\f0de'; opacity: 0.2; }
+table.table thead .sorting_desc_disabled:after { content: '\f0dd'; opacity: 0.2; }

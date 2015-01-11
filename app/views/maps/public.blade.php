@@ -40,7 +40,7 @@
 		    <p>
 		    	<a class="vote-btn vote-up" data-map-id="{{ $map->id }}" data-action="up" href="/maps"><span>{{ $map->feedback->sum('vote_up') }}</span> <i class="fa fa-thumbs-up"></i></a>
 		    	<a class="vote-btn vote-down" data-map-id="{{ $map->id }}" data-action="down" href="/maps"><span>{{ $map->feedback->sum('vote_down') }}</span> <i class="fa fa-thumbs-down"></i></a>
-		    	<a class="vote-btn vote-broken" data-map-id="{{ $map->id }}" data-action="broken" href="/maps"><span>{{ $map->feedback->sum('vote_broken') }}</span> Broken?</a>
+		    	<a class="vote-btn vote-broken" data-map-id="{{ $map->id }}" data-action="broken" href="/maps"><span>{{ $map->feedback->sum('vote_broken') }}</span> <i class="fa fa-exclamation-triangle"></i></a>
 		    </p>
 
 		</div>

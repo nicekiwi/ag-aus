@@ -28,3 +28,14 @@ Form::macro('delete',function($url, $button_label = 'Delete', $button_icon = 'fa
             . '<i class="fa fa-lg ' . $button_icon . '"></i><button type="button" class="btn btn-link btn-delete-confirm">' . $button_label . '</button>'
             . Form::close();
 });
+
+Form::macro('deleteMap',function($url, $html = '<button type="button" class="btn btn-danger btn-delete-confirm"><i class="fa fa-trash"></i></button>'){
+
+    $form_parameters = [
+        'method'=> 'DELETE',
+        'class' => 'delete-map-form',
+        'url'   => $url
+    ];
+
+    return Form::open($form_parameters) . $html . Form::close();
+});

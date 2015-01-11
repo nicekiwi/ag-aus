@@ -50,6 +50,11 @@ class UsersTableSeeder extends Seeder {
 		$manageUsers->display_name = 'Manage Users';
 		$manageUsers->save();
 
+		$manageOptions = new Permission;
+		$manageOptions->name = 'manage_options';
+		$manageOptions->display_name = 'Manage Options';
+		$manageOptions->save();
+
 		$runJukebox = new Permission;
 		$runJukebox->name = 'run_jukebox';
 		$runJukebox->display_name = 'Run Jukebox';
@@ -68,6 +73,7 @@ class UsersTableSeeder extends Seeder {
 		// Add Permissions to Roles
 		$owner->perms()->sync([
 			$runJukebox->id,
+			$manageOptions->id,
 			$manageConfigs->id,
 			$manageUsers->id,
 			$manageMaps->id,

@@ -46,7 +46,7 @@ Class SyntaxSteamData implements SteamDataInterface
 			$player->steam_64id = 		$user->steamId;
 			$player->steam_nickname = 	strip_tags($user->personaName);
 			$player->steam_image = 		$user->avatarFullUrl;
-			$player->steam_id = 		$this->convertCommunityIdToSteamId($user->steamId);
+			$player->steam_id = 		$this->steamIds->id32;
 
 			$players->players[] = $player;
 		}

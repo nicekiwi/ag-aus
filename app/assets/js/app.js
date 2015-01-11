@@ -3,7 +3,11 @@
 //= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/alert.js
 //= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/button.js
 //= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js
+//= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tab.js
 //= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/transition.js
+//= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js
+//= require ../../../bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/popover.js
+
 
 //= ../../../bower_components/fancybox/source/jquery.fancybox.js
 //= ../../../bower_components/fancybox/source/helpers/jquery.fancybox-media.js
@@ -115,6 +119,9 @@ function donationPayment() {
 $(document).ready(function() {
 
   var bod = $( document.body );
+
+  $('[data-toggle="tooltip"]').tooltip();
+
 	// $(".fancybox").fancybox({
 	// 	width: 1280,
 	// 	height: 720,

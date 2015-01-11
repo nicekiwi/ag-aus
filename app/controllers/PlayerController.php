@@ -132,4 +132,26 @@ class PlayerController extends \BaseController {
 		return App::make('Quelle\SteamData\SteamDataInterface')->getPlayerData($ids);
 	}
 
+	public function getGroupMembers()
+	{
+		$members = Steam::group()->GetGroupSummary('2835397');
+
+		$members = $members->members;
+
+		//$members = array_chunk($members, 100);
+
+		dd($members);
+
+		// $data = [];
+
+		// foreach($members->members->id64 as $member)
+		// {
+		// 	$data[] = $member->id64;
+		// }
+
+		// $players = Steam::user($data)->GetPlayerSummaries();
+
+		// dd($players);
+	}
+
 }

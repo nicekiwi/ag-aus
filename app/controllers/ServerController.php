@@ -1,6 +1,7 @@
 <?php
 
-//use SteamCondenser\Community;
+use \SteamCondenser\Community\SteamGroup;
+use \SteamCondenser\Community\SteamId;
 
 class ServerController extends \BaseController {
 
@@ -27,14 +28,14 @@ class ServerController extends \BaseController {
 
 	public function getGroupMembers($groupID = '2835397')
 	{
-		$groupClass = "\SteamCondenser\Community\SteamGroup";
-		$steamClass = "\SteamCondenser\Community\SteamId";
+		// $groupClass = new SteamGroup;
+		// $steamClass = new SteamId;
 
 		$data = new StdClass;
 
 		try 
 		{
-			$group = $groupClass::create($groupID);
+			$group = SteamGroup::create($groupID);
 			$members = $group->getMembers();
 
 			foreach ($members as $i) {

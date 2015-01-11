@@ -73,11 +73,15 @@ Route::get('donators', function()
 	// 76561197973440083
 	//$a = (string) (6587177 * 2) + 76561197960265728 + 1;
 
-	return App::make('MapController')->initiateRemoteAction('wacky_races_v2.bsp.bz2','bz2',1);
+	//return App::make('MapController')->initiateRemoteAction('wacky_races_v2.bsp.bz2','bz2',1);
 
 	//return substr('STEAM_0:1:6587177', -7);
 
 	///dd($a);
+	///
+	$data = Steam::user([76561197987217337,76561198073683885,76561197999078519])->GetPlayerSummaries();
+
+	dd($data);
 
 });
 
@@ -119,7 +123,7 @@ Route::get('get-bans', 'BansController@pull_bans');
 
 Route::get('check-steamid/{id}', 'PlayerController@getPlayerDataJson');
 
-Route::get('group-members/{id?}', 'ServerController@getGroupMembers');
+Route::get('group-members/{id?}', 'PlayerController@getGroupMembers');
 
 Route::get('donate', 'DonationController@public_index');
 Route::post('donate', 'DonationController@validate_donation');
@@ -176,8 +180,8 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 
 	Route::post('store-player', 'PlayerController@store');
 
-	Route::get('donations','DonationController@index');
-	Route::get('donations/players','DonationController@expiry');
+	Route::get('donations/{year?}/{quarter?}','DonationController@index');
+	//Route::get('donations/players','DonationController@expiry');
 	//Route::get('donations/confirm/{code}','DonationController@confirmDonation');
 
 	Route::get( 'user/create','UserController@create');
@@ -195,6 +199,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	//Route::resource('map-files', 'MapFileController');
 	Route::resource('players', 'PlayerController');
 	Route::resource('bans', 'BansController');
+	Route::resource('options', 'OptionController');
 
 
 

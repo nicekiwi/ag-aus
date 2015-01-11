@@ -61,23 +61,20 @@
         <li>Golden Frying-Pan <small>During the pre-round team killing, you weild a Golden Frying Pan.</small></li>
     </ul>
 
-    <p>Current quarter Goal: ${{ $goal }}, Donated so far: ${{ $total }}</p>
+    <p>Current quarter Goal: ${{ $quarter->goal }}, Donated so far: ${{ $quarter->total }}</p>
 
-    <div class="progress progress{{ ($percentage >= 100) ?: '-striped active' }}">
-      <div class="progress-bar progress-bar-{{ ($percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($percentage >= 100) ? '100' : $percentage }}%">
-        {{ $percentage }}%
+    <div class="progress progress{{ ($quarter->percentage >= 100) ?: '-striped active' }}">
+      <div class="progress-bar progress-bar-{{ ($quarter->percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $quarter->percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($quarter->percentage >= 100) ? '100' : $quarter->percentage }}%">
+        {{ $quarter->percentage }}%
       </div>
     </div>
 
-    <div class="col-sm-12">
+    <ul class="donators-avatar-list">
 
-        @foreach($donations as $donation)
-        <div class="col-md-3 donor">
-
-            <img src="/images/avatar/{{ ($donation->player ? urlencode($donation->player->steam_image) : urlencode('http://ag-aus.app/img/anonnymous.jpg') ) }}"> {{ $donation->player->steam_nickname or 'Anonnymous' }}
-        </div>
+        @foreach($quarter->donations as $donation)
+        <li><img data-toggle="tooltip" data-placement="bottom" title="{{ htmlspecialchars($donation->player->steam_nickname) }}" src="/images/donatoravatar/{{ ($donation->player ? urlencode($donation->player->steam_image) : urlencode('/img/anonnymous.jpg') ) }}"></li>
         @endforeach
-    </div>
+    </ul>
 </div>
 @stop
 

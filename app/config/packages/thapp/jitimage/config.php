@@ -108,6 +108,7 @@ return [
      */
     'recipes' => [
         'avatar'  => '2/30/30',
+        'donatoravatar'  => '2/50/50',
         'mapthumbnail'  => '2/300/169',
         // 'nphotos'  => '4/300/300',
         // 'videos'  => '2/300/168',

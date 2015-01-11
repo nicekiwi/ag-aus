@@ -8,55 +8,61 @@ class DonationController extends BaseController
 	function __construct() {
 
 		// set quarter goal amount
-		$this->quarterGoal = Options::pluck('donation_quarter_goal');
+		$this->options = Options::first();
 
 		// Get current year
-		$this->thisYear = date('Y');
+		// $this->thisYear = date('Y');
 
 		// Get timestamp of today
 		$this->today = new \Carbon\Carbon('today');
 
 		// Get quater dates
-		$this->firstQuarter = [
-			new \Carbon\Carbon('first day of January'),
-			new \Carbon\Carbon('23:59:59 last day of March')
-		];
+		// $this->firstQuarter = [
+		// 	new \Carbon\Carbon('first day of January'),
+		// 	new \Carbon\Carbon('23:59:59 last day of March')
+		// ];
 
-		$this->secondQuarter = [
-			new \Carbon\Carbon('first day of April'),
-			new \Carbon\Carbon('23:59:59 last day of June')
-		];
+		// $this->secondQuarter = [
+		// 	new \Carbon\Carbon('first day of April'),
+		// 	new \Carbon\Carbon('23:59:59 last day of June')
+		// ];
 
-		$this->thirdQuarter = [
-			new \Carbon\Carbon('first day of July'),
-			new \Carbon\Carbon('23:59:59 last day of September')
-		];
+		// $this->thirdQuarter = [
+		// 	new \Carbon\Carbon('first day of July'),
+		// 	new \Carbon\Carbon('23:59:59 last day of September')
+		// ];
 
-		$this->fourthQuarter = [
-			new \Carbon\Carbon('first day of October'),
-			new \Carbon\Carbon('23:59:59 last day of December')
-		];
+		// $this->fourthQuarter = [
+		// 	new \Carbon\Carbon('first day of October'),
+		// 	new \Carbon\Carbon('23:59:59 last day of December')
+		// ];
 
-		$this->currentQuarter = new StdClass;
+		// $this->currentQuarter = new StdClass;
 
-		// check for and get current quarter donations
-		if ($this->today->between($this->firstQuarter[0],$this->firstQuarter[1])) {
-			$this->currentQuarter->dates = $this->firstQuarter;
-		}
-		if ($this->today->between($this->secondQuarter[0],$this->secondQuarter[1]))  {
-			$this->currentQuarter->dates = $this->secondQuarter;
-		}
-		if ($this->today->between($this->thirdQuarter[0],$this->thirdQuarter[1])) {
-			$this->currentQuarter->dates = $this->thirdQuarter;
-		}
-		if ($this->today->between($this->fourthQuarter[0],$this->fourthQuarter[1]))  {
-			$this->currentQuarter->dates = $this->fourthQuarter;
-		}
+		// // check for and get current quarter donations
+		// if ($this->today->between($this->firstQuarter[0],$this->firstQuarter[1])) {
+		// 	$this->currentQuarter->dates = $this->firstQuarter;
+		// }
+		// if ($this->today->between($this->secondQuarter[0],$this->secondQuarter[1]))  {
+		// 	$this->currentQuarter->dates = $this->secondQuarter;
+		// }
+		// if ($this->today->between($this->thirdQuarter[0],$this->thirdQuarter[1])) {
+		// 	$this->currentQuarter->dates = $this->thirdQuarter;
+		// }
+		// if ($this->today->between($this->fourthQuarter[0],$this->fourthQuarter[1]))  {
+		// 	$this->currentQuarter->dates = $this->fourthQuarter;
+		// }
+		// 
+		$this->quarter = DonationQuarter::where('quarter', $this->today->quarter)
+					   					->where('year', $this->today->year)
+					   					->first();
 
-		$this->currentQuarter->donations = Donation::whereBetween('created_at', $this->currentQuarter->dates)->get();
-		$this->currentQuarter->totalDonations = $this->currentQuarter->donations->sum('amount');
-		$this->currentQuarter->percentage = round(($this->currentQuarter->totalDonations / $this->quarterGoal) * 100);
-		$this->currentQuarter->number = $this->today->quarter;
+		// $this->quarter->number 		= $this->today->quarter;
+		// $this->quarter->donations 	= Donation::where('quarter', $this->today->quarter)
+		// 									  ->where('year', 	 	$this->today->year)
+		// 									  ->get();
+		// $this->quarter->total 		= $this->quarter->donations->sum('amount');
+		// $this->quarter->percentage 	= round(($this->quarter->total / $this->options->donation_quarter_goal) * 100);
 
 		// get donations for current quater
 
@@ -188,62 +194,50 @@ class DonationController extends BaseController
 	//
 	//
 
-	public function getDonations() {
-		return json_encode($this->currentQuarter->donations);
+	public function getDonationsJson() {
+		return json_encode($this->quarter->donations);
 	}
 
-	public function getCurrentQuarter() {
-		return json_encode($this->currentQuarter->dates);
+	public function getCurrentQuarterJson() {
+		return json_encode($this->quarter->quarter);
 	}
 
-	public function index()
+	public function index($year = null, $q = 1)
 	{
-		// Get donations from current quater
-		//$donations = Donation::where('quarter_id',$quarter->id)->get();
+		if(is_null($year)) 
+		{
+			$quarter = $this->quarter;
+		}
+		else
+		{
+			$quarter = DonationQuarter::where('year', $year)
+									  ->where('quarter', $q)
+									  ->first();
+		}
 
-		//dd($donations);
-		//
-		$quarters = DonationQuarter::take(4)->get();
+		$yearList = DonationQuarter::where('quarter',1)->orderBy('year','desc')->get();
+		$quarterList = DonationQuarter::where('year', $quarter->year)->orderBy('quarter','asc')->get();
+
+		$players = Player::whereNotNull('donation_expires')
+						 ->orderBy('donation_expires','asc')
+						 ->get();
 
 		// Return donate with quarter data
-		return View::make('donate.index')->with([
-			'quarters' => $quarters
-		]);
-	}
-
-	public function expiry()
-	{
-		// Get donations from current quater
-		//$donations = Donation::where('quarter_id',$quarter->id)->get();
-
-		//dd($donations);
-		//
-		$players = Player::whereNotNull('donation_expires')->orderBy('donation_expires','asc')->get();
-		$today = $this->today;
-
-		// Return donate with quarter data
-		return View::make('donate.expiry')->with([
+		return View::make('donate.index', [
+			'quarter' => $quarter,
 			'players' => $players,
-			'today'	=> $today
+			'yearList' => $yearList,
+			'quarterList' => $quarterList
 		]);
 	}
 
 	public function public_index()
 	{
-		// Get latest quter Object
-		//$quarter = DonationQuarter::orderBy('id','desc')->first();
-		//$donations = Donation::where('quarter_id',$quarter->id)->get();
-
-		//dd($this->currentQuarter);
-
 		// Return donate with quarter data
 		$this->layout->bodyClass = 'donations-page';
 		$this->layout->content = View::make('donate.public')->with([
-			'donations' => 	$this->currentQuarter->donations,
-			'percentage' => $this->currentQuarter->percentage,
-			'total' => 			$this->currentQuarter->totalDonations,
-			'goal' 	=> 			$this->quarterGoal,
-			'number'	=> 	$this->currentQuarter->number
+			'quarter' => $this->quarter,
+			'today' => $this->today
 		]);
 	}
 
@@ -367,88 +361,91 @@ class DonationController extends BaseController
 	public function saveDonation()
 	{
 		$input = Input::all();
-		$credit_card = explode(',', $input['stripe_data']);
+		
 
 		// get or create donation_quarter record
-		$quarter = DonationQuarter::where('quarter', $this->today->quarter)->first();
+		$quarter = $this->quarter;
 
 		if(!$quarter->id) {
 
 			$quarter = new DonationQuarter;
-			$quarter->year = $this->today->year;
+			$quarter->year = 	$this->today->year;
 			$quarter->quarter = $this->today->quarter;
-			$quarter->goal = $this->quarterGoal;
+			$quarter->goal = 	$this->options->donation_quarter_goal;
 			$quarter->save();
 
 		}
 
 		// Save donation details to donnations table with player's ID.
 		$donation = new Donation;
-		$donation->amount = $input['amount'];
-		$donation->currency = 'AUD';
+		$donation->email = 		$input['email'];
+		$donation->amount = 	$input['amount'];
+		$donation->currency = 	'AUD';
 
-		$donation->email = $input['email'];
+		$credit_card = explode(',', $input['stripe_data']);
+		
 		$donation->card_token = $input['stripe_token'];
-		$donation->card_type = $credit_card[0];
+		$donation->card_type = 	$credit_card[0];
 		$donation->card_last4 = $credit_card[1];
 		$donation->card_month = $credit_card[2];
-		$donation->card_year = $credit_card[3];
+		$donation->card_year = 	$credit_card[3];
 		$donation->quarter_id = $quarter->id;
 
 
 		if($input['steam_id'])
 		{
+
 			// Check if donation gets a perk
-			if($donation->amount > 7) {
-				$expiry = new \Carbon\Carbon('tomorrow');
-				$expiry = $expiry->addMonths(round($donation->amount / 7));
+			if($donation->amount > $this->options->donation_monthly_cost) 
+			{
+				$months = round($donation->amount / $this->options->donation_monthly_cost);
+				$expiry = $this->today->addDays(1)->addMonths($months);
 			}
+			else
+			{
+				$expiry = null;
+			}
+
+			$input['donation_expires'] = $expiry;
 
 			//$donation->confirm_code = md5($donation->email . $expiry);
 
 			// Use Validation to check if player has dontated before
-			$validator = Validator::make($input, ['steam_id' => 'required|unique:players']);
+			//$validator = Validator::make($input, ['steam_id' => 'required|unique:players']);
+			$player = Player::where('steam_id', $input['steam_id'])->first();
 
 			// If player already exists, get their ID
-			if ( $validator->fails() )
+			if ( $player )
 			{
-				$existing_player = Player::where('steam_id', $input['steam_id'])->first();
-				$donation->player_id = $existing_player->id;
-				$existing_player->donation_expires = $expiry or null;
-
-				// Update the nickname if different from previously saved one.
-				if(Input::has('steam_nickname') && $input['steam_nickname'] !== $existing_player->steam_nickname)
-				{
-					$existing_player->steam_nickname = $input['steam_nickname'];
-				}
-
-				$existing_player->save();
+				$donation->player_id = $player->id;
+				$player->update($input['donation_expires']);
 			}
 			else
 			{
 				// Save new player to players table and get their ID
-				$player = new Player;
+				$player = Player::create($input);
 
-				$player->steam_id = $input['steam_id'];
+				// $player->steam_id = $input['steam_id'];
 
-				if(Input::has('steam_64id')){
-					$player->steam_64id = $input['steam_64id'];
-				}
+				// if(Input::has('steam_64id')){
+				// 	$player->steam_64id = $input['steam_64id'];
+				// }
 
-				if(Input::has('steam_url')){
-					$player->steam_url = $input['steam_url'];
-				}
+				// if(Input::has('steam_url')){
+				// 	$player->steam_url = $input['steam_url'];
+				// }
 
-				if(Input::has('steam_nickname')){
-					$player->steam_nickname = $input['steam_nickname'];
-				}
+				// if(Input::has('steam_nickname')){
+				// 	$player->steam_nickname = $input['steam_nickname'];
+				// }
 
-				if(Input::has('steam_image')){
-					$player->steam_image = $input['steam_image'];
-				}
+				// if(Input::has('steam_image')){
+				// 	$player->steam_image = $input['steam_image'];
+				// }
 
-				$player->donation_expires = $expiry or null;
-				$player->save();
+				//$player->donation_expires = $expiry or null;
+				//$player->save();
+				//
 				$donation->player_id = $player->id;
 			}
 
@@ -470,7 +467,7 @@ class DonationController extends BaseController
 		$donation->save();
 
 		// update the quarter total and percentage
-		$quarter->total = Donation::where('quarter_id', $quarter->id)->sum('amount');
+		$quarter->total = $this->quarter->total + $donation->amount;
 		$quarter->percentage = round(($quarter->total / $quarter->goal) * 100);
 		$quarter->save();
 
@@ -532,7 +529,7 @@ class DonationController extends BaseController
 
 	public function writeDonators()
 	{
-		$donators = Player::where('donation_expires','>', strtotime('today'))->get();
+		$donators = Player::where('donation_expires','>', $this->today->date)->get();
 
 		if($donators->count() > 0)
 		{
@@ -546,9 +543,9 @@ class DonationController extends BaseController
 			
 			foreach ($donators as $donator)
 			{
-				$admins .= $n . '\"' . $donator->steam_nickname . '\"' . $n;
+				$admins .= $n . '\"' . htmlspecialchars($donator->steam_nickname) . '\"' . $n;
 				$admins .= '{' . $n;
-				$admins .= $t . '// Expires ' . date('d/m/Y', strtotime($donator->donation_expires)) . $n;
+				$admins .= $t . '// Expires ' . date('d/m/Y', $donator->donation_expires->date) . $n;
 				$admins .= $t . '\"auth\"' . $t . $t . '\"steam\"' . $n;
 				$admins .= $t . '\"identity\"' . $t . '\"' . $donator->steam_id . '\"' . $n;
 				$admins .= $t . '\"group\"' . $t . $t . '\"Donator\"' . $n;

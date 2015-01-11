@@ -43,6 +43,7 @@
               @if(Auth::user()->can("manage_maps"))
               <li><a href="/admin/maps">Maps</a></li>
               @endif
+              <!--
               @if(Auth::user()->can("manage_posts"))
               <li><a href="/admin/posts">Posts</a></li>
               @endif
@@ -52,9 +53,15 @@
               @if(Auth::user()->can("manage_bans"))
               <li><a href="/admin/bans">Bans</a></li>
               @endif
+              -->
               @if(Auth::user()->can("manage_donations"))
               <li><a href="/admin/donations">Donations</a></li>
               @endif
+
+              @if(Auth::user()->can("manage_options"))
+              <li><a href="/admin/options">Options</a></li>
+              @endif
+
               @if(Auth::user()->can("manage_users"))
               <li><a href="/admin/users">Users</a></li>
               @endif

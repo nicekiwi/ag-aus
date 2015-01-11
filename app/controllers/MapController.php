@@ -68,7 +68,7 @@ class MapController extends BaseController {
 
 	public function index_public()
 	{
-		$maps = Map::where('map_type_id', '>', 0)->get();
+		$maps = Map::where('map_type_id', '>', 0)->where('remote',1)->get();
 		$map_total = $maps->count();
 		$map_types = MapType::orderBy('name','asc')->get();
 
@@ -358,9 +358,12 @@ class MapController extends BaseController {
 
 		$map->delete();
 
-		// redirect
-		Session::flash('success_message', $filename . ' deleted.');
-		return Redirect::to('admin/maps');
+		if (!Request::ajax())
+		{
+		    // redirect
+			Session::flash('success_message', $filename . ' deleted.');
+			return Redirect::to('admin/maps');
+		}
 	}
 
 	public function deleteMapFromAmazon($filename)

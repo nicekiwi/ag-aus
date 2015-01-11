@@ -5,13 +5,12 @@
   "dependencies": {
     "fancybox": "*",
     "unveil": "*",
-    "datatables": "~1.9.4",
+    "datatables": "~1.10.4",
     "bootstrap-sass-official": "~v3.1.1",
     "blueimp-file-upload": "~9.5.7",
     "jquery-sortable": "~0.9.12",
-    "bootbox": "~4.3.0"
-  },
-  "resolutions": {
-    "jquery": ">= 2.1.0"
+    "bootbox": "~4.3.0",
+    "datatables-bootstrap3": "*",
+    "datatables-bootstrap3-plugin": "~0.2.0"
   }
 }

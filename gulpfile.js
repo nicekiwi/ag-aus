@@ -40,8 +40,8 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(targets.js));
 });
 
-gulp.task('fonts', function () {
-    gulp.src('./bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap/*')
+gulp.task('copyfiles', function () {
+    gulp.src('./bower_components/bootstrap-sass-official/vendor/assets/fonts/**/*.{ttf,woff,eof,svg}')
         .pipe(gulp.dest('./public/fonts'));
 });
 
