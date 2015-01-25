@@ -29,7 +29,7 @@
                 {{ Form::number('amount', $value = null, [
                     'class' => 'form-control',
                     'id' => 'donation-amount',
-                    'placeholder' => '0.00',
+                    'placeholder' => ($options->donation_monthly_cost * 2).'.00',
                     'required' => 'required'
                 ]) }}
             </div>
@@ -50,15 +50,15 @@
 
 <div class="col-sm-12 col-md-9 content-shade">
 
-    <h1>Donations</h1>
+    <h1>Donate</h1>
 
-    <p>To support our server costs we offer a Donator satuts on our TF2 servers at $7.00AUD per month, this gives some  exclusive benifets (Not even admins get most of these):</p>
+    <p>To support our server costs we offer a Donator satuts on our TF2 servers at ${{ $options->donation_monthly_cost }}AUD per month, this gives some  exclusive benifets (Not even admins get most of these):</p>
 
     <ul class="donor-perks">
-        <li>Reserved Player Slot <small>Join a game even when its full.</small></li>
-        <li>Humiliation-Round immunity <small>If your team loses at the end of a round, you can't be killed.</small></li>
-        <li>Special Donator Tag in-game <small>Exclusive Purple? Donator tag on in-game chat.</small></li>
-        <li>Golden Frying-Pan <small>During the pre-round team killing, you weild a Golden Frying Pan.</small></li>
+        <li><i class="fa fa-star"></i> Reserved Player Slot<br><small>Join a game even when its full.</small></li>
+        <li>Humiliation-Round immunity<br><small>If your team loses at the end of a round, you can't be killed.</small></li>
+        <li><i class="fa fa-tag"></i> Special Donator Tag in-game<br><small>Exclusive Purple? Donator tag on in-game chat.</small></li>
+        <li>Golden Frying-Pan<br><small>During the pre-round team killing, you weild a Golden Frying Pan.</small></li>
     </ul>
 
     <p>Current quarter Goal: ${{ $quarter->goal }}, Donated so far: ${{ $quarter->total }}</p>
@@ -75,6 +75,15 @@
         <li><img data-toggle="tooltip" data-placement="bottom" title="{{ htmlspecialchars($donation->player->steam_nickname) }}" src="/images/donatoravatar/{{ ($donation->player ? urlencode($donation->player->steam_image) : urlencode('/img/anonnymous.jpg') ) }}"></li>
         @endforeach
     </ul>
+
+    <h5>Refunds</h5>
+    <p>Refunds are available only in the following two cases:</p>
+    <ol>
+        <li>If a technical fault causes the AG/DoP TF2 servers unplayable for an extended period of time (being empty does not count);</li>
+        <li>Or if </li>
+    </ol>
+
+    If something were to happen to the TF2 servers that made them unusable before your Donator Status expires (Being empty does not count), we can easily refund you for the months remaining on your donator status.</p>
 </div>
 @stop
 

@@ -9,8 +9,7 @@ class MapFeedback extends Eloquent
 
     public function map()
     {
-    	return $this->belongsTo('Map');
+        return $this->belongsTo('Map');
+
     }
-
-
 }

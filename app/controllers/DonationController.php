@@ -227,7 +227,8 @@ class DonationController extends BaseController
 			'quarter' => $quarter,
 			'players' => $players,
 			'yearList' => $yearList,
-			'quarterList' => $quarterList
+			'quarterList' => $quarterList,
+			'options' => $this->options
 		]);
 	}
 
@@ -237,7 +238,8 @@ class DonationController extends BaseController
 		$this->layout->bodyClass = 'donations-page';
 		$this->layout->content = View::make('donate.public')->with([
 			'quarter' => $this->quarter,
-			'today' => $this->today
+			'today' => $this->today,
+			'options' => $this->options
 		]);
 	}
 

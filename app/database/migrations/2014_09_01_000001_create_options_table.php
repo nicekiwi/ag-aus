@@ -15,9 +15,9 @@ class CreateOptionsTable extends Migration {
 		Schema::create('options', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('donation_quarter_goal');
-			$table->integer('donation_monthly_cost');
-			$table->integer('donation_maximum_amount');
+			$table->string('donation_quarter_goal');
+			$table->string('donation_monthly_cost');
+			$table->string('donation_maximum_amount');
 			$table->text('donation_admin_email1');
 			//$table->text('donation_admin_email2');
 

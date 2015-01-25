@@ -31,6 +31,17 @@ class Map extends Ardent
 
     }
 
+    /**
+     *
+     */
+    public function feedbackScore()
+    {
+        $positive = $this->feedback->sum('vote_up');
+        $negative = 0 - $this->feedback->sum('vote_down');
+
+        return ($negative + $positive) / 2;
+    }
+
     public function mapThumbnail()
     {
         $url = $this->images;
@@ -42,6 +53,8 @@ class Map extends Ardent
             return urlencode(url('/img/no-thumb.png'));
         }
     }
+
+
     
 
     // public function getMaps()

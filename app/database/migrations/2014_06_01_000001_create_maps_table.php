@@ -32,6 +32,7 @@ class CreateMapsTable extends Migration {
 			//$table->string('developer');
 			//$table->text('developer_url');
 			$table->integer('remote');
+			$table->integer('website');
 
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();
@@ -47,6 +48,10 @@ class CreateMapsTable extends Migration {
 			$table->integer('vote_up');
 			$table->integer('vote_down');
 			$table->integer('vote_broken');
+			$table->text('broken_report');
+			$table->string('broken_image');
+			$table->integer('broken_contact');
+			$table->integer('broken_status');
 
 			$table->softDeletes();
 			$table->integer('updated_by')->nullable();

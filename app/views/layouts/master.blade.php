@@ -31,19 +31,42 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Alternative Gaming</a>
+            <a class="navbar-brand" href="/"><img src="/img/ag-brand.png" alt="Alternative Gaming"/></a>
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <!-- <li><a href="/events">Events</a></li> -->
+
+              <li><a href="/news">News</a></li>
+              <li><a href="/events">Events</a></li>
+              <li><a href="http://steamcommunity.com/groups/AG-Aus/discussions" target="_blank">Forums <small><i class="fa fa-external-link"></i></small></a></li>
               <li><a href="/maps">Maps</a></li>
               <!-- <li><a href="/tools">Tools</a></li> -->
               <!-- <li><a href="/bans">Bans</a></li> -->
+
               <li><a href="/donate">Donate</a></li>
-              <li><a href="http://ag-aus.gameme.com" target="_blank">Stats</a></li>
+
+              <li><a href="http://ag-aus.gameme.com" target="_blank">Stats <small><i class="fa fa-external-link"></i></small></a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a target="_blank" href="http://community.ag-aus.org">Forums</a></li>
+              @if(Session::has('public-auth-true') && Session::has('player'))
+
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle steam-player-menu" data-toggle="dropdown" role="button" aria-expanded="false">
+                  <span><small>{{ substr(htmlspecialchars(Session::get('player')->steam_nickname), 0, 15) }}..</small></span>
+                  <img class="img-circle" src="/images/avatar/{{ (Session::get('player')->steam_image ? urlencode(Session::get('player')->steam_image) : urlencode('http://ag-aus.app/img/anonnymous.jpg') ) }}"> <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                  <li class="divider"></li>
+                  <li><a href="/maps/logout">Logout</a></li>
+                </ul>
+              </li>
+              @else
+              <li><a href="{{ SteamLogin::url(Config::get('steam.login')) }}"><i class="fa fa-steam fa-lg"></i> Login</a></li>
+              @endif
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
@@ -71,6 +94,10 @@
       </section>
 
     </div>
+
+    @if(Session::has('public-auth-true') && Session::has('player'))
+    <script type="text/javascript">var loggedIn = true;</script>
+    @endif
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="/js/app.js"></script>
     @yield('footer')

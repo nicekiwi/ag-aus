@@ -115,6 +115,104 @@ Route::get('players', function()
 	//var_dump($players);
 });
 
+Route::get('news/{slug?}', function($slug = null)
+{
+	$xml = simplexml_load_file("http://steamcommunity.com/groups/AG-Aus/rss/");
+
+	$posts = [];
+
+	foreach ($xml->channel->item as $item)
+	{
+		$post = new StdClass;
+		$post->title = (string)$item->title;
+		$post->slug = Str::slug($post->title);
+		$post->author = (string)$item->author;
+
+		$post->descHtml = (string)$item->description;
+
+		$desc = strip_tags($post->descHtml);
+		$desc = preg_replace('/\s+/', ' ', $desc);
+		$desc = trim(substr($desc, 0, 100)) . '...';
+		$post->desc = $desc;
+
+		$post->link = (string)$item->link;
+		$post->date = date('d/m', strtotime((string)$item->pubDate));
+
+		$posts[] = $post;
+
+		if(!is_null($slug) && $slug === $post->slug)
+		{
+			return View::make('news.show')->with(compact('post'));
+		}
+	}
+
+	return View::make('news.index')->with(compact('posts'));
+
+});
+
+Route::get('events', function()
+{
+	// Todo: Cache these calls
+	$xml = simplexml_load_file('http://steamcommunity.com/groups/AG-Aus/events?xml=1&action=eventFeed&month=1&year=2015');
+
+	$year = 2015;
+	$month = 1;
+
+	$elements = [$xml->event,$xml->expiredEvent];
+
+	$events = [];
+	$pastEvents = [];
+
+	foreach ($elements as $key => $element)
+	{
+		foreach ($element as $exp)
+		{
+			$crawler = new Symfony\Component\DomCrawler\Crawler((string)$exp);
+
+			$id = $crawler->filter('.eventBlock')->attr('id');
+			$day = $crawler->filter('.eventDateBlock > span')->text();
+			$time = $crawler->filter('.eventDateTime')->text();
+			$title = $crawler->filter('.headlineLink')->text();
+
+			$event = new StdClass;
+			$event->date = date('d/m/y', strtotime($time . ' ' . $day . '' . $month . ' ' . $year));
+			$event->title = $title;
+			$event->slug = Str::slug($event->title) . '/' . str_replace('_eventBlock', '', $id);
+
+			if($key > 0)
+			{
+				$pastEvents[] = $event;
+			}
+			else
+			{
+				$events[] = $event;
+			}
+
+		}
+	}
+
+	return View::make('events.index')->with([
+		'events' => $events,
+		'pastEvents' => $pastEvents
+	]);
+});
+
+Route::get('events/{id}/{slug}', function()
+{
+
+
+
+});
+
+Route::get('get-steam-discussions', function()
+{
+	$server = new Server;
+	return json_encode($server->getServerLocal());
+});
+
+
+
+
 Route::get('bans', 'BansController@index_public');
 
 Route::get('get-bans', 'BansController@pull_bans');
@@ -136,9 +234,9 @@ Route::get('/', 'HomeController@index_public');
 //Route::get('logout', 'SessionsController@destroy');
 //Route::resource('sessions', 'SessionsController');
 
-Route::get('news', 'PostController@index_public');
-Route::get('news/json/{id}', 'PostController@comments_plugin');
-Route::get('news/{slug}', 'PostController@show');
+//Route::get('news', 'PostController@index_public');
+//Route::get('news/json/{id}', 'PostController@comments_plugin');
+//Route::get('news/{slug}', 'PostController@show');
 
 Route::get('maps/login', 'MapController@steamAuth');
 Route::get('maps/logout', 'MapController@steamAuthLogout');
