@@ -26125,7 +26125,7 @@ function donationPayment() {
 		// Open Checkout with further options
     handler.open({
       name: 'Alternitive Gaming Australia',
-      description: 'Donation',
+      description: '$' + donation_amount + 'Donation',
       amount: donation_amount * 100,
       currency: 'AUD',
       panelLabel: 'Donate',

@@ -3,12 +3,14 @@
 @section('content')
 
     <section class="content-shade">
-        <h2>{{ $post->title }}</h2>
-        <p><small>{{ $post->date }} - {{ $post->author }}</small></p>
+        <h2>{{ $event->title }}</h2>
+        <p><small>{{ $event->date }} - {{ $event->author }}</small></p>
 
-        <div>{{ $post->descHtml }}</div>
+        <p><img src="{{ $event->logo }}" /></p>
 
-        <p><a target="_blank" href="{{ $post->link }}"><i class="fa fa-external-link"></i> View and Comment</a> on Steam Community.</p>
+        <div>{{ $event->desc }}</div>
+
+        <p><a target="_blank" href="http://steamcommunity.com/groups/AG-Aus/events/{{ $event->id }}"><i class="fa fa-external-link"></i> View and Comment</a> on Steam Community.</p>
     </section>
 
 

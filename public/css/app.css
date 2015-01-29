@@ -1176,7 +1176,7 @@ pre {
   @media (min-width: 768px) {
     .container {
       width: 750px; } }
-  @media (min-width: 1170px) {
+  @media (min-width: 970px) {
     .container {
       width: 970px; } }
   @media (min-width: 1600px) {
@@ -1471,7 +1471,7 @@ pre {
   .col-sm-offset-12 {
     margin-left: 100%; } }
 
-@media (min-width: 1170px) {
+@media (min-width: 970px) {
   .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
     float: left; }
   .col-md-1 {
@@ -3861,7 +3861,7 @@ button.close {
   .modal-sm {
     width: 300px; } }
 
-@media (min-width: 1170px) {
+@media (min-width: 970px) {
   .modal-lg {
     width: 900px; } }
 
@@ -4270,7 +4270,7 @@ button.close {
   .visible-xs-inline-block {
     display: inline-block !important; } }
 
-@media (min-width: 768px) and (max-width: 1169px) {
+@media (min-width: 768px) and (max-width: 969px) {
   .visible-sm {
     display: block !important; }
   table.visible-sm {
@@ -4280,19 +4280,19 @@ button.close {
   th.visible-sm, td.visible-sm {
     display: table-cell !important; } }
 
-@media (min-width: 768px) and (max-width: 1169px) {
+@media (min-width: 768px) and (max-width: 969px) {
   .visible-sm-block {
     display: block !important; } }
 
-@media (min-width: 768px) and (max-width: 1169px) {
+@media (min-width: 768px) and (max-width: 969px) {
   .visible-sm-inline {
     display: inline !important; } }
 
-@media (min-width: 768px) and (max-width: 1169px) {
+@media (min-width: 768px) and (max-width: 969px) {
   .visible-sm-inline-block {
     display: inline-block !important; } }
 
-@media (min-width: 1170px) and (max-width: 1599px) {
+@media (min-width: 970px) and (max-width: 1599px) {
   .visible-md {
     display: block !important; }
   table.visible-md {
@@ -4302,15 +4302,15 @@ button.close {
   th.visible-md, td.visible-md {
     display: table-cell !important; } }
 
-@media (min-width: 1170px) and (max-width: 1599px) {
+@media (min-width: 970px) and (max-width: 1599px) {
   .visible-md-block {
     display: block !important; } }
 
-@media (min-width: 1170px) and (max-width: 1599px) {
+@media (min-width: 970px) and (max-width: 1599px) {
   .visible-md-inline {
     display: inline !important; } }
 
-@media (min-width: 1170px) and (max-width: 1599px) {
+@media (min-width: 970px) and (max-width: 1599px) {
   .visible-md-inline-block {
     display: inline-block !important; } }
 
@@ -4340,11 +4340,11 @@ button.close {
   .hidden-xs {
     display: none !important; } }
 
-@media (min-width: 768px) and (max-width: 1169px) {
+@media (min-width: 768px) and (max-width: 969px) {
   .hidden-sm {
     display: none !important; } }
 
-@media (min-width: 1170px) and (max-width: 1599px) {
+@media (min-width: 970px) and (max-width: 1599px) {
   .hidden-md {
     display: none !important; } }
 
@@ -4415,7 +4415,12 @@ body {
   background: transparent url('/img/splash-gran-house.jpg') no-repeat center center fixed;
   background-size: cover; }
 
-h1, h2, h3 {
+h2, h3, h4 {
+  font-family: 'TF2Secondary', AllerRegular, Helvetica, Arial, sans-serif;
+  margin-top: 0; }
+
+h1 {
+  font-family: 'TF2Build', AllerRegular, Helvetica, Arial, sans-serif;
   margin-top: 0; }
 
 .content-shade {
@@ -4505,6 +4510,10 @@ body.maps-page .maps-list {
       padding: 2px 4px; }
     body.maps-page .maps-list .map-desc a:visited {
       color: #d9d9d9; }
+    body.maps-page .maps-list .map-desc .vote-positive {
+      background-color: #629319; }
+    body.maps-page .maps-list .map-desc .vote-negative {
+      background-color: #752501; }
     body.maps-page .maps-list .map-desc .vote-up {
       background-color: #629319; }
       body.maps-page .maps-list .map-desc .vote-up:hover {
@@ -4556,15 +4565,16 @@ body.maps-page .maps-list {
     width: 58%;
     float: right; } }
 
-@media only screen and (min-width: 768px) and (max-width: 1169px) { }
+@media only screen and (min-width: 768px) and (max-width: 969px) { }
 
-@media only screen and (max-width: 1169px) { }
+@media only screen and (max-width: 969px) { }
+
+.container {
+  max-width: 970px;
+  width: 100%; }
 
 .donation-options input {
   display: none; }
 
 #maps-list tr td:nth-child(1), #maps-list tr td:nth-child(4), #maps-list tr td:nth-child(5), #maps-list tr td:nth-child(6) {
   text-align: center; }
-
-.container {
-  max-width: 900px; }

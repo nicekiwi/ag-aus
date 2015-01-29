@@ -3,8 +3,8 @@
 @section('content')
 
     <section class="content-shade">
-        <h2>{{ $post->title }}</h2>
-        <p><small>{{ $post->date }} - {{ $post->author }}</small></p>
+        <h1>{{ $post->title }}</h1>
+        <p><small>{{ $post->date }} - {{ $post->author ?: 'MysteryMeat' }}</small></p>
 
         <div>{{ $post->descHtml }}</div>
 

@@ -115,15 +115,26 @@ Route::get('players', function()
 	//var_dump($players);
 });
 
-Route::get('news/{slug?}', function($slug = null)
+Route::get('news/{slug?}/{id?}', function($slug = null,$id = null)
 {
-	$xml = simplexml_load_file("http://steamcommunity.com/groups/AG-Aus/rss/");
+	$xml = Cache::remember('steam-group-news', 15, function()
+	{
+		return @file_get_contents('http://steamcommunity.com/groups/AG-Aus/rss/');
+	});
+
+	$xml = simplexml_load_string($xml);
 
 	$posts = [];
 
 	foreach ($xml->channel->item as $item)
 	{
 		$post = new StdClass;
+
+		$post->link = (string)$item->link;
+
+		$newId = explode('/', $post->link);
+
+		$post->id = $newId[count($newId)-1];
 		$post->title = (string)$item->title;
 		$post->slug = Str::slug($post->title);
 		$post->author = (string)$item->author;
@@ -135,12 +146,12 @@ Route::get('news/{slug?}', function($slug = null)
 		$desc = trim(substr($desc, 0, 100)) . '...';
 		$post->desc = $desc;
 
-		$post->link = (string)$item->link;
+
 		$post->date = date('d/m', strtotime((string)$item->pubDate));
 
 		$posts[] = $post;
 
-		if(!is_null($slug) && $slug === $post->slug)
+		if(!is_null($id) && $id === $post->id)
 		{
 			return View::make('news.show')->with(compact('post'));
 		}
@@ -150,10 +161,37 @@ Route::get('news/{slug?}', function($slug = null)
 
 });
 
+Route::get('events/{slug}/{id}', function($slug,$id)
+{
+	$html = Cache::remember('steam-group-event-' . $id, 15, function() use ($id)
+	{
+		return @file_get_contents('http://steamcommunity.com/groups/AG-Aus/events/' . $id . '?content_only=true');
+	});
+
+	$crawler = new Symfony\Component\DomCrawler\Crawler((string)$html);
+
+	$event = new StdClass;
+
+	$event->id = $id;
+	$event->logo = $crawler->filter('.gameLogo img')->attr('src');
+	$event->title = $crawler->filter('.large_title')->text();
+	$event->time = $crawler->filter('.announcement_byline > span')->text();
+	$event->author = $crawler->filter('.announcement_byline > a')->text();
+	$event->desc = $crawler->filter('.eventContent')->text();
+
+	return View::make('events.show')->with([
+		'event' => $event
+	]);
+});
+
 Route::get('events', function()
 {
-	// Todo: Cache these calls
-	$xml = simplexml_load_file('http://steamcommunity.com/groups/AG-Aus/events?xml=1&action=eventFeed&month=1&year=2015');
+	$xml = Cache::remember('upcoming-steam-group-events', 15, function()
+	{
+		return @file_get_contents('http://steamcommunity.com/groups/AG-Aus/events?xml=1&action=eventFeed&month=1&year=2015');
+	});
+
+	$xml = simplexml_load_string($xml);
 
 	$year = 2015;
 	$month = 1;
@@ -197,17 +235,47 @@ Route::get('events', function()
 	]);
 });
 
-Route::get('events/{id}/{slug}', function()
-{
-
-
-
-});
-
 Route::get('get-steam-discussions', function()
 {
-	$server = new Server;
-	return json_encode($server->getServerLocal());
+	$html = Cache::remember('recent-steam-group-discussions', 15, function()
+	{
+		return @file_get_contents('http://steamcommunity.com/groups/AG-Aus/discussions/0?content_only=true');
+	});
+
+	$crawler = new Symfony\Component\DomCrawler\Crawler((string)$html);
+
+	$posts = $crawler->filter('.forum_topic')->each(function ($node,$i)
+	{
+		$post = new StdClass;
+
+		$date = $node->filter('.forum_topic_lastpost')->text();
+		$date = str_replace(' @', '', trim($date));
+
+		if(strstr($date,','))
+		{
+			$dateObject = \Carbon\Carbon::createFromFormat('j M, Y g:ia', $date);
+		}
+		else
+		{
+			$dateObject = \Carbon\Carbon::createFromFormat('j M g:ia', $date);
+		}
+
+		$topicName = $node->filter('.forum_topic_name')->text();
+
+		$post->lastPostDate = $dateObject;
+		$post->lastPostDatePretty = $dateObject->diffForHumans();
+		$post->topicName = trim(str_replace('PINNED:','',$topicName));
+		$post->lastPoster = trim($node->filter('.forum_topic_op')->text());
+		$post->link = $node->filter('.forum_topic_overlay')->attr('href');
+
+		return $post;
+	});
+
+	usort($posts, function($a, $b) {
+		return $b->lastPostDate->format('U') - $a->lastPostDate->format('U');
+	});
+
+	return json_encode($posts);
 });
 
 
@@ -243,8 +311,8 @@ Route::get('maps/logout', 'MapController@steamAuthLogout');
 
 Route::post('maps/feedback', 'MapController@MapVote');
 
-Route::post('maps/verify-remote-removal', 'MapController@verifyRemoteRemoval');
-Route::post('maps/verify-remote-download', 'MapController@verifyRemoteDownload');
+//Route::post('maps/verify-remote-removal', 'MapController@verifyRemoteRemoval');
+//Route::post('maps/verify-remote-download', 'MapController@verifyRemoteDownload');
 
 Route::get('maps', 'MapController@index_public');
 //Route::get('maps/{slug}', 'MapController@show');
@@ -264,6 +332,16 @@ Route::get( 'login/reset-password/{token}', 'UserController@reset_password');
 Route::post('login/reset-password',         'UserController@do_reset_password');
 Route::get( 'login/confirm/{code}',         'UserController@confirm');
 
+
+// ===============================================
+// STEAM USER SECTION =================================
+// ===============================================
+Route::group(array('prefix' => 'steam-user', 'before' => 'steam-auth'), function()
+{
+
+
+
+});
 
 // ===============================================
 // ADMIN SECTION =================================
@@ -288,7 +366,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	//Route::get('maps/upload', 'MapController@upload');
 	//
 	//
-	Route::post('maps/remote-action-ajax', 'MapController@initiateRemoteActionAjax');
+	Route::post('maps/ajax-action', 'MapController@initiateRemoteActionAjax');
 
 	Route::resource('users', 'UserController');
 	Route::resource('posts', 'PostController');

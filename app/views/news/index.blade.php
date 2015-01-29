@@ -2,10 +2,15 @@
 
 @section('content')
 
-    <ul>
-    @foreach($posts as $post)
-        <li>{{ $post->date }} - <a href="/news/{{ $post->slug }}">{{ $post->title }}</a></li>
-    @endforeach
-    </ul>
+    <section class="content-shade">
+        <ul>
+        @foreach($posts as $post)
+            <li>
+                <h3><a href="/news/{{ $post->slug }}/{{ $post->id }}">{{ $post->title }}</a></h3>
+                <p><small>{{ $post->date }} - {{ $post->author ?: 'MysteryMeat' }}</small></p>
+            </li>
+        @endforeach
+        </ul>
+    </section>
 
 @stop

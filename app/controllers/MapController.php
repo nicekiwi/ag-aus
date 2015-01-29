@@ -69,7 +69,7 @@ class MapController extends BaseController
 
     public function index_public()
     {
-        $maps = Map::where('map_type_id', '>', 0)->where('remote', 1)->get();
+        $maps = Map::where('map_type_id', '>', 0)->where('remote', 1)->where('website', 1)->get();
         $map_total = $maps->count();
         $map_types = MapType::orderBy('name', 'asc')->get();
 
@@ -395,10 +395,12 @@ class MapController extends BaseController
             Session::put('public-auth-true', 1);
             Session::put('player', $player);
 
-            return Redirect::to('/maps')->with('success_message', 'You have been authenticated, vote away.');
+            return Redirect::to('/')->with('success_message', 'You have been authenticated, vote away.');
 
-        } else {
-            return Redirect::to('/maps')->with('error_message', 'Could not authenticate you with Steam.');
+        }
+        else
+        {
+            return Redirect::to('/')->with('error_message', 'Could not authenticate you with Steam.');
         }
     }
 
@@ -439,41 +441,80 @@ class MapController extends BaseController
 
     }
 
-    private $ssh_response;
+
 
     public function initiateRemoteActionAjax()
     {
-        return $this->initiateRemoteAction(Input::get('filename'), Input::get('filetype'), Input::get('action'));
+        return $this->initiateRemoteAction(Input::get('id'), Input::get('action'));
     }
 
-    public function initiateRemoteAction($filename, $filetype = 'bz2', $cID = 0)
+    public function initiateRemoteAction($id, $action)
     {
-        $commands = [
-            'add-remote' => '~/quelle/scripts/download-map.sh ' . $filename . ' ' . $filetype,
-            'remove-remote' => '~/quelle/scripts/remove-map.sh ' . $filename . ' ' . $filetype,
-        ];
+        $map = Map::findOrFail($id);
 
+        if(!$map) return 0;
+
+        $filename = $map->filename;
+        $filetype = $map->filetype;
+        $response = null;
+
+        if($action == 'add-remote')
+        {
+            $response = $this->remoteRequest('~/quelle/scripts/download-map.sh ' . $filename . ' ' . $filetype);
+
+            if($response == 1)
+            {
+                $map->remote = 1;
+            }
+//            else
+//            {
+//                $map->remote = 0;
+//            }
+        }
+        else if($action == 'remove-remote')
+        {
+            $response = $this->remoteRequest('~/quelle/scripts/remove-map.sh ' . $filename . ' ' . $filetype);
+
+            if($response == 1)
+            {
+                $map->remote = 0;
+            }
+//            else
+//            {
+//                $map->remote = 1;
+//            }
+        }
+        else if($action == 'add-website')
+        {
+            $response = 1;
+            $map->website = 1;
+        }
+        else if($action == 'remove-website')
+        {
+            $response = 1;
+            $map->website = 0;
+        }
+
+        $map->save();
+
+        return $response;
+    }
+
+    private $ssh_response;
+
+    /**
+     * @param $command
+     * @return null
+     */
+    private function remoteRequest($command)
+    {
         $this->ssh_response = null;
 
-        // Write contents to Pantheon
-        SSH::into('pantheon')->run($commands[$cID], function ($line) use ($filename) {
+        SSH::into('pantheon')->run($command, function ($line)
+        {
             $this->ssh_response = (int)$line;
-
-            // if the file is downloaded = 1, if not = 0
-            // remove-map will always return 0
-            $this->saveRemoteState($filename, $this->ssh_response);
         });
 
         return $this->ssh_response;
-    }
-
-    public function saveRemoteState($filename, $state)
-    {
-        $map = Map::where('filename', $filename)->first();
-
-        if ($map) {
-            $map->remote = $state;
-            $map->save();
-        }
     }
 }

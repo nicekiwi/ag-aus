@@ -14,7 +14,7 @@
 <ul class="maps-list">
 @if(count($maps) > 0)
 @foreach($maps as $map)
-	<li class="col-sm-4">
+	<li class="col-sm-3">
 
 		<div class="map-thumbnail">
 			<a target="_blank" href="https://s3-ap-southeast-2.amazonaws.com/alternative-gaming/{{ $map->s3_path }}">
@@ -28,10 +28,11 @@
 			<p class="filename">{{ substr($map->filename, 0, -8) }}<br><small>{{ $map->filesizeHuman() }}</small></p>
 
 		    <p>
+				<span class="{{ ($map->feedbackScore() >= 0) ? 'vote-positive' : 'vote-negative' }}">
 		    	<a class="vote-btn vote-up" data-map-id="{{ $map->id }}" data-action="up" href="/maps"><i class="fa fa-thumbs-up"></i></a>
-				<span>{{ $map->feedbackScore() }}</span>
+				{{ $map->hasVoted() }}
 		    	<a class="vote-btn vote-down" data-map-id="{{ $map->id }}" data-action="down" href="/maps"><i class="fa fa-thumbs-down"></i></a>
-
+				</span>
 		    	<a class="vote-btn vote-broken" data-filename="{{ substr($map->filename, 0, -8) }}" data-map-id="{{ $map->id }}" data-action="broken" href="/maps"><span>{{ $map->feedback->sum('vote_broken') }}</span> <i class="fa fa-exclamation-triangle"></i></a>
 		    </p>
 

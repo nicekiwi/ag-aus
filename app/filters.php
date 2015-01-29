@@ -38,6 +38,14 @@ Route::filter('auth', function()
 	if (Auth::guest()) return Redirect::guest('login');
 });
 
+Route::filter('steam-auth', function()
+{
+    if (!Session::has('public-auth-true') || !Session::has('player'))
+    {
+        return Redirect::to('/steam-login')->with('warning_message', 'You must be logged in to access that area.');
+    }
+});
+
 
 Route::filter('auth.basic', function()
 {

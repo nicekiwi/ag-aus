@@ -75,7 +75,7 @@
                                                     class="fa fa-circle"></i></button>
                                     @else
                                         <button data-action="add-remote" type="button" class="access-action-btn"><i
-                                                    class="fa fa-circle-o"></i></button>
+                                                    class="fa"></i></button>
                                     @endif
                                 </td>
 
@@ -86,7 +86,7 @@
                                                     class="fa fa-circle"></i></button>
                                     @else
                                         <button data-action="add-website" type="button" class="access-action-btn"><i
-                                                    class="fa fa-circle-o"></i></button>
+                                                    class="fa"></i></button>
                                     @endif
                                 </td>
 
@@ -304,29 +304,41 @@
 
                 var responseAction = function(data,btn)
                 {
-                    if (data === 1 || data === '1') {
-                        btn.html('<i class="fa fa-circle"></i>');
+                    if (data == 1) {
+
+                        if(btn.attr('data-action') == 'add-website') {
+                            btn.find('i').toggleClass('fa-circle');
+                            btn.attr('data-action','remove-website');
+                        }
+                        else if(btn.attr('data-action') == 'remove-website') {
+                            btn.attr('data-action','add-website');
+                        }
+                        else if(btn.attr('data-action') == 'add-remote') {
+                            btn.find('i').toggleClass('fa-circle');
+                            btn.attr('data-action','remove-remote');
+                        }
+                        else if(btn.attr('data-action') == 'remove-remote') {
+                            btn.attr('data-action','add-website');
+                        }
                     }
-                    else {
-                        btn.html('<i class="fa fa-circle-o"></i>');
-                    }
+
+                    btn.find('i').removeClass('fa-cog fa-spin');
                 };
 
                 var btn = $(this);
                 var row = btn.closest('tr');
                 var action = btn.attr('data-action');
-                var url = '/admin/maps/website-action-ajax';
+                var url = '/admin/maps/ajax-action';
 
-                btn.html('<i class="fa fa-cog fa-spin"></i>');
-
-                if (/remote/i.test(action)){
-                    url = '/admin/maps/remote-action-ajax';
+                if(btn.find('i').hasClass('fa-circle')){
+                    btn.find('i').toggleClass('fa-circle');
                 }
+
+                btn.find('i').addClass('fa-cog fa-spin');
 
                 $.post(url, {
 
-                    filename: row.attr('data-filename'),
-                    filetype: row.attr('data-filetype'),
+                    id: row.attr('data-id'),
                     action: action
 
                 }, function (data) {

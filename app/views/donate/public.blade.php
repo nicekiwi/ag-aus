@@ -3,7 +3,31 @@
 @section('content')
 
 
-<div class="col-sm-12 col-md-3 content-shade" style="float:right;">
+<div class="col-sm-12 col-md-4 content-shade" style="float:right;">
+
+    <h3>{{ $quarter->quarter }}st Quarter <small>${{ $quarter->total }} / ${{ $quarter->goal }}</small></h3>
+
+    <div class="progress progress{{ ($quarter->percentage >= 100) ?: '-striped active' }}">
+        <div class="progress-bar progress-bar-{{ ($quarter->percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $quarter->percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($quarter->percentage >= 100) ? '100' : $quarter->percentage }}%">
+            {{ $quarter->percentage }}%
+        </div>
+    </div>
+
+    <div class="donation-excitement-meter">
+        @if($quarter->percentage >= 100)
+            <img src="/img/donate/goal-complete.png" />
+        @elseif($quarter->percentage >= 90)
+            <img src="/img/donate/goal-90.png" />
+        @elseif($quarter->percentage >= 75)
+            <img src="/img/donate/goal-75.png" />
+        @elseif($quarter->percentage >= 50)
+            <img src="/img/donate/goal-50.png" />
+        @elseif($quarter->percentage >= 25)
+            <img src="/img/donate/goal-25.png" />
+        @else
+            <img src="/img/donate/goal-incomplete.png" />
+        @endif
+    </div>
 
 {{ Form::open([
     'url' => '/donate',
@@ -20,23 +44,24 @@
             <div id="steam_id_valid"></div>
 
             <div class="form-group">
-                    {{ Form::text('steam_id', null, ['class' => 'form-control', 'id' => 'steam_id', 'placeholder' => 'STEAM_X:X:XXXXXX']) }}
+                {{ Form::label('steam_id', 'Your SteamID (ID32)') }}
+                {{ Form::text('steam_id', Session::get('player')->steam_id ?: null, ['class' => 'form-control', 'id' => 'steam_id', 'placeholder' => 'STEAM_X:X:XXXXXX']) }}
             </div>
 
             <!-- Text input-->
-            <div class="form-group">
-                    
-                {{ Form::number('amount', $value = null, [
+                {{ Form::label('amount', 'Donation Amount') }}
+                <div class="input-group">
+
+                    {{ Form::number('amount', $value = null, [
                     'class' => 'form-control',
                     'id' => 'donation-amount',
                     'placeholder' => ($options->donation_monthly_cost * 2).'.00',
                     'required' => 'required'
                 ]) }}
-            </div>
-
-            <div class="form-group">
-                <button id="donation_submit" class="btn btn-warning btn-block" type="submit">Donate</button>
-            </div>
+                    <span class="input-group-btn">
+                        <button id="donation_submit" class="btn btn-warning">Donate</button>
+                    </span>
+                </div>
         </fieldset>
 
     {{ Form::token(); }}
@@ -48,7 +73,7 @@
 
 
 
-<div class="col-sm-12 col-md-9 content-shade">
+<div class="col-sm-12 col-md-8 content-shade">
 
     <h1>Donate</h1>
 
@@ -61,13 +86,9 @@
         <li>Golden Frying-Pan<br><small>During the pre-round team killing, you weild a Golden Frying Pan.</small></li>
     </ul>
 
-    <p>Current quarter Goal: ${{ $quarter->goal }}, Donated so far: ${{ $quarter->total }}</p>
 
-    <div class="progress progress{{ ($quarter->percentage >= 100) ?: '-striped active' }}">
-      <div class="progress-bar progress-bar-{{ ($quarter->percentage >= 100) ? 'success' : 'info' }}"  role="progressbar" aria-valuenow="{{ $quarter->percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($quarter->percentage >= 100) ? '100' : $quarter->percentage }}%">
-        {{ $quarter->percentage }}%
-      </div>
-    </div>
+
+    <h3>Exultant Donors</h3>
 
     <ul class="donators-avatar-list">
 

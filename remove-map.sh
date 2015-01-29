@@ -28,6 +28,10 @@ if [ -n "$1" ] && [ -n "$2" ]; then
 
 	fi
 
+	echo "1";
+
+else
+
 	echo "0";
 
 fi

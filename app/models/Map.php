@@ -42,6 +42,25 @@ class Map extends Ardent
         return ($negative + $positive) / 2;
     }
 
+    public function hasVoted()
+    {
+        $user = Session::get('player');
+
+        if(!$user) return false;
+
+        $votes = $this->feedback;
+
+        foreach($votes as $vote)
+        {
+            if($vote->player_id == $user->id)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function mapThumbnail()
     {
         $url = $this->images;
