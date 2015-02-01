@@ -28,7 +28,7 @@
 			<p class="filename">{{ substr($map->filename, 0, -8) }}<br><small>{{ $map->filesizeHuman() }}</small></p>
 
 		    <p>
-				<span class="{{ ($map->feedbackScore() >= 0) ? 'vote-positive' : 'vote-negative' }}">
+				<span class="vote-options {{ ($map->feedbackScore() >= 0) ? 'vote-positive' : 'vote-negative' }}">
 		    	<a class="vote-btn vote-up" data-map-id="{{ $map->id }}" data-action="up" href="/maps"><i class="fa fa-thumbs-up"></i></a>
 				{{ $map->hasVoted() }}
 		    	<a class="vote-btn vote-down" data-map-id="{{ $map->id }}" data-action="down" href="/maps"><i class="fa fa-thumbs-down"></i></a>
@@ -67,6 +67,8 @@
 
 <script type="text/javascript">
 
+	var brokenModel = $('#report-broken-modal');
+
 
 	$(function () {
     'use strict';
@@ -89,6 +91,7 @@
 
 			if(typeof loggedIn === 'undefined') {
 				alert('You must be logged in to vote on maps, click the Login with Steam link.');
+				return;
 			}
 			else {
 
@@ -106,10 +109,11 @@
 			}
 
 			if($(this).hasClass('vote-broken')) {
-				$('#report-broken-modal').modal('show');
+				brokenModel.modal('show');
+				brokenModel.on('shown.bs.modal', function (e) {
 
-				$('#report-broken-modal').on('shown.bs.modal', function (e) {
 					$('.broken-map-name').text(el.attr('data-filename'));
+					$('input[name="map_id"]').val(el.attr('data-map-id'));
 				})
 			}
 		});

@@ -12,4 +12,9 @@ class MapFeedback extends Eloquent
         return $this->belongsTo('Map');
 
     }
+
+    public function player()
+    {
+        return $this->belongsTo('Player');
+    }
 }

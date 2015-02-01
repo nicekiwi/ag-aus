@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>Maps <a class="btn btn-primary maps-upload-btn" href="/admin/maps/upload">Upload</a></h1>
+    <h1>Maps <a class="btn btn-primary maps-upload-btn btn-sm" href="/admin/maps/upload">Upload</a></h1>
 
 
     <div role="tabpanel">
@@ -118,10 +118,12 @@
                     <table id="maps-files-list" class="table table-striped table-bordered maps-list" width="100%">
                         <thead>
                         <tr>
-                            <td>Filename</td>
+                            <td>Name</td>
                             <td>Size</td>
+
+                            <td><i class="fa fa-steam fa-lg"></i></td>
+
                             <td>Added</td>
-                            <td>On Pantheon</td>
                             <td>Action</td>
                         </tr>
                         </thead>
@@ -129,30 +131,36 @@
                         @foreach($map_files as $file)
                             <tr data-id="{{ $file->id }}" data-filename="{{ $file->filename }}"
                                 data-filetype="{{ $file->filetype }}">
-                                <td>{{ $file->filename }}</td>
 
+                                {{-- Filename --}}
+                                <td>{{ $file->filename }}<br>
+                                    <small>Support File</small></td>
+
+                                {{-- Filesize --}}
                                 <td data-order="{{ (int)$file->filesize }}">
                                     {{ $file->filesizeHuman() }}
                                 </td>
 
-
-                                <td>{{ $file->created_at->diffForHumans() }} by {{ $file->user->username }}</td>
-                                <td>
-                                    @if($file->remote)
-                                        <i style="color:green;" class="fa fa-check-circle"></i>
+                                {{-- On Remote Server --}}
+                                <td data-order="{{ (int)$file->remote }}">
+                                    @if($file->remote === 1)
+                                        <button data-action="remove-remote" type="button" class="access-action-btn"><i
+                                                    class="fa fa-circle"></i></button>
                                     @else
-                                        <i style="color:red;" class="fa fa-circle"></i>
+                                        <button data-action="add-remote" type="button" class="access-action-btn"><i
+                                                    class="fa"></i></button>
                                     @endif
-
                                 </td>
-                                <td class="actions">
+
+                                {{-- Date Added / By Whomb--}}
+                                <td data-order="{{ $file->created_at->timestamp }}">
+                                    {{ date('M jS, Y', $file->created_at->timestamp) }}
+                                    <br><small> by {{ ucfirst($file->user->username) }}</small>
+                                </td>
+
+                                {{-- Delete Action --}}
+                                <td>
                                     {{ Form::deleteMap('admin/maps/'. $file->id) }}
-
-                                    <span data-action="0"
-                                          class="btn btn-small btn-primary remote-map-action-btn">p+</span>
-                                    <span data-action="1"
-                                          class="btn btn-small btn-primary remote-map-action-btn">p-</span>
-
                                 </td>
                             </tr>
                         @endforeach
@@ -161,6 +169,25 @@
                     </table>
                 @endif
 
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="broken-reports">
+                <table id="maps-broken-list" class="table table-striped table-bordered maps-list" width="100%">
+                    <thead>
+                    <tr>
+                        <td>Map</td>
+                        <td>Size</td>
+
+                        <td><i class="fa fa-steam fa-lg"></i></td>
+
+                        <td>Added</td>
+                        <td>Followup</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -248,11 +275,11 @@
             'use strict';
 
 
-            var mapsTable = $('#maps-list');
+            var mapsTable = $('#maps-list, #maps-files-list');
             mapsTable.dataTable();
 
-            var filesTable = $('#maps-files-list');
-            filesTable.dataTable();
+            //var filesTable = $('#maps-files-list');
+            //filesTable.dataTable();
 
             //$('#mapTabs a[href="#maps"]').tab('show'); // Select tab by name
             //$('#mapTabs a[href="#support-files"]').tab('show');
@@ -320,6 +347,10 @@
                         else if(btn.attr('data-action') == 'remove-remote') {
                             btn.attr('data-action','add-website');
                         }
+                    }
+
+                    if(data == 500) {
+                        alert('The Game server could not be reached.');
                     }
 
                     btn.find('i').removeClass('fa-cog fa-spin');
@@ -393,6 +424,10 @@
 
                         $.post(editForm.prop('action'), editForm.serialize(), function (response) {
                             mapEditModal.find('.modal-body').html(response);
+
+                            setTimeout(function(){
+                                mapEditModal.modal('hide');
+                            }, 1500);
                         });
                     });
                 });

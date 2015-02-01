@@ -1,5 +1,7 @@
 <?php
 
+use Aws\S3\Model\PostObject;
+
 class MapController extends BaseController
 {
 
@@ -15,7 +17,7 @@ class MapController extends BaseController
     {
         $s3 = AWS::get('s3');
 
-        $postObject = new \Aws\S3\Model\PostObject($s3, 'alternative-gaming', [
+        $postObject = new PostObject($s3, 'alternative-gaming', [
             'acl' => 'public-read',
         ]);
 
@@ -38,10 +40,11 @@ class MapController extends BaseController
         $maps = Map::where('map_type_id', '>', 0)->get();
         $map_total = $maps->count();
         $map_files = Map::where('map_type_id', 0)->get();
+        $maps_broken = MapFeedback::where('vote_broken', 1)->orderBy('vote_broken_status','asc')->get();
 
         $s3 = AWS::get('s3');
 
-        $postObject = new \Aws\S3\Model\PostObject($s3, 'alternative-gaming', [
+        $postObject = new PostObject($s3, 'alternative-gaming', [
             'acl' => 'public-read',
         ]);
 
@@ -56,13 +59,11 @@ class MapController extends BaseController
         $options->key = 'games/team-fortress-2/maps';//$form['key'];
         $options->acl = $form['acl'];
 
-        //dd($map_total);
-
-        //$this->layoutAdmin->bodyClass = 'maps-page';
         return View::make('maps.index')->with([
             'maps' => $maps,
             'map_files' => $map_files,
             'map_total' => $map_total,
+            'maps_broken' => $maps_broken,
             'options' => $options
         ]);
     }
@@ -466,10 +467,6 @@ class MapController extends BaseController
             {
                 $map->remote = 1;
             }
-//            else
-//            {
-//                $map->remote = 0;
-//            }
         }
         else if($action == 'remove-remote')
         {
@@ -479,10 +476,6 @@ class MapController extends BaseController
             {
                 $map->remote = 0;
             }
-//            else
-//            {
-//                $map->remote = 1;
-//            }
         }
         else if($action == 'add-website')
         {
@@ -510,10 +503,18 @@ class MapController extends BaseController
     {
         $this->ssh_response = null;
 
-        SSH::into('pantheon')->run($command, function ($line)
+        try
         {
-            $this->ssh_response = (int)$line;
-        });
+            SSH::into('pantheon')->run($command, function ($line)
+            {
+                $this->ssh_response = (int)$line;
+            });
+        }
+        catch(ErrorException $e)
+        {
+            $this->ssh_response = 500;
+        }
+
 
         return $this->ssh_response;
     }
