@@ -4455,8 +4455,27 @@ h1 {
   cursor: inherit;
   display: block; }
 
+.content-shade-left {
+  width: 60%; }
+
+.content-shade-right {
+  width: 39%; }
+
+a:link, a:visited {
+  color: #a1ffa5;
+  text-decoration: none; }
+
+p.opening {
+  color: #9ce3ff; }
+
+p {
+  text-align: justify; }
+
 .navbar-brand, .steam-player-menu {
   padding: 9px !important; }
+
+.logged-in-player img {
+  box-shadow: 0 0 3px #ddd; }
 
 body.homepage section.welcome {
   position: relative;
@@ -4473,6 +4492,10 @@ body.homepage section.about-us {
   padding-left: 15px;
   padding-right: 15px; }
 
+body.donations-page .content-shade-left {
+  width: 70%; }
+body.donations-page .content-shade-right {
+  width: 29%; }
 body.donations-page .donor {
   min-height: 40px;
   float: left;

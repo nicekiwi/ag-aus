@@ -19,7 +19,8 @@
 		"iron-io/iron_mq": "1.5.*",
 		"indatus/dispatcher": "~1.4",
 		"ehesp/steam-login": "~1.0.1",
-		"syntax/steam-api": "~1.1.0"
+		"syntax/steam-api": "~1.1.0",
+		"gries/rcon": "dev-master"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "v1.2.0"

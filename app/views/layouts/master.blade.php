@@ -50,7 +50,7 @@
             <ul class="nav navbar-nav navbar-right">
               @if(Session::has('public-auth-true') && Session::has('player'))
 
-              <li class="dropdown">
+              <li class="dropdown logged-in-player">
                 <a href="#" class="dropdown-toggle steam-player-menu" data-toggle="dropdown" role="button" aria-expanded="false">
                   <span><small>{{ substr(htmlspecialchars(Session::get('player')->steam_nickname), 0, 15) }}..</small></span>
                   <img class="img-circle" src="/images/avatar/{{ (Session::get('player')->steam_image ? urlencode(Session::get('player')->steam_image) : urlencode('http://ag-aus.app/img/anonnymous.jpg') ) }}"> <span class="caret"></span></a>

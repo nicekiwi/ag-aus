@@ -21,32 +21,7 @@
 
 
 $(document).ready(function() {
-	mapDroplist('/admin/maps');	
 
-	$( "#map-config-form" ).on( "submit", function( event ) {
-		event.preventDefault();
-
-		$( '#map-config-list' ).filter('li').each(function(index)
-		{
-			console.log($(this).prop('data-id') + index);
-		});
-
-		//console.log( $( this ).serializeArray() );
-	});
-
-	// $('.btn-delete-confirm').on('click', function(){
-
-	// 	var form = $(this).closest('form');
-
-	// 	bootbox.confirm("Are you sure?", function(result){
-
-	// 		if(result) {
-	// 			form.submit();
-	// 		}
-			
-	// 	});
-
-	// });
-	
+    $('.table-data').dataTable();
 
 });

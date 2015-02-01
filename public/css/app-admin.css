@@ -4434,6 +4434,9 @@ table.table thead .sorting_desc_disabled:after {
   content: '\f0dd';
   opacity: 0.2; }
 
+body.admin.donations-page .progress {
+  margin-bottom: 0; }
+
 .fileinput-button {
   position: relative;
   overflow: hidden;

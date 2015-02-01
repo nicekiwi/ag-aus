@@ -1,3 +1,9 @@
 .navbar-brand, .steam-player-menu {
   padding: 9px !important;
 }
+
+.logged-in-player {
+  img {
+    box-shadow: 0 0 3px #ddd;
+  }
+}

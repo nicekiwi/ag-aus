@@ -16,7 +16,7 @@
       <link rel="stylesheet" href="/css/app-admin.min.css">
 
   </head>
-  <body>
+  <body class="admin {{ $bodyClass or '' }}">
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
@@ -60,6 +60,10 @@
 
               @if(Auth::user()->can("manage_options"))
               <li><a href="/admin/options">Options</a></li>
+              @endif
+
+              @if(Auth::user()->can("manage_reports"))
+                <li><a href="/admin/reports">Reports</a></li>
               @endif
 
               @if(Auth::user()->can("manage_users"))

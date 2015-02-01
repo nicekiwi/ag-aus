@@ -34,6 +34,11 @@
 		<ul id="latest-news"></ul>
 	</section>
 
+	<section class="content-shade server-status">
+		<h2>Server Status</h2>
+		<ul id="server-status"></ul>
+	</section>
+
 @stop
 
 @section('footer')
@@ -63,9 +68,41 @@
 
 		}
 
+		function getServerStatus() {
+
+			var servers = [
+				'203.33.121.205:27058','203.33.121.205:27021'
+			];
+			var serverBox = $('#server-status').html('');
+
+			$.each(servers, function(index,server){
+
+				server = server.split(':');
+
+				var ip = server[0];
+				var port = server[1];
+
+				$.post('/get-steam-server-status', {
+					ip: ip, port: port
+				}, function(json){
+
+					json = $.parseJSON(json);
+
+					$('<li/>').text(ip + ':' + port + ' - ' + json.numberOfPlayers + '/' + json.maxPlayers).appendTo(serverBox);
+				});
+
+
+			});
+
+			// Refresh every minute
+			setTimeout(getServerStatus, 60000);
+
+		}
+
 		$( document ).ready(function() {
 
 			getForumPosts();
+			getServerStatus();
 
 		});
 
