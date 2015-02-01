@@ -18,4 +18,6 @@ class Donation extends Eloquent
         return $this->belongsTo('DonationQuarter');
     }
 
+
+
 }

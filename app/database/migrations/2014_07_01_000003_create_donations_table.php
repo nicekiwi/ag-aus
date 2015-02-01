@@ -20,8 +20,8 @@ class CreateDonationsTable extends Migration {
 			$table->integer('quarter');
 			$table->string('name');
 
-			$table->integer('total');
-			$table->integer('goal');
+			$table->string('total');
+			$table->string('goal');
 			$table->integer('percentage');
 
 			$table->softDeletes();
@@ -45,7 +45,7 @@ class CreateDonationsTable extends Migration {
 			$table->string('message');
 			$table->integer('anonymous')->nullable();
 			$table->string('currency');
-			$table->integer('amount');
+			$table->string('amount');
 
 			$table->string('card_token', 150);
 			$table->string('card_last4', 4);

@@ -10,4 +10,6 @@ class DonationQuarter extends Eloquent {
     {
         return $this->HasMany('Donation', 'quarter_id');
     }
+
+
 }

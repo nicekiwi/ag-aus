@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="col-sm-12 col-md-4 content-shade" style="float:right;">
+<div class="col-sm-12 col-md-4 content-shade content-shade-right" style="float:right;">
 
     <h3>{{ $quarter->quarter }}st Quarter <small>${{ $quarter->total }} / ${{ $quarter->goal }}</small></h3>
 
@@ -73,14 +73,14 @@
 
 
 
-<div class="col-sm-12 col-md-8 content-shade">
+<div class="col-sm-12 col-md-8 content-shade content-shade-left">
 
     <h1>Donate</h1>
 
     <p>To support our server costs we offer a Donator satuts on our TF2 servers at ${{ $options->donation_monthly_cost }}AUD per month, this gives some  exclusive benifets (Not even admins get most of these):</p>
 
     <ul class="donor-perks">
-        <li><i class="fa fa-star"></i> Reserved Player Slot<br><small>Join a game even when its full.</small></li>
+        <li><i class="fa fa-star"></i> Reserved Player Slot<br><small>Join a game even when its full. (Up to 32 Players)</small></li>
         <li>Humiliation-Round immunity<br><small>If your team loses at the end of a round, you can't be killed.</small></li>
         <li><i class="fa fa-tag"></i> Special Donator Tag in-game<br><small>Exclusive Purple? Donator tag on in-game chat.</small></li>
         <li>Golden Frying-Pan<br><small>During the pre-round team killing, you weild a Golden Frying Pan.</small></li>
