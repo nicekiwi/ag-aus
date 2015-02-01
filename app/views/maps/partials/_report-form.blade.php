@@ -12,6 +12,7 @@
                 <!-- The async form to send and replace the modals content with its response -->
                 <form id="report-broken-form">
                     <fieldset>
+                        <input name="map_id" type="hidden">
                         <div class="form-group">
                             <label for="exampleInputPassword1">Where/How is this map broken?</label>
                             <textarea class="form-control" rows="5"></textarea>
