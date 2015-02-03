@@ -60,6 +60,17 @@ Route::get('test', function()
 	//echo 
 	//writeDonators();
 
+	$role = Role::find(1);
+	$role->users;
+
+
+
+	$permission = Permission::find(4);
+
+	//dd($permission);
+
+	dd($permission->roles);
+
 });
 
 Route::get('donators', function()
@@ -121,26 +132,29 @@ Route::get('donators', function()
 //	//var_dump($players);
 //});
 
-Route::get('news/{slug?}/{id?}', 'HomeController@getGroupNews');
-Route::get('events/{slug}/{id}', 'HomeController@getGroupEvent');
-Route::get('events', 'HomeController@getGroupEvents');
+//Route::get('news/{slug?}/{id?}', 'HomeController@getGroupNews');
+//Route::get('events/{slug}/{id}', 'HomeController@getGroupEvent');
+//Route::get('events', 'HomeController@getGroupEvents');
+
+Route::get('get-steam-news', 'HomeController@getGroupNews');
+Route::get('get-steam-events', 'HomeController@getGroupEvents');
 Route::get('get-steam-discussions', 'HomeController@getGroupDiscussions');
 
 
+Route::get('/', 'HomeController@index_public');
 
+//Route::get('bans', 'BansController@index_public');
 
-Route::get('bans', 'BansController@index_public');
+//Route::get('get-bans', 'BansController@pull_bans');
 
-Route::get('get-bans', 'BansController@pull_bans');
+//Route::get('check-steamid/{id}', 'PlayerController@getPlayerDataJson');
 
-Route::get('check-steamid/{id}', 'PlayerController@getPlayerDataJson');
-
-Route::get('group-members/{id?}', 'PlayerController@getGroupMembers');
+//Route::get('group-members/{id?}', 'PlayerController@getGroupMembers');
 
 Route::get('donate', 'DonationController@public_index');
 Route::post('donate', 'DonationController@validate_donation');
 
-Route::get('/', 'HomeController@index_public');
+
 
 
 Route::get('maps/login', 'MapController@steamAuth');
@@ -202,6 +216,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 	Route::resource('players', 'PlayerController');
 	Route::resource('bans', 'BansController');
 	Route::resource('options', 'OptionController');
+	Route::resource('donations', 'DonationController');
 	Route::resource('reports', 'ReportController');
 
 });

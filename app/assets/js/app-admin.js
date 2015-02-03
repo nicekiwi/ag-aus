@@ -18,6 +18,7 @@
 //= include ../../../bower_components/bootbox/bootbox.js
 
 //= include ./shared.js
+//= include ./vendor/datatables-bootstrap.js
 
 
 $(document).ready(function() {

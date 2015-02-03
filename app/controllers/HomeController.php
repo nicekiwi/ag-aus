@@ -1,6 +1,8 @@
 <?php
 
 use SteamCondenser\Servers\GoldSrcServer;
+use Symfony\Component\DomCrawler\Crawler;
+use Carbon\Carbon;
 
 class HomeController extends BaseController {
 
@@ -61,7 +63,12 @@ class HomeController extends BaseController {
 		});
 	}
 
-	public function getGroupNews($slug=null,$id=null)
+//	public function getGroupNewsJson()
+//	{
+//		return $this->getGroupNews(null,null,true);
+//	}
+
+	public function getGroupNews($slug=null,$id=null,$json=null)
 	{
 		$xml = Cache::remember('steam-group-news', 15, function()
 		{
@@ -72,120 +79,163 @@ class HomeController extends BaseController {
 
 		$posts = [];
 
+		if(!$xml)
+		{
+			return $posts;
+		}
+
 		foreach ($xml->channel->item as $item)
 		{
 			$post = new StdClass;
 
 			$post->link = (string)$item->link;
 
-			$newId = explode('/', $post->link);
+			//$newId = explode('/', $post->link);
 
-			$post->id = $newId[count($newId)-1];
+			//$post->id = $newId[count($newId)-1];
 			$post->title = (string)$item->title;
-			$post->slug = Str::slug($post->title);
+			//$post->slug = Str::slug($post->title);
 			$post->author = (string)$item->author;
 
-			$post->descHtml = (string)$item->description;
+//			$post->descHtml = (string)$item->description;
+//
+//			$desc = strip_tags($post->descHtml);
+//			$desc = preg_replace('/\s+/', ' ', $desc);
+//			$desc = trim(substr($desc, 0, 100)) . '...';
+//			$post->desc = $desc;
 
-			$desc = strip_tags($post->descHtml);
-			$desc = preg_replace('/\s+/', ' ', $desc);
-			$desc = trim(substr($desc, 0, 100)) . '...';
-			$post->desc = $desc;
 
+			$post->date = date('jS M', strtotime((string)$item->pubDate));
 
-			$post->date = date('d/m', strtotime((string)$item->pubDate));
 
 			$posts[] = $post;
 
-			if(!is_null($id) && $id === $post->id)
-			{
-				return View::make('news.show')->with(compact('post'));
-			}
+//			if(!is_null($id) && $id === $post->id)
+//			{
+//				return View::make('news.show')->with(compact('post'));
+//			}
 		}
 
-		return View::make('news.index')->with(compact('posts'));
+		//if(!is_null($json))
+		//{
+			return json_encode($posts);
+		//}
+
+		//return View::make('news.index')->with(compact('posts'));
 	}
 
-	public function getGroupEvent($slug,$id)
+//	public function getGroupEvent($slug,$id)
+//	{
+//		$html = Cache::remember('steam-group-event-' . $id, 15, function() use ($id)
+//		{
+//			return @file_get_contents($this->groupUrl . '/events/' . $id . '?content_only=true');
+//		});
+//
+//		$crawler = new Crawler((string)$html);
+//
+//		$event = new StdClass;
+//
+//		$event->id = $id;
+//		$event->logo = $crawler->filter('.gameLogo img')->attr('src');
+//		$event->title = $crawler->filter('.large_title')->text();
+//		$event->time = $crawler->filter('.announcement_byline > span')->text();
+//		$event->author = $crawler->filter('.announcement_byline > a')->text();
+//		$event->desc = $crawler->filter('.eventContent')->text();
+//
+//		return View::make('events.show')->with([
+//			'event' => $event
+//		]);
+//	}
+
+//	public function getGroupEventsJson()
+//	{
+//		return $this->getGroupEvents(true);
+//	}
+
+	public function getGroupEvents($json=null)
 	{
-		$html = Cache::remember('steam-group-event-' . $id, 15, function() use ($id)
+		$today = \Carbon\Carbon::today();
+		$events = [];
+
+		$xml = Cache::remember('upcoming-steam-group-events', 15, function() use ($today)
 		{
-			return @file_get_contents($this->groupUrl . '/events/' . $id . '?content_only=true');
-		});
-
-		$crawler = new Symfony\Component\DomCrawler\Crawler((string)$html);
-
-		$event = new StdClass;
-
-		$event->id = $id;
-		$event->logo = $crawler->filter('.gameLogo img')->attr('src');
-		$event->title = $crawler->filter('.large_title')->text();
-		$event->time = $crawler->filter('.announcement_byline > span')->text();
-		$event->author = $crawler->filter('.announcement_byline > a')->text();
-		$event->desc = $crawler->filter('.eventContent')->text();
-
-		return View::make('events.show')->with([
-			'event' => $event
-		]);
-	}
-
-	public function getGroupEvents()
-	{
-		$xml = Cache::remember('upcoming-steam-group-events', 15, function()
-		{
-			$today = \Carbon\Carbon::today();
 			return @file_get_contents($this->groupUrl . '/events?xml=1&action=eventFeed&month=' . $today->month . '&year=' . $today->year);
 		});
 
+
+
 		$xml = simplexml_load_string($xml);
 
-		$elements = [$xml->event,$xml->expiredEvent];
 
-		$events = [];
-		$pastEvents = [];
 
-		foreach ($elements as $key => $element)
+		//dd($xml->eventCount);
+
+		//$elements = [$xml->event,$xml->expiredEvent];
+		//$events = $xml->events;
+
+		if($xml->eventCount == 0 || !$xml)
 		{
-			foreach ($element as $exp)
+			return $events;
+		}
+		//$pastEvents = [];
+
+		//foreach ($elements as $key => $element)
+		//{
+			//foreach ($element as $exp)
+			foreach ($xml->event as $exp)
 			{
-				$crawler = new Symfony\Component\DomCrawler\Crawler((string)$exp);
+				$crawler = new Crawler((string)$exp);
 
 				$id = $crawler->filter('.eventBlock')->attr('id');
 				$day = $crawler->filter('.eventDateBlock > span')->text();
 				$time = $crawler->filter('.eventDateTime')->text();
 				$title = $crawler->filter('.headlineLink')->text();
 
-				$event = new StdClass;
-				$event->date = date('d/m/y', strtotime($time . ' ' . $day . ' ' . $month . ' ' . $year));
-				$event->title = $title;
-				$event->slug = Str::slug($event->title) . '/' . str_replace('_eventBlock', '', $id);
+				$date = $day . ' ' . $today->month . ' ' . $time;
+				$date = Carbon::createFromFormat('l j n g:ia', $date);
 
-				if($key > 0)
-				{
-					$pastEvents[] = $event;
-				}
-				else
-				{
+				$event = new StdClass;
+				$event->date = date('jS M, g:ia', $date->format('U'));
+				$event->title = $title;
+				//$event->slug = Str::slug($event->title) . '/' . str_replace('_eventBlock', '', $id);
+				$event->link = $this->groupUrl . '/events/' . $id;
+
+//				if($key > 0)
+//				{
+//					$pastEvents[] = $event;
+//				}
+//				else
+//				{
 					$events[] = $event;
-				}
+//				}
 
 			}
-		}
+		//}
 
-		return View::make('events.index')->with([
-			'events' => $events,
-			'pastEvents' => $pastEvents
-		]);
+		//if(!is_null($json))
+		//{
+			return json_encode($events);
+		//}
+
+//		return View::make('events.index')->with([
+//			'events' => $events,
+//			'pastEvents' => $pastEvents
+//		]);
 	}
 
 	public function getGroupDiscussions()
 	{
 		$html = Cache::remember('recent-steam-group-discussions', 60, function()
 		{
-			return @file_get_contents('http://steamcommunity.com/groups/AG-Aus/discussions/0?content_only=true');
+			return @file_get_contents($this->groupUrl . '/discussions/0?content_only=true');
 		});
 
-		$crawler = new Symfony\Component\DomCrawler\Crawler((string)$html);
+		if(!$html)
+		{
+			return [];
+		}
+
+		$crawler = new Crawler((string)$html);
 
 		$posts = $crawler->filter('.forum_topic')->each(function ($node,$i)
 		{
@@ -196,11 +246,11 @@ class HomeController extends BaseController {
 
 			if(strstr($date,','))
 			{
-				$dateObject = \Carbon\Carbon::createFromFormat('j M, Y g:ia', $date);
+				$dateObject = Carbon::createFromFormat('j M, Y g:ia', $date);
 			}
 			else
 			{
-				$dateObject = \Carbon\Carbon::createFromFormat('j M g:ia', $date);
+				$dateObject = Carbon::createFromFormat('j M g:ia', $date);
 			}
 
 			$topicName = $node->filter('.forum_topic_name')->text();

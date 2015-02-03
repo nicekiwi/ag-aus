@@ -16,6 +16,12 @@ class DonationController extends BaseController
 		$this->quarter = DonationQuarter::where('quarter', $this->today->quarter)
 					   					->where('year', $this->today->year)
 					   					->first();
+
+		// Create a new quarter if it does not exist
+		if(!$this->quarter)
+		{
+			$this->quarter = $this->createQuarter();
+		}
 	}
 
 	public function getDonationsJson() {
@@ -131,10 +137,11 @@ class DonationController extends BaseController
 		$quarter = new DonationQuarter;
 		$quarter->year = 	$this->today->year;
 		$quarter->quarter = $this->today->quarter;
+		$quarter->total = 0;
 		$quarter->goal = 	$this->options->donation_quarter_goal;
 		$quarter->save();
 
-		return;
+		return $quarter;
 	}
 
 	public function saveDonation()

@@ -1,7 +1,7 @@
 @import url(datatables/media/css/jquery.dataTables.css);
-@import url(datatables-bootstrap3/BS3/assets/css/datatables.css);
 @import url(fancybox/source/jquery.fancybox.css);
 @import url(blueimp-file-upload/css/jquery.fileupload.css);
+@import url(vendor/datatables-bootstrap.css);
 /* Styles.scss x- All imported files will be compiled. */
 /*! normalize.css v3.0.1 | MIT License | git.io/normalize */
 html {
@@ -3075,6 +3075,21 @@ tbody.collapse.in {
     .navbar-inverse .btn-link[disabled]:hover, .navbar-inverse .btn-link[disabled]:focus, fieldset[disabled] .navbar-inverse .btn-link:hover, fieldset[disabled] .navbar-inverse .btn-link:focus {
       color: #444; }
 
+.breadcrumb {
+  padding: 8px 15px;
+  margin-bottom: 20px;
+  list-style: none;
+  background-color: #f5f5f5;
+  border-radius: 4px; }
+  .breadcrumb > li {
+    display: inline-block; }
+    .breadcrumb > li + li:before {
+      content: "/\00a0";
+      padding: 0 5px;
+      color: #ccc; }
+  .breadcrumb > .active {
+    color: #999999; }
+
 .pagination {
   display: inline-block;
   padding-left: 0;
@@ -3276,6 +3291,28 @@ a.badge:hover, a.badge:focus {
       .jumbotron h1, .jumbotron .h1 {
         font-size: 63px; } }
 
+.thumbnail {
+  display: block;
+  padding: 4px;
+  margin-bottom: 20px;
+  line-height: 1.42857;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out; }
+  .thumbnail > img, .thumbnail a > img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto; }
+  .thumbnail .caption {
+    padding: 9px;
+    color: #333333; }
+
+a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
+  border-color: #428bca; }
+
 .alert {
   padding: 15px;
   margin-bottom: 20px;
@@ -3405,6 +3442,31 @@ a.badge:hover, a.badge:focus {
   background-color: #d9534f; }
   .progress-striped .progress-bar-danger {
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
+
+.media, .media-body {
+  overflow: hidden;
+  zoom: 1; }
+
+.media, .media .media {
+  margin-top: 15px; }
+
+.media:first-child {
+  margin-top: 0; }
+
+.media-object {
+  display: block; }
+
+.media-heading {
+  margin: 0 0 5px; }
+
+.media > .pull-left {
+  margin-right: 10px; }
+.media > .pull-right {
+  margin-left: 10px; }
+
+.media-list {
+  padding-left: 0;
+  list-style: none; }
 
 .list-group {
   margin-bottom: 20px;
@@ -4388,6 +4450,9 @@ button.close {
 @media print {
   .hidden-print {
     display: none !important; } }
+
+.dataTables_wrapper {
+  margin-top: 25px; }
 
 .btn-file {
   position: relative;

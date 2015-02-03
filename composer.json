@@ -20,7 +20,9 @@
 		"indatus/dispatcher": "~1.4",
 		"ehesp/steam-login": "~1.0.1",
 		"syntax/steam-api": "~1.1.0",
-		"gries/rcon": "dev-master"
+		"gries/rcon": "dev-master",
+		"heybigname/backup-manager": "0.3.*@dev",
+		"league/flysystem-aws-s3-v2": "~1.0@dev"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "v1.2.0"

@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -120,6 +120,7 @@ return array(
 		'Indatus\Dispatcher\ServiceProvider',
 		'Ehesp\SteamLogin\Laravel\SteamLoginServiceProvider',
 		'Syntax\SteamApi\SteamApiServiceProvider',
+		'BigName\BackupManager\Integrations\Laravel\BackupManagerServiceProvider',
 	),
 
 	/*

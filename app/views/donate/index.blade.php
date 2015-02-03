@@ -36,13 +36,15 @@
                 <table class="table table-hover table-data">
                     <thead>
                     <tr>
-                        <td>Amount</td>
-                        <td>Email</td>
-                        <td>CC Details</td>
-                        <td>Status</td>
-                        <td>Date</td>
+                        <th>Year</th>
+                        <th>Quarter</th>
+                        <th>Amount</th>
+                        <th>Email</th>
+                        <th>CC Details</th>
+                        <th>Status</th>
+                        <th>Date</th>
                         @if(Auth::user()->hasRole('Owner'))
-                        <td></td>
+                        <th></th>
                         @endif
                     </tr>
                     </thead>
@@ -50,6 +52,8 @@
                     <tbody>
                     @foreach($quarters[0]->donations as $donation)
                         <tr>
+                            <td>{{ $donation->quarter->year }}</td>
+                            <td>Q{{ $donation->quarter->quarter }}</td>
                             <td>${{ $donation->amount }}</td>
                             <td>{{ $donation->email }}</td>
                             <td><img style="max-height: 16px;"
@@ -77,12 +81,12 @@
                 <table class="table table-hover table-data">
                     <thead>
                     <tr>
-                        <td>Year</td>
-                        <td>Quarter</td>
-                        <td>Percentage</td>
-                        <td>Total</td>
-                        <td>Goal</td>
-                        <td>Donors</td>
+                        <th>Year</th>
+                        <th>Quarter</th>
+                        <th>Percentage</th>
+                        <th>Total</th>
+                        <th>Goal</th>
+                        <th>Donors</th>
                     </tr>
                     </thead>
 
@@ -116,9 +120,9 @@
                 <table class="table table-hover table-data">
                     <thead>
                     <tr>
-                        <td>Nickname</td>
-                        <td>Steam ID32</td>
-                        <td>Expires</td>
+                        <th>Nickname</th>
+                        <th>Steam ID32</th>
+                        <th>Expires</th>
                     </tr>
                     </thead>
 
@@ -149,16 +153,7 @@
         @section('footer')
             <script type="text/javascript">
 
-                $(function () {
-                    'use strict';
 
-                    $('select').on('change', function () {
-                        var el = $(this);
-                        var year = el.find('option:selected').text();
-                        window.location.replace('/admin/donations/' + year);
-                    });
-
-                });
 
 
             </script>

@@ -25,17 +25,17 @@
                     <table id="maps-list" class="table table-striped maps-list" width="100%">
                         <thead>
                         <tr>
-                            <td>Image</td>
-                            <td>Name</td>
-                            <td>Size</td>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Size</th>
 
-                            <td>Rating</td>
-                            <td><i class="fa fa-exclamation-triangle fa-lg"></i></td>
-                            <td><i class="fa fa-steam fa-lg"></i></td>
-                            <td><i class="fa fa-globe fa-lg"></i></td>
+                            <th>Rating</th>
+                            <th><i class="fa fa-exclamation-triangle fa-lg"></i></th>
+                            <th><i class="fa fa-steam fa-lg"></i></th>
+                            <th><i class="fa fa-globe fa-lg"></i></th>
 
-                            <td>Added</td>
-                            <td>Action</td>
+                            <th>Added</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -118,13 +118,13 @@
                     <table id="maps-files-list" class="table table-striped table-bordered maps-list" width="100%">
                         <thead>
                         <tr>
-                            <td>Name</td>
-                            <td>Size</td>
+                            <th>Name</th>
+                            <th>Size</th>
 
-                            <td><i class="fa fa-steam fa-lg"></i></td>
+                            <th><i class="fa fa-steam fa-lg"></i></th>
 
-                            <td>Added</td>
-                            <td>Action</td>
+                            <th>Added</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -175,13 +175,13 @@
                 <table id="maps-broken-list" class="table table-striped table-bordered maps-list" width="100%">
                     <thead>
                     <tr>
-                        <td>Map</td>
-                        <td>Size</td>
+                        <th>Map</th>
+                        <th>Size</th>
 
-                        <td><i class="fa fa-steam fa-lg"></i></td>
+                        <th><i class="fa fa-steam fa-lg"></i></th>
 
-                        <td>Added</td>
-                        <td>Followup</td>
+                        <th>Added</th>
+                        <th>Followup</th>
                     </tr>
                     </thead>
                     <tbody>
