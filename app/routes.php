@@ -11,11 +11,6 @@
 |
 */
 
-Route::post('queue/receive', function()
-{
-    return Queue::marshal();
-});
-
 Route::post('get-steam-server-status', 'HomeController@getServerStatus');
 
 Route::get('tester', 'DonationController@checkDonatorExpiry');
@@ -170,7 +165,7 @@ Route::get('maps', 'MapController@index_public');
 
 
 
-Route::get( 'login','UserController@login');
+Route::get( 'login',						'UserController@login');
 Route::post('login',                  		'UserController@do_login');
 Route::get( 'login/forgot-password',        'UserController@forgot_password');
 Route::post('login/forgot-password',        'UserController@do_forgot_password');
@@ -202,21 +197,19 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 		return View::make('admin.index');
 	});
 
+	Route::get( 'user/create',		'UserController@create');
 
+	Route::post('store-player', 	'PlayerController@store');
+	Route::post('maps/ajax-action', 'MapController@ajaxAction');
+	Route::post('user',				'UserController@store');
 
-	Route::get( 'user/create','UserController@create');
-
-	Route::post('store-player', 'PlayerController@store');
-	Route::post('maps/ajax-action', 'MapController@initiateRemoteActionAjax');
-	Route::post('user','UserController@store');
-
-	Route::resource('users', 'UserController');
-	Route::resource('posts', 'PostController');
-	Route::resource('maps', 'MapController');
-	Route::resource('players', 'PlayerController');
-	Route::resource('bans', 'BansController');
-	Route::resource('options', 'OptionController');
-	Route::resource('donations', 'DonationController');
-	Route::resource('reports', 'ReportController');
+	Route::resource('users', 		'UserController');
+	Route::resource('posts', 		'PostController');
+	Route::resource('maps', 		'MapController');
+	Route::resource('players', 		'PlayerController');
+	Route::resource('bans', 		'BansController');
+	Route::resource('options', 		'OptionController');
+	Route::resource('donations', 	'DonationController');
+	Route::resource('reports', 		'ReportController');
 
 });

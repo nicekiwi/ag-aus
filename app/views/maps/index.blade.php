@@ -2,8 +2,10 @@
 
 @section('content')
 
-    <h1>Maps <a class="btn btn-primary maps-upload-btn btn-sm" href="/admin/maps/upload">Upload</a></h1>
+    <h1>Maps</h1>
+    <p>All maps listed below are hosted on an Amazon S3 datacenter, maps need to be synced to Pantheon to be playable and need to be enabled on the website for manual downloading outside of game.</p>
 
+    <p><a class="btn btn-primary maps-upload-btn btn-sm" href="/admin/maps/upload">Upload</a> <a class="btn btn-primary maps-sync-btn btn-sm" href="/admin/maps/sync">Sync</a></p>
 
     <div role="tabpanel">
 
