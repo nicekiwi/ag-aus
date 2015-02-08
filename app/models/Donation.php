@@ -8,6 +8,8 @@ class Donation extends Eloquent
 	 * @var string
 	 */
 
+    protected $fillable = [];
+
 	public function player()
     {
         return $this->belongsTo('Player');

@@ -47,6 +47,15 @@ class EntrustSetupTables extends Migration {
             $table->foreign('permission_id')->references('id')->on('permissions'); // assumes a users table
             $table->foreign('role_id')->references('id')->on('roles');
         });
+
+        Schema::create('permission_user', function($table)
+        {
+            $table->increments('id')->unsigned();
+            $table->integer('permission_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->foreign('permission_id')->references('id')->on('permissions'); // assumes a users table
+            $table->foreign('user_id')->references('id')->on('users');
+        });
     }
 
     /**
@@ -66,7 +75,13 @@ class EntrustSetupTables extends Migration {
             $table->dropForeign('permission_role_role_id_foreign');
         });
 
+        Schema::table('permission_user', function(Blueprint $table) {
+            $table->dropForeign('permission_user_permission_id_foreign');
+            $table->dropForeign('permission_user_user_id_foreign');
+        });
+
         Schema::drop('assigned_roles');
+        Schema::drop('permission_user');
         Schema::drop('permission_role');
         Schema::drop('roles');
         Schema::drop('permissions');

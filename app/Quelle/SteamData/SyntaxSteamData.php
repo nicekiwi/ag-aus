@@ -5,66 +5,40 @@ use stdClass;
 
 Class SyntaxSteamData implements SteamDataInterface 
 {
-	public function checkIds($id)
+	/**
+	 * @param array $ids
+	 * @return array
+     */
+	public function getPlayerData(array $ids)
 	{
-		// Check if the ID is a community ID
-		if(strpos($id, 'STEAM') !== false)
+		// make sure all IDs are id64
+		array_map(function($id)
 		{
-			return $this->convertSteamIdToCommunityId($id);
-		}
-		else
-		{
-			return $id;
-		}
-	}
-
-	public function getPlayerData(array $ids) 
-	{
-		// Check all ids to make sure they're communityID
-		// and convert them if they are not
-		if (is_array($ids))
-		{
-			$ids = array_map ( [$this, 'checkIds'], $ids );
-		}
-		else
-		{
-			$ids = $this->checkIds($ids);
-		}
-		
+			return Steam::convertId($id,'id64');
+		}, $ids);
 
 		// Get Players details from Valve Web API
 		$users = Steam::user($ids)->GetPlayerSummaries();
 
 		// Setup the players object
-		$players = new StdClass;
+		$players = [];
+
+		if(count($users) == 0) return $players;
 
 		foreach($users as $key => $user)
 		{
 			$player = new StdClass;
 
+			$player->steam_id64 = 		$user->steamIds->id64;
+			$player->steam_id32 = 		$user->steamIds->id32;
+			$player->steam_id3 = 		$user->steamIds->id3;
+			$player->steam_nickname = 	htmlspecialchars($user->personaName);
 			$player->steam_url = 		$user->profileUrl;
-			$player->steam_64id = 		$user->steamId;
-			$player->steam_nickname = 	strip_tags($user->personaName);
 			$player->steam_image = 		$user->avatarFullUrl;
-			$player->steam_id = 		$this->steamIds->id32;
 
-			$players->players[] = $player;
+			$players[] = $player;
 		}
 
 		return $players;
-
 	}
-
-	public function convertCommunityIdToSteamId(int $id)
-	{
-		$x = ($id - 76561197960265728) / 2;
-		return 'STEAM_0:' . is_float($x) . ':' . (int)$x; 
-	}
-
-	public function convertSteamIdToCommunityId(string $id)
-	{
-		$x = explode(':', $id);
-		return (string) ($x[2] * 2) + 76561197960265728 + $x[1];
-	}
-
 }

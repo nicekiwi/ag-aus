@@ -1,16 +1,5 @@
 <?php
 
-View::composer('partials.server-list', function($view)
-{
-	$servers = new Servers;
-    $view->with('servers', $servers->getServers());
-});
-
-View::composer('partials.event-list', function($view)
-{
-	$view->with('events', Post::where('event',1)->take(3)->get());
-});
-
 View::composer('partials.donation-widget', function($view)
 {
     $total_amount = Donation::where('created_at', '>=', '2013-01-01')
@@ -32,5 +21,25 @@ View::composer('partials.donation-widget', function($view)
     $view->with('data', $data);
 });
 
-//View::composer('partials.donation-widget', 'DonationController@display_donation_widget');
+//View::composer('maps.partials._upload-form', function($view)
+//{
+//	$postObject = new PostObject($this->s3, 'alternative-gaming', [
+//		'acl' => 'public-read',
+//	]);
+//
+//	$form = $postObject->prepareData()->getFormInputs();
+//
+//	$options = new stdClass;
+//	$options->policy = $form['policy'];
+//	$options->signature = $form['signature'];
+//	$options->uid = uniqid();
+//	$options->accessKey = $form['AWSAccessKeyId'];
+//	$options->bucket = 'alternative-gaming';
+//	$options->key = 'games/team-fortress-2/maps';//$form['key'];
+//	$options->acl = $form['acl'];
+//
+//	$view->with(compact('options'));
+//});
+
+View::composer('maps.partials._upload-form', 'MapController@uploadFormComposer');
 //View::composer('partials.event-widget', 'PostsController@display_events_widget');

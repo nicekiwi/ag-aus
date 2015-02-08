@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 class DonationController extends BaseController
 {
 	protected $layout = 'layouts.master';
@@ -10,7 +12,7 @@ class DonationController extends BaseController
 		$this->options = Options::first();
 
 		// Get timestamp of today
-		$this->today = new \Carbon\Carbon('today');
+		$this->today = new Carbon('today');
 
 		// Get current Quarter
 		$this->quarter = DonationQuarter::where('quarter', $this->today->quarter)
@@ -22,14 +24,36 @@ class DonationController extends BaseController
 		{
 			$this->quarter = $this->createQuarter();
 		}
+
 	}
 
+	public function validatePlayer($id32)
+	{
+		return App::make('PlayerController')->store($id32);
+	}
+
+	/**
+	 * @return string
+     */
 	public function getDonationsJson() {
 		return json_encode($this->quarter->donations);
 	}
 
+	/**
+	 * @return string
+     */
 	public function getCurrentQuarterJson() {
 		return json_encode($this->quarter->quarter);
+	}
+
+	/**
+	 * @param $total
+	 * @param $goal
+	 * @return float
+     */
+	public function getQuarterPercentage($total,$goal)
+	{
+		return round(($total / $goal) * 100);
 	}
 
 	public function index()
@@ -39,8 +63,8 @@ class DonationController extends BaseController
 								   ->orderBy('quarter','asc')
 								   ->get();
 
-		$players = Player::whereNotNull('donation_expires')
-						 ->orderBy('donation_expires','asc')
+		$players = Donator::whereNotNull('expires')
+						 ->orderBy('expires','asc')
 						 ->get();
 
 		// Return donate with quarter data
@@ -65,8 +89,20 @@ class DonationController extends BaseController
 
 	public function validate_donation()
 	{
+		if(Input::has('steam_id32'))
+		{
+			$player = $this->validatePlayer(Input::get('steam_id32'));
+
+			if(!$player)
+			{
+				Session::flash('error_message', 'Your SteamID is invalid, you have not been charged. Please correct it and try again.');
+
+				return Redirect::to('donate')
+					->withInput(Input::except('stripe_token'));
+			}
+		}
+
 		$rules = array(
-			//'steam_nickname'    => 'required',
 			'email'      		=> 'required|email',
 			'stripe_token'      => 'required',
 			'stripe_data'      	=> 'required',
@@ -137,7 +173,7 @@ class DonationController extends BaseController
 		$quarter = new DonationQuarter;
 		$quarter->year = 	$this->today->year;
 		$quarter->quarter = $this->today->quarter;
-		$quarter->total = 0;
+		$quarter->total = 	0;
 		$quarter->goal = 	$this->options->donation_quarter_goal;
 		$quarter->save();
 
@@ -147,17 +183,11 @@ class DonationController extends BaseController
 	public function saveDonation()
 	{
 		$input = Input::all();
-		
 
-		// get or create donation_quarter record
+		// get the current donation_quarter record
 		$quarter = $this->quarter;
 
-		// Create new quarter if not found
-		if(!$quarter->id) {
-			$this->createQuarter();
-		}
-
-		// Save donation details to donnations table with player's ID.
+		// Save donation details to donations table with player's ID.
 		$donation = new Donation;
 		$donation->email = 		$input['email'];
 		$donation->amount = 	$input['amount'];
@@ -187,13 +217,12 @@ class DonationController extends BaseController
 				$expiry = null;
 			}
 
-			$input['donation_expires'] = $expiry;
+			$input['expires'] = $expiry;
 
 			//$donation->confirm_code = md5($donation->email . $expiry);
 
-			// Use Validation to check if player has dontated before
-			//$validator = Validator::make($input, ['steam_id' => 'required|unique:players']);
-			$player = Player::where('steam_id', $input['steam_id'])->first();
+			// Check if player exists, add if not, return player
+			$player = $this->validatePlayer($input['steam_id']);
 
 			// If player already exists, get their ID
 			if ( $player )
@@ -203,31 +232,8 @@ class DonationController extends BaseController
 			}
 			else
 			{
-				// Save new player to players table and get their ID
-				$player = Player::create($input);
-
-				// $player->steam_id = $input['steam_id'];
-
-				// if(Input::has('steam_64id')){
-				// 	$player->steam_64id = $input['steam_64id'];
-				// }
-
-				// if(Input::has('steam_url')){
-				// 	$player->steam_url = $input['steam_url'];
-				// }
-
-				// if(Input::has('steam_nickname')){
-				// 	$player->steam_nickname = $input['steam_nickname'];
-				// }
-
-				// if(Input::has('steam_image')){
-				// 	$player->steam_image = $input['steam_image'];
-				// }
-
-				//$player->donation_expires = $expiry or null;
-				//$player->save();
-				//
-				$donation->player_id = $player->id;
+				$message = 'Your steamID32 is invalid, please eamil <a href="mailto:staff@ag-aus.org">staff@ag-aus.org</a> with your steamID and email address used in payment.';
+				return Redirect::to('/donate')->with('error_message', $message);
 			}
 
 			//$this->notifyAdmin($donation->player_id, $donation->amount, $donation->confirm_code);
@@ -249,7 +255,7 @@ class DonationController extends BaseController
 
 		// update the quarter total and percentage
 		$quarter->total = $this->quarter->total + $donation->amount;
-		$quarter->percentage = round(($quarter->total / $quarter->goal) * 100);
+		$quarter->percentage = $this->getQuarterPercentage($quarter->total,$quarter->goal);
 		$quarter->save();
 
 		// Write Donations to the server.

@@ -55,81 +55,22 @@ Route::get('test', function()
 	//echo 
 	//writeDonators();
 
-	$role = Role::find(1);
-	$role->users;
+//	$role = Role::find(1);
+//	$role->users;
+//
+//
+//
+//	$permission = Permission::find(4);
+//
+//	//dd($permission);
+//
+//	dd($permission->roles);
 
+	$player = App::make('PlayerController')->getPlayerData(['STEAM_0:0:23337253']);
 
-
-	$permission = Permission::find(4);
-
-	//dd($permission);
-
-	dd($permission->roles);
+	dd($player);
 
 });
-
-Route::get('donators', function()
-{
-	// $gen = new Generator;
-
-	// return $gen->donators();
-	// 
-	//checkDonatorExpiry();
-	//return new \Carbon\Carbon('today');
-	//
-	//
-	//$user = Steam::user(76561198006940234)->GetPlayerSummaries();
-
-	//dd($user);
-	// STEAM_0:1:6587177
-	// 76561197973440083
-	//$a = (string) (6587177 * 2) + 76561197960265728 + 1;
-
-	//return App::make('MapController')->initiateRemoteAction('wacky_races_v2.bsp.bz2','bz2',1);
-
-	//return substr('STEAM_0:1:6587177', -7);
-
-	///dd($a);
-	///
-//	$data = Steam::user([76561197987217337,76561198073683885,76561197999078519])->GetPlayerSummaries();
-//
-//	dd($data);
-
-});
-
-
-
-//Route::get('server-info', function()
-//{
-//	$server = new Server;
-//	return json_encode($server->getServerLocal());
-//});
-//
-//Route::get('refresh-servers', function()
-//{
-//	$servers = new Servers;
-//	return $servers->refreshServers();
-//});
-
-//Route::get('players', function()
-//{
-//	$servers = new Servers;
-//	$players = $servers->getPlayers('203.33.121.205','27021');
-//
-//	//dd($players);
-//
-//	echo '<table>';
-//	foreach($players as $player){
-//	    echo '<tr><td>' . $player->getName() . '</td><td>' . $player->getSteamId() . '</td></tr>';
-//	}
-//	echo '</table>';
-//
-//	//var_dump($players);
-//});
-
-//Route::get('news/{slug?}/{id?}', 'HomeController@getGroupNews');
-//Route::get('events/{slug}/{id}', 'HomeController@getGroupEvent');
-//Route::get('events', 'HomeController@getGroupEvents');
 
 Route::get('get-steam-news', 'HomeController@getGroupNews');
 Route::get('get-steam-events', 'HomeController@getGroupEvents');
@@ -158,10 +99,6 @@ Route::get('maps/logout', 'MapController@steamAuthLogout');
 Route::post('maps/feedback', 'MapController@MapVote');
 
 Route::get('maps', 'MapController@index_public');
-//Route::get('maps/{slug}', 'MapController@show');
-
-
-
 
 
 
@@ -179,7 +116,7 @@ Route::get( 'login/confirm/{code}',         'UserController@confirm');
 // ===============================================
 // STEAM USER SECTION =================================
 // ===============================================
-Route::group(array('prefix' => 'steam-user', 'before' => 'steam-auth'), function()
+Route::group(array('prefix' => 'players', 'before' => 'steam-auth'), function()
 {
 
 
@@ -205,7 +142,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 
 	Route::resource('users', 		'UserController');
 	Route::resource('posts', 		'PostController');
-	Route::resource('maps', 		'MapController');
+	Route::resource('maps','MapController');
 	Route::resource('players', 		'PlayerController');
 	Route::resource('bans', 		'BansController');
 	Route::resource('options', 		'OptionController');

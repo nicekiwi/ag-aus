@@ -69,20 +69,18 @@
 {{ Form::open([
     'url' => '/donate',
     'method' => 'post',
-    'id' => 'donation_form',
+    'id' => 'donate-form',
     'role' => 'form',
-    'autocomplete' => true,
-    'class'=>'form-horozontal'
+    'autocomplete' => false
 ]) }}
 
 
         <fieldset>
-            <!-- Text input-->
-            <div id="steam_id_valid"></div>
 
             <div class="form-group">
-                {{ Form::label('steam_id', 'Your SteamID (ID32)') }}
-                {{ Form::text('steam_id', Session::get('player')->steam_id ?: null, ['class' => 'form-control', 'id' => 'steam_id', 'placeholder' => 'STEAM_X:X:XXXXXX']) }}
+                {{ Form::label('steamId32', 'Your SteamID (ID32)') }}
+                {{ Form::text('steamId32', Session::get('player')->steam_id32 ?: null, ['class' => 'form-control', 'placeholder' => 'STEAM_X:X:XXXXXX']) }}
+                <span class="help-block id-validation"></span>
             </div>
 
             <!-- Text input-->
@@ -96,7 +94,7 @@
                     'required' => 'required'
                 ]) }}
                     <span class="input-group-btn">
-                        <button id="donation_submit" class="btn btn-warning">Donate</button>
+                        <button class="btn btn-warning">Donate</button>
                     </span>
                 </div>
 
@@ -109,11 +107,6 @@
     </section>
 
 </div>
-
-
-
-
-
 
 @stop
 

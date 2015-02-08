@@ -14,12 +14,11 @@ class PlayerController extends \BaseController {
 		//
 	}
 
+
 	/**
-	 * Store a newly created resource in storage.
-	 * POST /players
-	 *
-	 * @return Response
-	 */
+	 * @param $steam_id
+	 * @return bool|\Illuminate\Database\Eloquent\Model|null|Player|static
+     */
 	public function store($steam_id)
 	{
 		$player = Player::where('steam_id', $steam_id)->first();
@@ -38,6 +37,10 @@ class PlayerController extends \BaseController {
 				$player->steam_id = $steam_id;
 
 				$player->save();
+			}
+			else
+			{
+				return false;
 			}
 		}
 

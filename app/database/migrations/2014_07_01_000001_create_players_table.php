@@ -16,31 +16,34 @@ class CreatePlayersTable extends Migration {
 		{
 			$table->increments('id')->unsigned();
 			$table->string('steam_nickname')->nullable();
-			$table->string('steam_id')->unique()->nullable();
-			$table->string('steam_64id')->unique()->nullable();
+			$table->string('steam_id32')->unique()->nullable();
+			$table->string('steam_id64')->unique()->nullable();
+			$table->string('steam_id3')->unique()->nullable();
 			$table->text('steam_image')->nullable();
 			$table->text('steam_url')->nullable();
-
-			$table->timestamp('donation_expires')->nullable();
 
 			$table->softDeletes();
 			$table->timestamps();
 		});
 
 		// Creates the assigned_roles (Many-to-Many relation) table
-	    // Schema::create('player_roles', function($table)
-	    // {
-	    //     $table->increments('id')->unsigned();
-	    //     $table->integer('player_id')->unsigned();
-	    //     $table->integer('role_id')->unsigned();
-	    //     $table->foreign('player_id')->references('id')->on('players');
-	    //     $table->foreign('role_id')->references('id')->on('roles');
-	    // });
+		Schema::create('player_user', function($table)
+		{
+			$table->increments('id')->unsigned();
+			$table->integer('player_id')->unsigned();
+			$table->integer('user_id')->unsigned();
+			$table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+		});
 
-	    Schema::table('users', function($table) 
-	    {
-	    	$table->foreign('player_id')->references('id')->on('players')->onDelete('set null'); // assumes a users table
-	    });
+		Schema::create('player_role', function($table)
+		{
+			$table->increments('id')->unsigned();
+			$table->integer('player_id')->unsigned();
+			$table->integer('role_id')->unsigned();
+			$table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
+			$table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+		});
 
 	    Schema::table('map_feedback', function($table) 
 	    {
@@ -57,7 +60,13 @@ class CreatePlayersTable extends Migration {
 	 */
 	public function down()
 	{
-		//Schema::drop('player_roles');
+		Schema::table('map_feedback', function(Blueprint $table) {
+			$table->dropForeign('map_feedback_player_id_foreign');
+			$table->dropForeign('map_feedback_map_id_foreign');
+		});
+
+		Schema::drop('player_user');
+		Schema::drop('player_role');
 		Schema::drop('players');
 	}
 

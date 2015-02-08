@@ -35,15 +35,12 @@ class CreateDonationsTable extends Migration {
 			$table->increments('id')->unsigned();
 
 			$table->integer('quarter_id')->unsigned()->index()->nullable();
-			$table->foreign('quarter_id')->references('id')->on('donation_quarters');
+			$table->foreign('quarter_id')->references('id')->on('donation_quarters')->onDelete('set null');
 
 			$table->integer('player_id')->unsigned()->index()->nullable();
-			$table->foreign('player_id')->references('id')->on('players');
+			$table->foreign('player_id')->references('id')->on('players')->onDelete('set null');
 
 			$table->string('email');
-
-			$table->string('message');
-			$table->integer('anonymous')->nullable();
 			$table->string('currency');
 			$table->string('amount');
 
@@ -53,12 +50,21 @@ class CreateDonationsTable extends Migration {
 			$table->string('card_month', 3);
 			$table->string('card_year', 6);
 
-			$table->string('confirm_code');
-			$table->integer('confirmed');
-			$table->integer('confirmed_by')->unsigned()->index()->nullable();
-			$table->foreign('confirmed_by')->references('id')->on('users');
+			$table->string('status');
 
 			$table->softDeletes();
+			$table->timestamps();
+		});
+
+		Schema::create('donators', function(Blueprint $table)
+		{
+			$table->increments('id')->unsigned();
+
+			$table->integer('player_id')->unsigned()->index()->nullable();
+			$table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
+
+			$table->timestamp('expires')->nullable();
+
 			$table->timestamps();
 		});
 
@@ -73,6 +79,7 @@ class CreateDonationsTable extends Migration {
 	public function down()
 	{
 		Schema::drop('donations');
+		Schema::drop('donators');
 		Schema::drop('donation_quarters');
 		
 	}

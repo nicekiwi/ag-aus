@@ -20,94 +20,96 @@ class UsersTableSeeder extends Seeder {
 
 		// Add Permissions
 
-		$manageConfigs = new Permission;
-		$manageConfigs->name = 'manage_configs';
-		$manageConfigs->display_name = 'Manage Configs';
-		$manageConfigs->save();
+		$viewOptions = new Permission;
+		$viewOptions->name = 'options.view';
+		$viewOptions->display_name = 'View Options';
+		$viewOptions->save();
 
-		$manageBans = new Permission;
-		$manageBans->name = 'manage_bans';
-		$manageBans->display_name = 'Manage Bans';
-		$manageBans->save();
+		$manageOptions = new Permission;
+		$manageOptions->name = 'options.manage';
+		$manageOptions->display_name = 'Manage Options';
+		$manageOptions->save();
+
+		$viewUsers = new Permission;
+		$viewUsers->name = 'users.view';
+		$viewUsers->display_name = 'View Users';
+		$viewUsers->save();
+
+		$manageUsers = new Permission;
+		$manageUsers->name = 'users.manage';
+		$manageUsers->display_name = 'Manage Users';
+		$manageUsers->save();
+
+		$manageReports = new Permission;
+		$manageReports->name = 'reports.manage';
+		$manageReports->display_name = 'Manage Reports';
+		$manageReports->save();
+
+		$viewDonations = new Permission;
+		$viewDonations->name = 'donations.view';
+		$viewDonations->display_name = 'View Donations';
+		$viewDonations->save();
 
 		$manageDonations = new Permission;
-		$manageDonations->name = 'manage_donations';
+		$manageDonations->name = 'donations.manage';
 		$manageDonations->display_name = 'Manage Donations';
 		$manageDonations->save();
 
 		$manageMaps = new Permission;
-		$manageMaps->name = 'manage_maps';
+		$manageMaps->name = 'maps.manage';
 		$manageMaps->display_name = 'Manage Maps';
 		$manageMaps->save();
 
-		$managePosts = new Permission;
-		$managePosts->name = 'manage_posts';
-		$managePosts->display_name = 'Manage Posts';
-		$managePosts->save();
+		$manageBans = new Permission;
+		$manageBans->name = 'bans.manage';
+		$manageBans->display_name = 'Manage Bans';
+		$manageBans->save();
 
-		$manageUsers = new Permission;
-		$manageUsers->name = 'manage_users';
-		$manageUsers->display_name = 'Manage Users';
-		$manageUsers->save();
-
-		$manageOptions = new Permission;
-		$manageOptions->name = 'manage_options';
-		$manageOptions->display_name = 'Manage Options';
-		$manageOptions->save();
-
-		$runJukebox = new Permission;
-		$runJukebox->name = 'run_jukebox';
-		$runJukebox->display_name = 'Run Jukebox';
-		$runJukebox->save();
-
-		$readVariables = new Permission;
-		$readVariables->name = 'read_config_variable';
-		$readVariables->display_name = 'Read Config Variables';
-		$readVariables->save();
-
-		$writeVariables = new Permission;
-		$writeVariables->name = 'write_config_variable';
-		$writeVariables->display_name = 'Write Config Variables';
-		$writeVariables->save();
 
 		// Add Permissions to Roles
 		$owner->perms()->sync([
-			$runJukebox->id,
+
+			$viewOptions->id,
+			$viewUsers->id,
+			$viewDonations->id,
+
+			$manageReports->id,
 			$manageOptions->id,
-			$manageConfigs->id,
 			$manageUsers->id,
-			$manageMaps->id,
-			$managePosts->id,
 			$manageDonations->id,
-			$manageBans->id,
-			$writeVariables->id,
-			$readVariables->id
+			$manageMaps->id,
+			$manageBans->id
 		]);
 
 		$admin->perms()->sync([
-			$runJukebox->id,
-			$manageConfigs->id,
-			$manageMaps->id,
-			$managePosts->id,
+
+			$viewOptions->id,
+			$viewUsers->id,
+			$viewDonations->id,
+
+			$manageReports->id,
+			$manageOptions->id,
 			$manageDonations->id,
-			$manageBans->id,
-			$readVariables->id
+			$manageMaps->id,
+			$manageBans->id
 		]);
 
 		$mod->perms()->sync([
-			$runJukebox->id,
-			$manageConfigs->id,
+
+			$viewOptions->id,
+			$viewUsers->id,
+			$viewDonations->id,
+
 			$manageMaps->id,
-			$manageBans->id,
-			$readVariables->id
+			$manageBans->id
 		]);
 
 		// Add Users
 		$user = new User;
 
-        $user->username = 'webmaster';
-        $user->email = 'webmaster@ag-aus.org';
-        $user->password = 'password';
+        $user->username = 	'webmaster';
+        $user->email = 		'webmaster@ag-aus.org';
+        $user->password = 	'password';
 
         // The password confirmation will be removed from model
         // before saving. This field will be used in Ardent's

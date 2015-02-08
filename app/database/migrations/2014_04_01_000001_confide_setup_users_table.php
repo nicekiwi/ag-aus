@@ -14,7 +14,6 @@ class ConfideSetupUsersTable extends Migration {
         Schema::create('users', function($table)
         {
             $table->increments('id');
-            $table->integer('player_id')->unsigned()->nullable();
             $table->string('username');
             $table->string('email');
             $table->string('password');

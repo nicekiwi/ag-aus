@@ -1,5 +1,6 @@
 <?php
 
+use Aws\Common\Exception;
 use Aws\S3\Model\PostObject;
 
 class MapController extends BaseController
@@ -8,16 +9,14 @@ class MapController extends BaseController
     protected $layout = 'layouts.master';
     protected $layoutAdmin = 'layouts.admin';
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function upload()
+    function __construct()
     {
-        $s3 = AWS::get('s3');
+        $this->s3 = AWS::get('s3');
+    }
 
-        $postObject = new PostObject($s3, 'alternative-gaming', [
+    public function uploadFormComposer($view)
+    {
+        $postObject = new PostObject($this->s3, 'alternative-gaming', [
             'acl' => 'public-read',
         ]);
 
@@ -32,7 +31,7 @@ class MapController extends BaseController
         $options->key = 'games/team-fortress-2/maps';//$form['key'];
         $options->acl = $form['acl'];
 
-        return View::make('maps.upload')->with(compact('options'));
+        $view->with(compact('options'));
     }
 
     public function index()
@@ -42,29 +41,11 @@ class MapController extends BaseController
         $map_files = Map::where('map_type_id', 0)->get();
         $maps_broken = MapFeedback::where('vote_broken', 1)->orderBy('vote_broken_status','asc')->get();
 
-        $s3 = AWS::get('s3');
-
-        $postObject = new PostObject($s3, 'alternative-gaming', [
-            'acl' => 'public-read',
-        ]);
-
-        $form = $postObject->prepareData()->getFormInputs();
-
-        $options = new stdClass;
-        $options->policy = $form['policy'];
-        $options->signature = $form['signature'];
-        $options->uid = uniqid();
-        $options->accessKey = $form['AWSAccessKeyId'];
-        $options->bucket = 'alternative-gaming';
-        $options->key = 'games/team-fortress-2/maps';//$form['key'];
-        $options->acl = $form['acl'];
-
         return View::make('maps.index')->with([
             'maps' => $maps,
             'map_files' => $map_files,
             'map_total' => $map_total,
-            'maps_broken' => $maps_broken,
-            'options' => $options
+            'maps_broken' => $maps_broken
         ]);
     }
 
@@ -90,9 +71,7 @@ class MapController extends BaseController
      */
     public function create()
     {
-        $s3 = AWS::get('s3');
-
-        $response = $s3->listObjects([
+        $response = $this->s3->listObjects([
             'Bucket' => 'alternative-gaming',
             'Prefix' => 'games/team-fortress-2/maps/'
         ]);
@@ -357,9 +336,7 @@ class MapController extends BaseController
 
     public function deleteMapFromAmazon($filename)
     {
-        $s3 = AWS::get('s3');
-
-        $response = $s3->deleteObject([
+        $response = $this->s3->deleteObject([
             'Bucket' => 'alternative-gaming',
             'Key' => 'games/team-fortress-2/maps/' . $filename
         ]);
@@ -373,23 +350,13 @@ class MapController extends BaseController
 
         if ($steam_64id) {
 
-            $player = Player::where('steam_64id', $steam_64id)->first();
+            // Get player data from Steam, or make new player and return it
+            $player = App::make('PlayerController')->getPlayerData($steam_64id);
 
-            // If player already exists, get their ID
-            if (!$player) {
-                // Get player data from Steam
-                $data = App::make('PlayerController')->getPlayerData($steam_64id);
-
-                // Save new player to players table and get their ID
-                $player = new Player;
-
-                $player->steam_id = $data->steam_id;
-                $player->steam_64id = $steam_64id;
-                $player->steam_url = $data->steam_url;
-                $player->steam_nickname = $data->steam_nickname;
-                $player->steam_image = $data->steam_image;
-
-                $player->save();
+            // If player is empty
+            if (count($player) == 0)
+            {
+                return Redirect::to('/')->with('error_message', 'Invalid Steam Session, Could not authenticate you with Steam.');
             }
 
             // save player data to session
@@ -444,12 +411,12 @@ class MapController extends BaseController
 
 
 
-    public function initiateRemoteActionAjax()
+    public function ajaxAction()
     {
-        return $this->initiateRemoteAction(Input::get('id'), Input::get('action'));
+        return $this->remoteAction(Input::get('id'), Input::get('action'));
     }
 
-    public function initiateRemoteAction($id, $action)
+    public function remoteAction($id, $action)
     {
         $map = Map::findOrFail($id);
 
