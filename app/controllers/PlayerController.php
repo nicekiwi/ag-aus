@@ -1,6 +1,6 @@
 <?php
 
-class PlayerController extends \BaseController {
+class PlayerController extends BaseController {
 
 
 	/**
@@ -19,32 +19,17 @@ class PlayerController extends \BaseController {
 	 * @param $steam_id
 	 * @return bool|\Illuminate\Database\Eloquent\Model|null|Player|static
      */
-	public function store($steam_id)
+	public function store(array $ids)
 	{
-		$player = Player::where('steam_id', $steam_id)->first();
+		$players = $this->getPlayerData($ids);
+		$newPlayers = [];
 
-		if(!$player)
+		array_walk($players, function($player)
 		{
-			$data = $this->getPlayerData($steam_id);
+			$newPlayers[] = Player::firstOrCreate($player);
+		});
 
-			if($data) 
-			{
-				$player = new Player;
-				$player->steam_url = $data->profileUrl;
-				$player->steam_64id = $data->steamId;
-				$player->steam_nickname = $data->personaName;
-				$player->steam_image = $data->avatarFullUrl;
-				$player->steam_id = $steam_id;
-
-				$player->save();
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		return $player;
+		return $newPlayers;
 	}
 	// public function store()
 	// {
@@ -125,9 +110,21 @@ class PlayerController extends \BaseController {
 		//
 	}
 
-	public function getPlayerDataJson($id)
+	/**
+	 * @return bool
+     */
+	public function validatePlayer()
 	{
-		return json_encode($this->getPlayerData($id));
+		if(!Input::has('id32')) return false;
+
+		$players =  $this->getPlayerData([Input::get('id32')]);
+
+		if(count($players) > 0)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	public function getPlayerData($ids)

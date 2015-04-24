@@ -24,17 +24,30 @@
 
 
 .homepage {
+  
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    
+    li {
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+  }
 
   .sbtn {
     display: inline-block;
     border-radius: 8px;
     transition: box-shadow .1s ease-in-out;
-    width: 44%;
+    width: 100%;
 
     > div {
       display: inline-block;
       padding: 0.375em 0.714em;
-      widows: 100%;
+      width: 100%;
 
       letter-spacing: 0.041em;
       line-height: 1.4em;
@@ -61,6 +74,10 @@
         font-size: 16px;
         font-family: "TF2Secondary", "Helvetica Neue", Helvetica, Arial, sans-serif;
       }
+    }
+
+    div.server-information {
+      font-size: 12px;
     }
   }
 

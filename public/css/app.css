@@ -4669,15 +4669,24 @@ body.maps-page .maps-list {
     .sidebar ul li small {
       font-size: 10px; }
 
+.homepage ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%; }
+  .homepage ol li {
+    float: left;
+    width: 50%;
+    padding: 5px; }
 .homepage .sbtn {
   display: inline-block;
   border-radius: 8px;
   transition: box-shadow 0.1s ease-in-out;
-  width: 44%; }
+  width: 100%; }
   .homepage .sbtn > div {
     display: inline-block;
     padding: 0.375em 0.714em;
-    widows: 100%;
+    width: 100%;
     letter-spacing: 0.041em;
     line-height: 1.4em;
     text-shadow: 0 -1px 1px rgba(19, 65, 88, 0.8);
@@ -4697,6 +4706,8 @@ body.maps-page .maps-list {
     .homepage .sbtn div.server-description b {
       font-size: 16px;
       font-family: "TF2Secondary", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .homepage .sbtn div.server-information {
+    font-size: 12px; }
 .homepage .server-one {
   box-shadow: 0 8px 0 #1a74a1, 0 15px 20px rgba(0, 0, 0, 0.35); }
   .homepage .server-one > div {

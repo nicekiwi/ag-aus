@@ -2,6 +2,7 @@
 
 use Steam;
 use stdClass;
+use Syntax\SteamApi\Exceptions\UnrecognizedId;
 
 Class SyntaxSteamData implements SteamDataInterface 
 {
@@ -12,10 +13,19 @@ Class SyntaxSteamData implements SteamDataInterface
 	public function getPlayerData(array $ids)
 	{
 		// make sure all IDs are id64
-		array_map(function($id)
+		array_filter($ids, function($id)
 		{
-			return Steam::convertId($id,'id64');
-		}, $ids);
+			try
+			{
+				return Steam::convertId($id,'id64');
+			}
+			catch(UnrecognizedId $e)
+			{
+				return false;
+			}
+		});
+
+		dd($ids);
 
 		// Get Players details from Valve Web API
 		$users = Steam::user($ids)->GetPlayerSummaries();

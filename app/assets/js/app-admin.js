@@ -12,13 +12,15 @@
 //= include ../../../bower_components/blueimp-file-upload/js/jquery.iframe-transport.js
 //= include ../../../bower_components/blueimp-file-upload/js/jquery.fileupload.js
 //= include ../../../bower_components/datatables/media/js/jquery.dataTables.js
-//= include ../../../bower_components/datatables-bootstrap3/BS3/assets/js/datatables.js
 
 //= include ../../../bower_components/jquery-sortable/source/js/jquery-sortable-min.js
 //= include ../../../bower_components/bootbox/bootbox.js
 
 //= include ./shared.js
 //= include ./vendor/datatables-bootstrap.js
+
+
+
 
 
 $(document).ready(function() {

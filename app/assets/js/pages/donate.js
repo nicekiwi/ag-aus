@@ -3,7 +3,7 @@
  */
 var donationPayment = function() {
 
-    var donationForm 			= $('#donationForm');
+    var donationForm 			= $('#donate-form');
     var donationAmount          = $('input[name="amount"]', donationForm).val();
     var submitBtn               = $('button[type="submit"]', donationForm);
     var steamId                 = $('input[name="steamId32"]', donationForm);
@@ -67,6 +67,8 @@ var donationPayment = function() {
         var validationPanel = $('.id-validation');
         var steamId32 = $(this).val();
 
+        validationPanel.html('');
+
         if(steamId32 === '') return false;
 
         $.post('/validate-steam-id32', { 'id32': steamId32 }, function(data){
@@ -83,10 +85,11 @@ var donationPayment = function() {
             }
             else
             {
-                //validationPanel.addClass('error').text('Invalid ID');
-
+                validationPanel.addClass('error').text('Invalid ID');
             }
 
+        }).fail(function() {
+            validationPanel.addClass('error').text('ID could ne be validated.');
         });
     });
 };

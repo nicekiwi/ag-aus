@@ -18,11 +18,14 @@
 				</li>
 				<li data-ip="203.33.121.205" data-port="27058">
 					<a class="sbtn server-two" href="steam://connect/203.33.121.205:27058" title="Join Server #2">
-						<span class="server-title">Join Server #2<br>
-							<small class="server-description"><b>Highlander mode</b><br>
-								<span class="players"></span>/<span class="maxPlayers"></span> -
-								<span class="mapName"></span>
-							</small></span></a>
+						<div>
+							<div class="server-title">Join Server #2</div>
+							<div class="server-description"><b>Highlander Mode</b></div>
+							<div class="server-information">
+								<span class="players"></span>/<span class="maxPlayers"></span> - <span class="mapName"></span>
+							</div>
+						</div>
+					</a>
 				</li>
 			</ol>
 		</section>

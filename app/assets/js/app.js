@@ -19,10 +19,10 @@
 //= ../../../bower_components/unveil/jquery.unveil.js
 //= include ../../../bower_components/datatables/media/js/jquery.dataTables.js
 
-//= require https://checkout.stripe.com/checkout.js
 
 //= include ./shared.js
-//
+
+//= require ./pages/donate.js
 
 $(document).ready(function() {
 

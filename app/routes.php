@@ -83,7 +83,7 @@ Route::get('/', 'HomeController@index_public');
 
 //Route::get('get-bans', 'BansController@pull_bans');
 
-//Route::get('check-steamid/{id}', 'PlayerController@getPlayerDataJson');
+Route::post('validate-steam-id32', 'PlayerController@validatePlayer');
 
 //Route::get('group-members/{id?}', 'PlayerController@getGroupMembers');
 
